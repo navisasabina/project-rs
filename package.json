@@ -6,7 +6,12 @@
   "scripts": {
     "start": "node server/server.js",
     "dev": "node --watch server/server.js",
-    "test:health": "node scripts/test-health.js"
+    "migrate:up": "node database/migrate.js up",
+    "migrate:down": "node database/migrate.js down",
+    "migrate:status": "node database/migrate.js status",
+    "test:health": "node scripts/test-health.js",
+    "test:db": "node scripts/test-db.js",
+    "test": "node scripts/test-db.js && node scripts/test-health.js"
   },
   "keywords": [
     "it-support",
@@ -17,6 +22,11 @@
   "author": "IT Division RS Awal Bros Botania",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.2"
+    "dotenv": "^17.4.2",
+    "express": "^4.21.2",
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "pg-mem": "^3.0.14"
   }
 }
