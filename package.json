@@ -9,9 +9,11 @@
     "migrate:up": "node database/migrate.js up",
     "migrate:down": "node database/migrate.js down",
     "migrate:status": "node database/migrate.js status",
+    "seed:sop": "node database/seed-sop-data.js",
     "test:health": "node scripts/test-health.js",
     "test:db": "node scripts/test-db.js",
-    "test": "node scripts/test-db.js && node scripts/test-health.js"
+    "test:seed": "node scripts/test-seed.js",
+    "test": "node scripts/test-db.js && node scripts/test-seed.js && node scripts/test-health.js"
   },
   "keywords": [
     "it-support",
