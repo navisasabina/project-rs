@@ -21,4 +21,23 @@ app.get('/api/v1/health', (req, res) => {
   });
 });
 
+// M3 Public Knowledge Base API Routes
+const categoriesRouter = require('./routes/categories');
+const guidesRouter = require('./routes/guides');
+
+app.use('/api/v1/categories', categoriesRouter);
+app.use('/api/v1/guides', guidesRouter);
+
+// Fallback 404 handler for unmatched /api/* requests
+app.use('/api/*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    error: {
+      code: 'ROUTE_NOT_FOUND',
+      message: 'Endpoint API tidak ditemukan.',
+    },
+  });
+});
+
 module.exports = app;
+

@@ -82,14 +82,76 @@ npm run dev
 # Atau mode production:
 npm start
 
-# Uji endpoint health check:
-npm run test:health
+# Uji seluruh automated test suite (database, seed, public api, health):
+npm test
+
+# Atau uji spesifik public api:
+npm run test:api
 ```
 Akses di browser melalui `http://localhost:3000` (User Portal) dan `http://localhost:3000/api/v1/health` (API Health Check).
 
-### 2. Membuka Frontend Langsung (Static Fallback)
+### 2. Public REST API Endpoints (M3)
+Platform menyediakan Public REST API read-only berbasis PostgreSQL:
+
+- **`GET /api/v1/categories`**: Mengembalikan daftar kategori aktif yang memiliki panduan `PUBLISHED` beserta jumlah panduannya.
+  ```json
+  {
+    "success": true,
+    "data": [
+      {
+        "id": "uuid",
+        "name": "Farmasi & Kasir",
+        "slug": "farmasi-kasir",
+        "icon": "print",
+        "description": "...",
+        "display_order": 3,
+        "guide_count": 1
+      }
+    ],
+    "meta": { "count": 8 }
+  }
+  ```
+
+- **`GET /api/v1/guides`**: Mengembalikan seluruh panduan berstatus `PUBLISHED` (opsional filter kategori: `?category=slug`).
+  ```json
+  {
+    "success": true,
+    "data": [
+      {
+        "id": "uuid",
+        "key_code": "printer",
+        "title": "Printer Tidak Berfungsi / Resep Macet",
+        "location_scope": "Kasir, Screening & Farmasi",
+        "status": "PUBLISHED",
+        "category": { "id": "uuid", "name": "Farmasi & Kasir", "slug": "farmasi-kasir", "icon": "print" }
+      }
+    ],
+    "meta": { "count": 8 }
+  }
+  ```
+
+- **`GET /api/v1/guides/:id_or_key`**: Mengembalikan detail lengkap panduan berdasarkan `key_code` (misal: `/api/v1/guides/printer`) atau `UUID`, lengkap dengan relasi kategori dan urutan langkah deterministik (`step_number` 1 -> 2 -> 3).
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": "uuid",
+      "key_code": "printer",
+      "title": "Printer Tidak Berfungsi / Resep Macet",
+      "category": { "name": "Farmasi & Kasir", "slug": "farmasi-kasir" },
+      "steps": [
+        { "step_number": 1, "title": "Langkah 1: ...", "instruction": "..." },
+        { "step_number": 2, "title": "Langkah 2: ...", "instruction": "..." },
+        { "step_number": 3, "title": "Langkah 3: ...", "instruction": "..." }
+      ]
+    }
+  }
+  ```
+
+### 3. Membuka Frontend Langsung (Static Fallback)
 Buka file `index.html` langsung di browser modern, atau gunakan HTTP server sederhana:
 ```bash
 python -m http.server 8000
 ```
+
 
