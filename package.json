@@ -14,7 +14,8 @@
     "test:db": "node scripts/test-db.js",
     "test:seed": "node scripts/test-seed.js",
     "test:api": "node scripts/test-api.js",
-    "test": "node scripts/test-db.js && node scripts/test-seed.js && node scripts/test-api.js && node scripts/test-health.js"
+    "test:frontend-api": "node scripts/test-frontend-api.js",
+    "test": "node scripts/test-db.js && node scripts/test-seed.js && node scripts/test-api.js && node scripts/test-frontend-api.js && node scripts/test-health.js"
   },
   "keywords": [
     "it-support",
