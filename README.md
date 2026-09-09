@@ -74,13 +74,22 @@ stitch_rs_awal_bros_hardware_guidebook/
 
 ## Menjalankan Project
 
-Buka file `index.html` langsung di browser modern manapun (Google Chrome, Microsoft Edge, Mozilla Firefox, dsb.), atau gunakan local HTTP server sederhana:
-
+### 1. Menggunakan Node.js Backend Server (Rekomendasi)
 ```bash
-# Menggunakan Python:
-python -m http.server 8000
+# Menjalankan server backend (otomatis melayani User Portal & API)
+npm run dev
 
-# Atau menggunakan Node.js (npx):
-npx serve .
+# Atau mode production:
+npm start
+
+# Uji endpoint health check:
+npm run test:health
 ```
-Akses di browser melalui `http://localhost:8000` atau buka `index.html` secara langsung.
+Akses di browser melalui `http://localhost:3000` (User Portal) dan `http://localhost:3000/api/v1/health` (API Health Check).
+
+### 2. Membuka Frontend Langsung (Static Fallback)
+Buka file `index.html` langsung di browser modern, atau gunakan HTTP server sederhana:
+```bash
+python -m http.server 8000
+```
+
