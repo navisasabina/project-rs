@@ -89,6 +89,7 @@ function normalizeGuideDetail(apiGuide) {
     image: apiGuide.image_url || '',
     prompt: apiGuide.prompt_shortcut || apiGuide.title,
     symptoms: parsedSymptoms,
+    status: apiGuide.status || 'PUBLISHED',
     step1Title: step1.title || '',
     step1Desc: step1.instruction || '',
     step2Title: step2.title || '',

@@ -11,6 +11,7 @@
     "migrate:status": "node database/migrate.js status",
     "seed:sop": "node database/seed-sop-data.js",
     "seed:admin": "node database/seed-admin.js",
+    "setup": "node database/migrate.js up && node database/seed-sop-data.js && node database/seed-admin.js",
     "test:health": "node scripts/test-health.js",
     "test:db": "node scripts/test-db.js",
     "test:seed": "node scripts/test-seed.js",

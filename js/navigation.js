@@ -19,12 +19,27 @@ function openDedicatedSOP(sopKey) {
   const data = getSOPRecord(sopKey);
   currentActiveSOPKey = data.key || sopKey;
 
+  const defaultImg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%23002541'/%3E%3Ctext x='50%25' y='46%25' dominant-baseline='middle' text-anchor='middle' fill='%230097A7' font-family='sans-serif' font-size='28' font-weight='bold'%3ERS AWAL BROS%3C/text%3E%3Ctext x='50%25' y='58%25' dominant-baseline='middle' text-anchor='middle' fill='%2394A3B8' font-family='sans-serif' font-size='16'%3EPanduan IT Support%3C/text%3E%3C/svg%3E";
+
   // Populate SOP View DOM Elements
-  document.getElementById('sop-category-badge').innerText = data.category || '';
-  document.getElementById('sop-title').innerText = "Panduan: " + (data.title || '');
-  document.getElementById('sop-location').innerText = data.location || '';
-  document.getElementById('sop-image').src = data.image || '';
-  document.getElementById('sop-image').alt = data.title || '';
+  const catBadge = document.getElementById('sop-category-badge');
+  if (catBadge) catBadge.innerText = data.category || '';
+
+  const titleEl = document.getElementById('sop-title');
+  if (titleEl) titleEl.innerText = "Panduan: " + (data.title || '');
+
+  const locEl = document.getElementById('sop-location');
+  if (locEl) locEl.innerText = data.location || '';
+
+  const imgEl = document.getElementById('sop-image');
+  if (imgEl) {
+    imgEl.src = data.image || defaultImg;
+    imgEl.alt = data.title || '';
+    imgEl.onerror = function() {
+      this.onerror = null;
+      this.src = defaultImg;
+    };
+  }
 
   // Populate Symptoms
   const symptomsListEl = document.getElementById('sop-symptoms-list');
@@ -34,13 +49,35 @@ function openDedicatedSOP(sopKey) {
   }
 
   // Populate Steps
-  document.getElementById('step-1-title').innerText = data.step1Title || '';
-  document.getElementById('step-1-desc').innerHTML = data.step1Desc || '';
-  document.getElementById('step-2-title').innerText = data.step2Title || '';
-  document.getElementById('step-2-desc').innerHTML = data.step2Desc || '';
-  document.getElementById('step-3-title').innerText = data.step3Title || '';
-  document.getElementById('step-3-desc').innerHTML = data.step3Desc || '';
-  document.getElementById('sop-security-note').innerText = data.securityNote || '';
+  const step1TitleEl = document.getElementById('step-1-title');
+  if (step1TitleEl) step1TitleEl.innerText = data.step1Title || '';
+  const step1DescEl = document.getElementById('step-1-desc');
+  if (step1DescEl) step1DescEl.innerHTML = data.step1Desc || '';
+
+  const step2TitleEl = document.getElementById('step-2-title');
+  if (step2TitleEl) {
+    step2TitleEl.innerText = data.step2Title || '';
+    const step2Card = step2TitleEl.closest('.flex');
+    if (step2Card) {
+      step2Card.style.display = (data.step2Title || data.step2Desc) ? 'flex' : 'none';
+    }
+  }
+  const step2DescEl = document.getElementById('step-2-desc');
+  if (step2DescEl) step2DescEl.innerHTML = data.step2Desc || '';
+
+  const step3TitleEl = document.getElementById('step-3-title');
+  if (step3TitleEl) {
+    step3TitleEl.innerText = data.step3Title || '';
+    const step3Card = step3TitleEl.closest('.flex');
+    if (step3Card) {
+      step3Card.style.display = (data.step3Title || data.step3Desc) ? 'flex' : 'none';
+    }
+  }
+  const step3DescEl = document.getElementById('step-3-desc');
+  if (step3DescEl) step3DescEl.innerHTML = data.step3Desc || '';
+
+  const noteEl = document.getElementById('sop-security-note');
+  if (noteEl) noteEl.innerText = data.securityNote || '';
 
   // Configure Direct WhatsApp Button
   const waText = encodeURIComponent(`Halo IT Support RS Awal Bros Botania, saya memerlukan bantuan teknisi untuk kendala: ${data.title} di lokasi unit: ${data.location}. Sudah mencoba SOP mandiri.`);

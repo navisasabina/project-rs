@@ -464,7 +464,7 @@ router.post('/', requireAuth, requireRoles('ADMIN', 'IT_MANAGER'), async (req, r
           published_at
         ) VALUES (
           $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14,
-          CASE WHEN $13 = 'PUBLISHED' THEN CURRENT_TIMESTAMP ELSE NULL END
+          CASE WHEN $13 = 'PUBLISHED'::guide_status THEN CURRENT_TIMESTAMP ELSE NULL END
         )
         RETURNING *;
       `;

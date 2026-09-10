@@ -74,21 +74,73 @@ stitch_rs_awal_bros_hardware_guidebook/
 
 ## Menjalankan Project
 
-### 1. Menggunakan Node.js Backend Server (Rekomendasi)
-```bash
-# Menjalankan server backend (otomatis melayani User Portal & API)
-npm run dev
+### 1. Panduan Menjalankan Secara Native Tanpa Docker (Node.js & PostgreSQL)
 
-# Atau mode production:
-npm start
+Bagi pengembang atau rekan tim yang menerima arsip source code project ini, aplikasi dapat langsung dijalankan secara native tanpa Docker dengan langkah-langkah berikut:
 
-# Uji seluruh automated test suite (database, seed, public api, health):
-npm test
+#### A. Prasyarat Sistem
+- **Node.js**: v18.x atau v20.x LTS (direkomendasikan v20+ LTS)
+- **PostgreSQL**: v14.x atau v15.x (service aktif berjalan lokal pada port 5432)
 
-# Atau uji spesifik public api:
-npm run test:api
-```
-Akses di browser melalui `http://localhost:3000` (User Portal) dan `http://localhost:3000/api/v1/health` (API Health Check).
+#### B. Langkah Setup Cepat
+
+1. **Buat Database PostgreSQL**:
+   Pastikan service PostgreSQL berjalan, lalu buat database untuk project ini:
+   ```sql
+   CREATE DATABASE rs_awal_bros_kb;
+   ```
+
+2. **Salin File Konfigurasi Environment**:
+   Salin file `.env.example` menjadi `.env`:
+   ```bash
+   # Di Windows (Command Prompt / PowerShell):
+   copy .env.example .env
+
+   # Di Linux / macOS:
+   cp .env.example .env
+   ```
+   Buka file `.env` dan sesuaikan username/password PostgreSQL lokal Anda pada baris `DATABASE_URL`:
+   ```ini
+   DATABASE_URL=postgresql://postgres:password_anda@localhost:5432/rs_awal_bros_kb
+   ```
+
+3. **Install Dependensi Proyek**:
+   ```bash
+   npm install
+   ```
+
+4. **Inisialisasi Database (Migrasi, Master Data SOP, dan Akun Admin)**:
+   Jalankan satu perintah terpadu:
+   ```bash
+   npm run setup
+   ```
+   > *Catatan: Perintah `npm run setup` secara otomatis menjalankan tiga tahapan berturut-turut:*
+   > - `npm run migrate:up` (Menerapkan skema tabel, indeks relasional, dan vector Full-Text Search)
+   > - `npm run seed:sop` (Mengisi master 8 modul SOP dasar RS Awal Bros secara idempoten)
+   > - `npm run seed:admin` (Membuat akun Bootstrap Administrator IT awal)
+
+5. **Jalankan Server Aplikasi**:
+   ```bash
+   # Mode Development (auto-reload):
+   npm run dev
+
+   # Atau Mode Standar / Production:
+   npm start
+   ```
+
+6. **Akses Antarmuka di Browser**:
+   - **Portal Pengguna Publik**: `http://localhost:3000`
+   - **Portal Admin & Staf IT**: `http://localhost:3000/admin/login`
+     - **Username**: `admin.it`
+     - **Password**: `AwalBrosIT@2026`
+   - **Liveness Probe**: `http://localhost:3000/api/v1/health`
+   - **Readiness Probe**: `http://localhost:3000/api/v1/health/ready` (memverifikasi status `database: "connected"`)
+
+7. **Menjalankan Validasi Automated Test Suite**:
+   ```bash
+   npm test
+   ```
+   *(Seluruh 12 test suite M0–M11 akan dijalankan dan terverifikasi 100% PASS).*
 
 ### 2. Public REST API Endpoints (M3)
 Platform menyediakan Public REST API read-only berbasis PostgreSQL:
