@@ -53,9 +53,12 @@ app.get('/api/v1/health/ready', async (req, res) => {
 // M3 Public Knowledge Base API Routes
 const categoriesRouter = require('./routes/categories');
 const guidesRouter = require('./routes/guides');
+const aiRouter = require('./routes/ai');
 
 app.use('/api/v1/categories', categoriesRouter);
 app.use('/api/v1/guides', guidesRouter);
+app.use('/api/v1/ai', aiRouter);
+
 
 // M5 Authentication & Account Provisioning Routes
 const authRouter = require('./routes/auth');

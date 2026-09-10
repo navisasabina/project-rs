@@ -81,7 +81,16 @@ const loginRateLimiter = createRateLimiter({
   max: 10,
 });
 
+// Pre-configured AI diagnostic rate limiter: 15 requests per 15 minutes per IP
+const aiRateLimiter = createRateLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 15,
+  message: 'Terlalu banyak permintaan diagnosa AI. Silakan tunggu beberapa saat sebelum mencoba kembali.',
+  code: 'AI_RATE_LIMIT_EXCEEDED',
+});
+
 module.exports = {
   createRateLimiter,
   loginRateLimiter,
+  aiRateLimiter,
 };

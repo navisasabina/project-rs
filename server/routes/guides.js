@@ -10,15 +10,24 @@ const KEY_CODE_REGEX = /^[a-zA-Z0-9_-]{2,50}$/;
 /**
  * GET /api/v1/guides
  * Mengembalikan daftar ringkas panduan berstatus PUBLISHED.
- * Mendukung filter opsional ?category=slug.
+ * Mendukung filter opsional ?category=slug dan pencarian ?search=query / ?q=query.
+ * Menggunakan search_vector PostgreSQL FTS dengan fallback aman.
  * Tidak mengekspos DRAFT atau ARCHIVED ke publik.
  */
 router.get('/', async (req, res) => {
   try {
     const { category } = req.query;
+    const rawSearch = req.query.search !== undefined ? req.query.search : req.query.q;
+    let search = '';
+    if (typeof rawSearch === 'string') {
+      search = rawSearch.trim();
+      if (search.length > 100) {
+        search = search.substring(0, 100);
+      }
+    }
 
     const queryParams = [];
-    let queryText = `
+    let baseQueryText = `
       SELECT 
         g.id,
         g.key_code,
@@ -51,12 +60,48 @@ router.get('/', async (req, res) => {
         });
       }
       queryParams.push(category);
-      queryText += ` AND c.slug = $${queryParams.length}`;
+      baseQueryText += ` AND c.slug = $${queryParams.length}`;
     }
 
-    queryText += ` ORDER BY c.display_order ASC, g.title ASC;`;
+    let result;
+    if (search) {
+      try {
+        // Attempt 1: PostgreSQL Full-Text Search via search_vector & plainto_tsquery
+        const ftsParams = [...queryParams, search, `%${search}%`];
+        const searchParamIdx = queryParams.length + 1;
+        const likeParamIdx = queryParams.length + 2;
+        const ftsQuery = `
+          ${baseQueryText}
+          AND (
+            g.search_vector @@ plainto_tsquery('indonesian', $${searchParamIdx})
+            OR g.title ILIKE $${likeParamIdx}
+            OR g.keywords ILIKE $${likeParamIdx}
+            OR g.location_scope ILIKE $${likeParamIdx}
+          )
+          ORDER BY ts_rank(g.search_vector, plainto_tsquery('indonesian', $${searchParamIdx})) DESC, c.display_order ASC, g.title ASC;
+        `;
+        result = await db.query(ftsQuery, ftsParams);
+      } catch (ftsErr) {
+        // Attempt 2: Safe ILIKE Fallback (e.g. pg-mem mock or missing tsvector dictionary)
+        const fallbackParams = [...queryParams, `%${search}%`];
+        const fallbackParamIdx = queryParams.length + 1;
+        const fallbackQuery = `
+          ${baseQueryText}
+          AND (
+            g.title ILIKE $${fallbackParamIdx}
+            OR g.keywords ILIKE $${fallbackParamIdx}
+            OR g.location_scope ILIKE $${fallbackParamIdx}
+            OR g.possible_causes ILIKE $${fallbackParamIdx}
+          )
+          ORDER BY c.display_order ASC, g.title ASC;
+        `;
+        result = await db.query(fallbackQuery, fallbackParams);
+      }
+    } else {
+      const defaultQuery = `${baseQueryText} ORDER BY c.display_order ASC, g.title ASC;`;
+      result = await db.query(defaultQuery, queryParams);
+    }
 
-    const result = await db.query(queryText, queryParams);
 
     // Format category object nested cleanly
     const guides = result.rows.map((row) => ({

@@ -81,7 +81,7 @@ function resetGeminiConversation() {
   `;
 }
 
-function processUserMessage(message) {
+async function processUserMessage(message) {
   const container = document.getElementById('gemini-messages-box');
   if (!container) return;
 
@@ -118,50 +118,88 @@ function processUserMessage(message) {
   container.appendChild(typingBubble);
   container.scrollTop = container.scrollHeight;
 
-  // 3. AI Intelligent Response Generation
-  setTimeout(() => {
-    const typingEl = document.getElementById(typingId);
-    if (typingEl) typingEl.remove();
+  // 3. AI Intelligent Response Generation via Backend Proxy
+  let responseObj = null;
 
-    const responseObj = generateSOPResponse(message);
+  try {
+    const res = await fetch('/api/v1/ai/diagnose', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({ message: message }),
+    });
 
-    const aiBubble = document.createElement('div');
-    aiBubble.className = 'flex gap-2.5 animate-in fade-in duration-200';
-    aiBubble.innerHTML = `
-      <div class="w-8 h-8 rounded-xl bg-hospital-navy text-[#00A3A6] flex-shrink-0 flex items-center justify-center shadow">
-        <span class="material-symbols-outlined text-base">auto_awesome</span>
+    if (res.status === 429) {
+      const errJson = await res.json().catch(() => ({}));
+      responseObj = {
+        title: 'Batas Permintaan Tercapai (Rate Limit)',
+        category: 'Keamanan Sistem',
+        intro: errJson?.error?.message || 'Terlalu banyak permintaan diagnosa AI. Silakan tunggu beberapa saat sebelum mencoba kembali.',
+        steps: [
+          'Tunggu 1–2 menit sebelum mengirimkan pertanyaan baru.',
+          'Bila membutuhkan bantuan segera, hubungi IT Helpdesk melalui sambungan telepon darurat.'
+        ],
+        note: 'Rate limiting diterapkan untuk menjaga stabilitas infrastruktur rumah sakit.',
+        source: 'RATE_LIMITED'
+      };
+    } else if (res.ok) {
+      const json = await res.json();
+      if (json.success && json.data) {
+        responseObj = json.data;
+      }
+    }
+  } catch (netErr) {
+    console.warn('[Gemini AI] Backend endpoint unreachable, using client-side fallback:', netErr.message);
+  }
+
+  // Graceful fallback to client-side SOP generation if backend is unavailable or failed
+  if (!responseObj) {
+    responseObj = generateSOPResponse(message);
+  }
+
+  // Remove typing indicator
+  const typingEl = document.getElementById(typingId);
+  if (typingEl) typingEl.remove();
+
+  // Render AI Response Bubble
+  const aiBubble = document.createElement('div');
+  aiBubble.className = 'flex gap-2.5 animate-in fade-in duration-200';
+  aiBubble.innerHTML = `
+    <div class="w-8 h-8 rounded-xl bg-hospital-navy text-[#00A3A6] flex-shrink-0 flex items-center justify-center shadow">
+      <span class="material-symbols-outlined text-base">auto_awesome</span>
+    </div>
+    <div class="bg-white border border-slate-200 p-3.5 rounded-2xl rounded-tl-sm shadow-sm max-w-[88%] text-slate-800 space-y-2.5">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-1.5">
+        <span class="font-bold text-hospital-navy flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm text-[#0097A7]">verified</span> ${escapeHtml(responseObj.title || 'Diagnosis SOP IT')}
+        </span>
+        <span class="text-[9px] px-1.5 py-0.5 rounded bg-teal-50 text-[#0097A7] font-bold uppercase">${escapeHtml(responseObj.category || 'IT Support')}</span>
       </div>
-      <div class="bg-white border border-slate-200 p-3.5 rounded-2xl rounded-tl-sm shadow-sm max-w-[88%] text-slate-800 space-y-2.5">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-1.5">
-          <span class="font-bold text-hospital-navy flex items-center gap-1">
-            <span class="material-symbols-outlined text-sm text-[#0097A7]">verified</span> ${responseObj.title}
-          </span>
-          <span class="text-[9px] px-1.5 py-0.5 rounded bg-teal-50 text-[#0097A7] font-bold uppercase">${responseObj.category}</span>
-        </div>
-        <p class="text-slate-600 leading-relaxed">${responseObj.intro}</p>
-        <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-2.5 space-y-1.5">
-          <div class="font-bold text-[11px] text-slate-700">Langkah Mandiri Sesuai SOP:</div>
-          <ol class="list-decimal list-inside space-y-1 text-slate-600 text-[11px] leading-relaxed">
-            ${responseObj.steps.map(s => `<li>${s}</li>`).join('')}
-          </ol>
-        </div>
-        ${responseObj.note ? `
-          <div class="bg-amber-50 border border-amber-200 rounded-lg p-2 text-[10px] text-amber-900 leading-tight">
-            <strong>Catatan Penting:</strong> ${responseObj.note}
-          </div>
-        ` : ''}
-        <div class="pt-1.5 flex flex-wrap items-center gap-2">
-          <a href="https://wa.me/6281234567890?text=Halo%20IT%20RS%20Awal%20Bros,%20butuh%20bantuan%20teknisi%20untuk:%20${encodeURIComponent(message)}" target="_blank" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1.5 rounded-lg text-[10px] shadow transition">
-            <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
-            Panggil Teknisi via WA
-          </a>
-          <span class="text-[10px] text-slate-400">atau PABX <strong>Ext 104</strong> (Emergency)</span>
-        </div>
+      <p class="text-slate-600 leading-relaxed">${escapeHtml(responseObj.intro || '')}</p>
+      <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-2.5 space-y-1.5">
+        <div class="font-bold text-[11px] text-slate-700">Langkah Mandiri Sesuai SOP:</div>
+        <ol class="list-decimal list-inside space-y-1 text-slate-600 text-[11px] leading-relaxed">
+          ${(responseObj.steps || []).map(s => `<li>${escapeHtml(s)}</li>`).join('')}
+        </ol>
       </div>
-    `;
-    container.appendChild(aiBubble);
-    container.scrollTop = container.scrollHeight;
-  }, 700);
+      ${responseObj.note ? `
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-2 text-[10px] text-amber-900 leading-tight">
+          <strong>Catatan Penting:</strong> ${escapeHtml(responseObj.note)}
+        </div>
+      ` : ''}
+      <div class="pt-1.5 flex flex-wrap items-center gap-2">
+        <a href="https://wa.me/6281234567890?text=Halo%20IT%20RS%20Awal%20Bros,%20butuh%20bantuan%20teknisi%20untuk:%20${encodeURIComponent(message)}" target="_blank" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1.5 rounded-lg text-[10px] shadow transition">
+          <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+          Panggil Teknisi via WA
+        </a>
+        <span class="text-[10px] text-slate-400">atau PABX <strong>Ext 104</strong> (Emergency)</span>
+      </div>
+    </div>
+  `;
+  container.appendChild(aiBubble);
+  container.scrollTop = container.scrollHeight;
 }
 
 function generateSOPResponse(query) {

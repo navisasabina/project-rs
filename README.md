@@ -271,12 +271,38 @@ docker compose down -v
 
 ---
 
-### 7. Membuka Frontend Langsung (Static Fallback)
+### 7. Fitur Pencarian Cerdas & Asisten Diagnostik AI (M10)
+
+Platform kini mengintegrasikan PostgreSQL Full-Text Search dan Asisten AI Diagnostik yang ter-grounding secara ketat pada SOP resmi RS Awal Bros:
+
+1. **PostgreSQL Full-Text Search (`GET /api/v1/guides?search=...` / `?q=...`)**:
+   - Memanfaatkan infrastruktur `search_vector TSVECTOR` PostgreSQL dengan query terparameterisasi `plainto_tsquery('indonesian', ...)`.
+   - Mengurutkan hasil relevansi pencarian menggunakan `ts_rank(...) DESC`.
+   - Menjamin isolasi data: panduan berstatus `DRAFT`, `ARCHIVED`, maupun kategori non-aktif tidak akan pernah muncul di portal publik.
+   - Dilengkapi graceful fallback `ILIKE` yang tahan terhadap kegagalan mock lingkungan pengujian.
+   - Frontend `js/search.js` terhubung langsung ke API pencarian backend dan mendegradasi secara transparan jika koneksi offline.
+
+2. **Asisten AI Diagnostik IT Ter-grounding (`POST /api/v1/ai/diagnose`)**:
+   - **PostgreSQL Sebagai Sumber Kebenaran Tunggal**: Konten SOP resmi dari database PostgreSQL dijadikan konteks acuan wajib sebelum memanggil model AI.
+   - **Kunci API Rahasia Tetap di Sisi Server**: `GEMINI_API_KEY` dikonfigurasi melalui environment variable server dan **tidak pernah diekspos** ke kode klien/browser.
+   - **Batasan Keselamatan Klinis (*Medical Guardrail*)**: Permintaan diagnosa medis, keluhan klinis pasien, maupun resep obat langsung ditolak secara aman (`SAFETY_REFUSAL`) dan diarahkan ke IGD / Tim Code Blue Medis.
+   - **Degradasi Lokal Anggun (*Graceful Local Fallback*)**: Jika kunci Gemini tidak dikonfigurasi, kuota habis, terjadi error jaringan, atau timeout (8 detik), endpoint secara otomatis mengembalikan prosedur SOP resmi dari database PostgreSQL (`DATABASE_SOP_GROUNDED` / `DATABASE_SOP_FALLBACK`).
+   - **Proteksi Rate Limiting Khusus**: Dibatasi maksimal **15 permintaan per 15 menit per IP**. Request berlebih menerima status `HTTP 429 Too Many Requests` beserta header `Retry-After`.
+   - **Validasi Input**: Pertanyaan pengguna dibatasi maksimal 500 karakter untuk mencegah penyalahgunaan token AI.
+
+3. **Menjalankan Pengujian M10**:
+   ```bash
+   # Menjalankan test suite mandiri M10:
+   npm run test:m10
+
+   # Atau seluruh rangkaian pengujian sistem M0–M10:
+   npm test
+   ```
+
+---
+
+### 8. Membuka Frontend Langsung (Static Fallback)
 Buka file `index.html` langsung di browser modern, atau gunakan HTTP server sederhana:
 ```bash
 python -m http.server 8000
 ```
-
-
-
-
