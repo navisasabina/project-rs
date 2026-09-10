@@ -18,7 +18,8 @@
     "test:frontend-api": "node scripts/test-frontend-api.js",
     "test:auth": "node scripts/test-auth.js",
     "test:admin-kb": "node scripts/test-admin-kb.js",
-    "test": "node scripts/test-db.js && node scripts/test-seed.js && node scripts/test-api.js && node scripts/test-frontend-api.js && node scripts/test-auth.js && node scripts/test-admin-kb.js && node scripts/test-health.js"
+    "test:admin-ui": "node scripts/test-frontend-admin.js",
+    "test": "node scripts/test-db.js && node scripts/test-seed.js && node scripts/test-api.js && node scripts/test-frontend-api.js && node scripts/test-auth.js && node scripts/test-admin-kb.js && node scripts/test-frontend-admin.js && node scripts/test-health.js"
   },
   "keywords": [
     "it-support",

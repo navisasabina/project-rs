@@ -44,6 +44,15 @@ const adminGuidesRouter = require('./routes/admin-guides');
 app.use('/api/v1/admin/categories', adminCategoriesRouter);
 app.use('/api/v1/admin/guides', adminGuidesRouter);
 
+// M7 Admin Dashboard Web Pages
+app.get('/admin/login', (req, res) => {
+  res.sendFile(path.resolve(rootDir, 'admin-login.html'));
+});
+
+app.get(['/admin', '/admin/*'], (req, res) => {
+  res.sendFile(path.resolve(rootDir, 'admin.html'));
+});
+
 // Fallback 404 handler for unmatched /api/* requests
 app.use('/api/*', (req, res) => {
   res.status(404).json({

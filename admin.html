@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Admin Dashboard — RS Awal Bros Botania Knowledge Base</title>
+  <!-- Tailwind CSS v3 with Plugins -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Tailwind Configuration -->
+  <script src="js/tailwind.config.js"></script>
+  <!-- Google Fonts: Inter & Montserrat -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  <!-- Custom Styles -->
+  <link href="css/styles.css" rel="stylesheet"/>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col selection:bg-[#0097A7] selection:text-white relative">
+
+  <!-- Fullscreen Loading Skeleton (Dismissed on session verify) -->
+  <div id="dashboard-loading-overlay" class="fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center transition-opacity duration-300">
+    <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#002541] text-cyan-400 border border-slate-800 shadow-xl mb-4">
+      <span class="animate-spin inline-block w-6 h-6 border-2 border-[#0097A7] border-t-transparent rounded-full"></span>
+    </div>
+    <p class="text-sm font-semibold text-slate-200">Memverifikasi Sesi Staf IT...</p>
+    <p class="text-xs text-slate-500 mt-1">RS Awal Bros Botania Knowledge Base</p>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="admin-toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none *:pointer-events-auto"></div>
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-40 bg-slate-900/90 border-b border-slate-800 backdrop-blur-md shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Left: Branding & Organization -->
+        <div class="flex items-center gap-4">
+          <a href="/admin" class="flex items-center gap-3 group">
+            <img alt="RS Awal Bros" class="h-8 md:h-9 w-auto object-contain rounded-md transition-transform group-hover:scale-105" src="/logo.png"/>
+            <div class="pl-3 border-l border-slate-800 hidden sm:block">
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-[#0097A7] block leading-none">Admin Knowledge Base</span>
+              <span class="text-xs text-slate-400 font-medium">RS Awal Bros Botania</span>
+            </div>
+          </a>
+
+          <!-- Navigation Tabs -->
+          <nav class="hidden md:flex items-center gap-1.5 ml-6 border-l border-slate-800 pl-6 text-xs font-semibold">
+            <button
+              id="tab-btn-overview"
+              onclick="switchAdminTab('overview')"
+              class="admin-nav-btn px-3.5 py-2 rounded-xl transition-all border border-[#0097A7] text-[#0097A7] bg-slate-800 flex items-center gap-1.5"
+            >
+              <span class="material-symbols-outlined text-base">dashboard</span>
+              <span>Ringkasan</span>
+            </button>
+            <button
+              id="tab-btn-guides"
+              onclick="switchAdminTab('guides')"
+              class="admin-nav-btn px-3.5 py-2 rounded-xl transition-all border border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5"
+            >
+              <span class="material-symbols-outlined text-base">menu_book</span>
+              <span>Basis Pengetahuan SOP</span>
+            </button>
+            <button
+              id="tab-btn-categories"
+              onclick="switchAdminTab('categories')"
+              class="admin-nav-btn px-3.5 py-2 rounded-xl transition-all border border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5"
+            >
+              <span class="material-symbols-outlined text-base">category</span>
+              <span>Kategori Hardware</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- Right: User Profile & Actions -->
+        <div class="flex items-center gap-3">
+          <!-- View Public Portal Button -->
+          <a
+            href="/"
+            target="_blank"
+            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-colors"
+            title="Buka Portal Pengguna di Tab Baru"
+          >
+            <span>Portal Pengguna</span>
+            <span class="material-symbols-outlined text-sm">open_in_new</span>
+          </a>
+
+          <!-- User Badge & Profile Info -->
+          <div class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800">
+            <div id="user-avatar-initial" class="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#002541] to-[#0097A7] text-white flex items-center justify-center font-bold text-xs shadow-inner">
+              A
+            </div>
+            <div class="text-left hidden md:block">
+              <span id="user-full-name" class="text-xs font-bold text-slate-200 block leading-tight truncate max-w-[130px]">Memuat...</span>
+              <span id="user-role-badge" class="px-1.5 py-0.2 text-[9px] font-bold rounded text-slate-400 border border-slate-700 block mt-0.5">ROLE</span>
+            </div>
+          </div>
+
+          <!-- Logout Button -->
+          <button
+            onclick="confirmLogout()"
+            class="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-xl border border-slate-800 hover:border-red-500/30 transition-colors"
+            title="Keluar Sesi Portal IT"
+          >
+            <span class="material-symbols-outlined text-lg">logout</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Mobile Tab Nav (Visible on small screens) -->
+      <div class="flex md:hidden items-center justify-around py-2.5 border-t border-slate-800 text-xs font-semibold">
+        <button onclick="switchAdminTab('overview')" class="px-2.5 py-1 text-slate-400 hover:text-white">Ringkasan</button>
+        <button onclick="switchAdminTab('guides')" class="px-2.5 py-1 text-slate-400 hover:text-white">Panduan SOP</button>
+        <button onclick="switchAdminTab('categories')" class="px-2.5 py-1 text-slate-400 hover:text-white">Kategori</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Read-Only Banner for IT_SUPPORT -->
+    <div id="read-only-banner" class="hidden mb-6 p-4 rounded-2xl bg-blue-950/40 border border-blue-800/60 text-xs text-blue-200 flex items-start gap-3 shadow-lg">
+      <span class="material-symbols-outlined text-blue-400 text-lg shrink-0 mt-0.5">info</span>
+      <div>
+        <strong class="font-bold text-blue-300 block mb-0.5">Hak Akses Terbatas (Read-Only)</strong>
+        <p class="text-slate-300 leading-relaxed">
+          Akun Anda memiliki role <strong>IT_SUPPORT</strong>. Anda dapat melihat seluruh daftar panduan, detail langkah, dan kategori.
+          Tindakan penambahan, perubahan, publikasi, dan pengarsipan dibatasi untuk <strong>ADMIN</strong> dan <strong>IT_MANAGER</strong>.
+        </p>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         TAB 1: RINGKASAN / OVERVIEW
+         ========================================================================= -->
+    <section id="view-overview" class="admin-view-panel space-y-8">
+      
+      <!-- Greeting Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold font-brand text-white">Dashboard Monitoring IT</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+            Ringkasan status basis pengetahuan, panduan aktif, dan kategori hardware RS Awal Bros.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            onclick="openCreateGuideModal()"
+            class="rbac-mutation px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#0097A7] to-cyan-600 hover:from-cyan-600 hover:to-[#00828A] text-white text-xs font-bold shadow-lg shadow-cyan-900/30 transition-all flex items-center gap-1.5"
+          >
+            <span class="material-symbols-outlined text-base">add</span>
+            <span>Tambah Panduan Baru</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Summary Cards Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        
+        <!-- Total Guides -->
+        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-xs font-medium">Total Panduan</span>
+            <span class="material-symbols-outlined text-lg text-cyan-400">auto_stories</span>
+          </div>
+          <div id="kpi-total-guides" class="text-2xl font-bold font-mono text-white">0</div>
+          <span class="text-[10px] text-slate-500 mt-1 block">Seluruh status</span>
+        </div>
+
+        <!-- Published Guides -->
+        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-xs font-medium">Panduan Publik</span>
+            <span class="material-symbols-outlined text-lg text-emerald-400">check_circle</span>
+          </div>
+          <div id="kpi-published-guides" class="text-2xl font-bold font-mono text-emerald-400">0</div>
+          <span class="text-[10px] text-emerald-500/80 mt-1 block">Aktif di Portal Pengguna</span>
+        </div>
+
+        <!-- Draft Guides -->
+        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-xs font-medium">Draf Belum Rilis</span>
+            <span class="material-symbols-outlined text-lg text-amber-400">edit_note</span>
+          </div>
+          <div id="kpi-draft-guides" class="text-2xl font-bold font-mono text-amber-400">0</div>
+          <span class="text-[10px] text-amber-500/80 mt-1 block">Internal tim IT</span>
+        </div>
+
+        <!-- Archived Guides -->
+        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-xs font-medium">Diarsipkan</span>
+            <span class="material-symbols-outlined text-lg text-slate-400">archive</span>
+          </div>
+          <div id="kpi-archived-guides" class="text-2xl font-bold font-mono text-slate-300">0</div>
+          <span class="text-[10px] text-slate-500 mt-1 block">Tidak tampil di publik</span>
+        </div>
+
+        <!-- Total Categories -->
+        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md col-span-2 sm:col-span-1">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-xs font-medium">Kategori Hardware</span>
+            <span class="material-symbols-outlined text-lg text-cyan-400">category</span>
+          </div>
+          <div id="kpi-total-categories" class="text-2xl font-bold font-mono text-white">0</div>
+          <span class="text-[10px] text-slate-500 mt-1 block">Klasifikasi perangkat</span>
+        </div>
+
+      </div>
+
+      <!-- Quick Action Cards & Recent Activity -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Left 2 cols: Recent Guides Table -->
+        <div class="lg:col-span-2 bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+              <span class="material-symbols-outlined text-cyan-400 text-lg">history</span>
+              <span>Daftar Panduan Terkini</span>
+            </h3>
+            <button onclick="switchAdminTab('guides')" class="text-xs text-cyan-400 hover:text-cyan-300 font-semibold inline-flex items-center gap-1">
+              <span>Kelola Semua</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead>
+                <tr class="border-b border-slate-800 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  <th class="py-2.5 px-4">Judul Masalah</th>
+                  <th class="py-2.5 px-4">Kategori</th>
+                  <th class="py-2.5 px-4">Langkah</th>
+                  <th class="py-2.5 px-4">Status</th>
+                  <th class="py-2.5 px-4 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="overview-recent-guides">
+                <tr>
+                  <td colspan="5" class="py-8 text-center text-slate-500 text-xs">Memuat data terbaru...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right 1 col: Quick Guide Actions -->
+        <div class="space-y-4">
+          <div class="p-6 rounded-2xl bg-gradient-to-br from-[#002541]/80 to-slate-900/90 border border-slate-800 shadow-xl space-y-4">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#0097A7] text-lg">bolt</span>
+              <span>Aksi Cepat Staf IT</span>
+            </h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Tambahkan panduan masalah hardware baru langsung ke sistem atau kelola klasifikasi kategori hardware.
+            </p>
+            <div class="space-y-2 pt-2">
+              <button
+                onclick="openCreateGuideModal()"
+                class="rbac-mutation w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-cyan-500/50 text-white text-xs font-semibold flex items-center justify-between transition-all"
+              >
+                <span class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-cyan-400 text-base">post_add</span>
+                  <span>Buat Panduan SOP Baru</span>
+                </span>
+                <span class="material-symbols-outlined text-slate-500 text-sm">chevron_right</span>
+              </button>
+
+              <button
+                onclick="openCreateCategoryModal()"
+                class="rbac-mutation w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-cyan-500/50 text-white text-xs font-semibold flex items-center justify-between transition-all"
+              >
+                <span class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-cyan-400 text-base">add_circle</span>
+                  <span>Tambah Kategori Baru</span>
+                </span>
+                <span class="material-symbols-outlined text-slate-500 text-sm">chevron_right</span>
+              </button>
+
+              <a
+                href="/"
+                target="_blank"
+                class="w-full py-2.5 px-4 rounded-xl bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 text-slate-300 hover:text-white text-xs font-semibold flex items-center justify-between transition-all"
+              >
+                <span class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-slate-400 text-base">open_in_browser</span>
+                  <span>Pratinjau Portal Pengguna</span>
+                </span>
+                <span class="material-symbols-outlined text-slate-500 text-sm">north_east</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =========================================================================
+         TAB 2: BASIS PENGETAHUAN SOP (GUIDES MANAGEMENT)
+         ========================================================================= -->
+    <section id="view-guides" class="admin-view-panel hidden space-y-6">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold font-brand text-white">Basis Pengetahuan SOP Troubleshooting</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+            Kelola panduan troubleshooting perangkat keras, langkah perbaikan mandiri, dan siklus hidup publikasi.
+          </p>
+        </div>
+        <button
+          onclick="openCreateGuideModal()"
+          class="rbac-mutation px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#0097A7] to-cyan-600 hover:from-cyan-600 hover:to-[#00828A] text-white text-xs font-bold shadow-lg shadow-cyan-900/30 transition-all flex items-center gap-1.5 self-start sm:self-auto"
+        >
+          <span class="material-symbols-outlined text-base">add</span>
+          <span>Tambah Panduan Baru</span>
+        </button>
+      </div>
+
+      <!-- Filters & Search Toolbar -->
+      <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        
+        <!-- Left: Search Box -->
+        <div class="relative flex-1 max-w-md">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <span class="material-symbols-outlined text-lg">search</span>
+          </div>
+          <input
+            id="guide-search-input"
+            type="text"
+            oninput="handleGuideSearch(event)"
+            placeholder="Cari judul panduan, key code, lokasi, atau kata kunci..."
+            class="w-full pl-10 pr-4 py-2 bg-slate-950/70 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7] transition-all"
+          />
+        </div>
+
+        <!-- Right: Status & Category Filter -->
+        <div class="flex flex-wrap items-center gap-3">
+          
+          <!-- Category Dropdown -->
+          <select
+            id="guide-filter-category"
+            onchange="handleGuideCategoryFilter(event)"
+            class="px-3 py-2 bg-slate-950/70 border border-slate-700/80 rounded-xl text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+          >
+            <option value="ALL">Semua Kategori</option>
+          </select>
+
+          <!-- Status Filter Buttons -->
+          <div class="inline-flex rounded-xl bg-slate-950 p-1 border border-slate-800 text-xs">
+            <button
+              id="status-filter-all"
+              onclick="filterGuidesByStatus('ALL')"
+              class="guide-status-filter-btn px-3 py-1 rounded-lg transition-colors bg-[#0097A7] text-white font-semibold"
+            >
+              Semua
+            </button>
+            <button
+              id="status-filter-published"
+              onclick="filterGuidesByStatus('PUBLISHED')"
+              class="guide-status-filter-btn px-3 py-1 rounded-lg transition-colors text-slate-400 hover:text-white"
+            >
+              Published
+            </button>
+            <button
+              id="status-filter-draft"
+              onclick="filterGuidesByStatus('DRAFT')"
+              class="guide-status-filter-btn px-3 py-1 rounded-lg transition-colors text-slate-400 hover:text-white"
+            >
+              Draft
+            </button>
+            <button
+              id="status-filter-archived"
+              onclick="filterGuidesByStatus('ARCHIVED')"
+              class="guide-status-filter-btn px-3 py-1 rounded-lg transition-colors text-slate-400 hover:text-white"
+            >
+              Archived
+            </button>
+          </div>
+
+          <!-- Total Count Badge -->
+          <span id="guides-filtered-count" class="text-xs font-mono text-slate-400 px-2 py-1 bg-slate-800/80 rounded-lg border border-slate-700">
+            0 Panduan
+          </span>
+
+        </div>
+
+      </div>
+
+      <!-- Guides Data Table -->
+      <div class="bg-slate-900/80 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="bg-slate-950/80 border-b border-slate-800 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                <th class="py-3.5 px-4">Panduan & Kode SOP</th>
+                <th class="py-3.5 px-4">Kategori Hardware</th>
+                <th class="py-3.5 px-4">Status Siklus</th>
+                <th class="py-3.5 px-4">Langkah SOP</th>
+                <th class="py-3.5 px-4">Penulis & Terakhir Diperbarui</th>
+                <th class="py-3.5 px-4 text-right">Tindakan</th>
+              </tr>
+            </thead>
+            <tbody id="guides-table-body">
+              <tr>
+                <td colspan="6" class="py-12 text-center text-slate-500 text-xs">Memuat daftar panduan troubleshooting...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- =========================================================================
+         TAB 3: MANAJEMEN KATEGORI (CATEGORIES MANAGEMENT)
+         ========================================================================= -->
+    <section id="view-categories" class="admin-view-panel hidden space-y-6">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold font-brand text-white">Klasifikasi Kategori Hardware</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+            Atur pengelompokan perangkat medis, komputer, jaringan, dan aksesoris RS Awal Bros.
+          </p>
+        </div>
+        <button
+          onclick="openCreateCategoryModal()"
+          class="rbac-mutation px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#0097A7] to-cyan-600 hover:from-cyan-600 hover:to-[#00828A] text-white text-xs font-bold shadow-lg shadow-cyan-900/30 transition-all flex items-center gap-1.5 self-start sm:self-auto"
+        >
+          <span class="material-symbols-outlined text-base">add</span>
+          <span>Tambah Kategori Baru</span>
+        </button>
+      </div>
+
+      <!-- Categories Grid List -->
+      <div id="categories-list-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="col-span-full py-12 text-center text-slate-500 text-xs">
+          Memuat daftar kategori hardware...
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full py-4 text-center text-xs text-slate-500 border-t border-slate-800 bg-slate-900/50 mt-auto">
+    &copy; 2026 IT Division RS Awal Bros Botania. Seluruh hak cipta dilindungi.
+  </footer>
+
+  <!-- =========================================================================
+       MODAL 1: PREVIEW DETAIL PANDUAN
+       ========================================================================= -->
+  <div id="guide-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
+    <div class="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 my-8 max-h-[90vh] overflow-y-auto relative">
+      <button
+        onclick="closeGuideDetailModal()"
+        class="absolute top-5 right-5 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+      >
+        <span class="material-symbols-outlined text-xl">close</span>
+      </button>
+      <div id="guide-detail-modal-content">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2: FORM TAMBAH / EDIT PANDUAN (WITH STEP BUILDER)
+       ========================================================================= -->
+  <div id="guide-form-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
+    <div class="w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 my-8 max-h-[90vh] overflow-y-auto relative">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+        <h3 id="guide-form-modal-title" class="text-lg sm:text-xl font-bold font-brand text-white">
+          Tambah Panduan Troubleshooting Baru
+        </h3>
+        <button
+          type="button"
+          onclick="closeGuideFormModal()"
+          class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+        >
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <form id="guide-form" onsubmit="handleGuideFormSubmit(event)" class="space-y-6">
+        
+        <!-- Row 1: Title & Category -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Judul Masalah / SOP <span class="text-red-400">*</span>
+            </label>
+            <input
+              id="guide-form-title"
+              type="text"
+              required
+              placeholder="Contoh: Printer Resep Macet / Offline"
+              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Kategori Hardware <span class="text-red-400">*</span>
+            </label>
+            <select
+              id="guide-form-category"
+              required
+              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            >
+              <option value="" disabled selected>Pilih Kategori Hardware</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Row 2: Key Code & Location Scope -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Key Code (Opsional)
+            </label>
+            <input
+              id="guide-form-keycode"
+              type="text"
+              placeholder="Dibuat otomatis dari judul jika kosong"
+              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white font-mono placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            />
+            <span class="text-[10px] text-slate-500 block mt-1">Hanya huruf kecil, angka, strip (-). Contoh: printer_thermal</span>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Lokasi / Lingkup Ruangan <span class="text-red-400">*</span>
+            </label>
+            <input
+              id="guide-form-location"
+              type="text"
+              required
+              placeholder="Contoh: Farmasi, Kasir & Screening"
+              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            />
+          </div>
+        </div>
+
+        <!-- Row 3: Image URL & Estimated Time -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              URL Foto Perangkat <span class="text-red-400">*</span>
+            </label>
+            <input
+              id="guide-form-image"
+              type="url"
+              required
+              placeholder="https://..."
+              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Estimasi Waktu Penanganan
+            </label>
+            <input
+              id="guide-form-time"
+              type="text"
+              placeholder="Contoh: 2 - 4 Menit"
+              value="2 - 4 Menit"
+              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            />
+          </div>
+        </div>
+
+        <!-- Row 4: Security Note (Hospital Safety Note) -->
+        <div>
+          <label class="block text-xs font-semibold text-red-300 uppercase tracking-wider mb-1.5">
+            Catatan Keselamatan & Kepatuhan Pasien <span class="text-red-400">*</span>
+          </label>
+          <textarea
+            id="guide-form-security"
+            rows="2"
+            required
+            placeholder="Peringatan keselamatan bagi staf di ruangan (misal: JANGAN mencabut kabel ventilator medis...)"
+            class="w-full px-3.5 py-2 bg-red-950/20 border border-red-900/60 rounded-xl text-xs text-red-200 placeholder-red-400/50 focus:outline-none focus:ring-1 focus:ring-red-500"
+          ></textarea>
+        </div>
+
+        <!-- Row 5: Symptoms & Causes -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Gejala / Indikasi Masalah (1 per baris)
+            </label>
+            <textarea
+              id="guide-form-symptoms"
+              rows="3"
+              placeholder="Lampu status merah berkedip&#10;Kertas resep tidak keluar&#10;Antrian cetak macet"
+              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            ></textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Kemungkinan Penyebab
+            </label>
+            <textarea
+              id="guide-form-causes"
+              rows="3"
+              placeholder="Paper jam pada roll thermal, sensor optik kotor, atau kabel USB kendor."
+              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Row 6: Prompt Shortcut & Keywords -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Shortcut Prompt AI Gemini
+            </label>
+            <input
+              id="guide-form-prompt"
+              type="text"
+              placeholder="Contoh: Bagaimana cara mengatasi printer resep farmasi macet?"
+              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Kata Kunci Pencarian (Keywords)
+            </label>
+            <input
+              id="guide-form-keywords"
+              type="text"
+              placeholder="printer resep macet thermal etiket kasir"
+              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            />
+          </div>
+        </div>
+
+        <!-- Row 7: Initial Status -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+            Status Publikasi
+          </label>
+          <select
+            id="guide-form-status"
+            class="w-full sm:w-60 px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+          >
+            <option value="DRAFT">DRAFT (Disimpan internal)</option>
+            <option value="PUBLISHED">PUBLISHED (Langsung tampil di Portal)</option>
+          </select>
+        </div>
+
+        <!-- DYNAMIC STEPS BUILDER SECTION -->
+        <div class="pt-4 border-t border-slate-800">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h4 class="text-sm font-bold text-white flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[#0097A7] text-base">format_list_numbered</span>
+                <span>Langkah-Langkah Troubleshooting (SOP Steps)</span>
+              </h4>
+              <p class="text-[11px] text-slate-400 mt-0.5">
+                Susun langkah terurut yang jelas dan mudah dipraktikkan staf ruangan.
+              </p>
+            </div>
+            <button
+              type="button"
+              onclick="addStepToBuilder()"
+              class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-400 hover:text-cyan-300 text-xs font-semibold inline-flex items-center gap-1 transition-colors"
+            >
+              <span class="material-symbols-outlined text-sm">add</span>
+              <span>Tambah Langkah</span>
+            </button>
+          </div>
+
+          <!-- Step Cards Container -->
+          <div id="steps-builder-container" class="space-y-3">
+            <!-- Dynamic step items injected by JS -->
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+          <button
+            type="button"
+            onclick="closeGuideFormModal()"
+            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+          >
+            Batal
+          </button>
+          <button
+            id="guide-form-submit-btn"
+            type="submit"
+            class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#0097A7] to-cyan-600 hover:from-cyan-600 hover:to-[#00828A] shadow-lg shadow-cyan-900/30 transition-all flex items-center gap-1.5"
+          >
+            <span class="material-symbols-outlined text-base">save</span>
+            <span>Simpan Panduan</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 3: FORM TAMBAH / EDIT KATEGORI
+       ========================================================================= -->
+  <div id="category-form-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
+    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 my-8 relative">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+        <h3 id="category-form-modal-title" class="text-lg font-bold font-brand text-white">
+          Tambah Kategori Hardware Baru
+        </h3>
+        <button
+          type="button"
+          onclick="closeCategoryFormModal()"
+          class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+        >
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <form id="category-form" onsubmit="handleCategoryFormSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+            Nama Kategori <span class="text-red-400">*</span>
+          </label>
+          <input
+            id="cat-form-name"
+            type="text"
+            required
+            placeholder="Contoh: Server & Jaringan ICU"
+            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+            Slug URL (Opsional)
+          </label>
+          <input
+            id="cat-form-slug"
+            type="text"
+            placeholder="Otomatis dari nama (contoh: server-jaringan-icu)"
+            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white font-mono placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+          />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Nama Icon Material
+            </label>
+            <input
+              id="cat-form-icon"
+              type="text"
+              value="devices"
+              placeholder="devices / print / lan"
+              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white font-mono placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Urutan Tampilan
+            </label>
+            <input
+              id="cat-form-order"
+              type="number"
+              value="0"
+              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+            Deskripsi Kategori
+          </label>
+          <textarea
+            id="cat-form-desc"
+            rows="3"
+            placeholder="Deskripsi perangkat dan modul yang tercakup dalam kategori ini..."
+            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+          ></textarea>
+        </div>
+
+        <div class="pt-2 flex items-center gap-2">
+          <input
+            id="cat-form-active"
+            type="checkbox"
+            checked
+            class="w-4 h-4 rounded text-[#0097A7] focus:ring-[#0097A7] bg-slate-950 border-slate-700"
+          />
+          <label for="cat-form-active" class="text-xs font-semibold text-slate-300">
+            Aktifkan Kategori (Dapat dipilih untuk panduan baru)
+          </label>
+        </div>
+
+        <div class="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+          <button
+            type="button"
+            onclick="closeCategoryFormModal()"
+            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+          >
+            Batal
+          </button>
+          <button
+            id="category-form-submit-btn"
+            type="submit"
+            class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#0097A7] to-cyan-600 hover:from-cyan-600 hover:to-[#00828A] shadow-lg shadow-cyan-900/30 transition-all flex items-center gap-1.5"
+          >
+            <span class="material-symbols-outlined text-base">save</span>
+            <span>Simpan Kategori</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 4: KONFIRMASI AKSI (CONFIRMATION DIALOG)
+       ========================================================================= -->
+  <div id="admin-confirm-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 relative text-center">
+      <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/30 flex items-center justify-center mx-auto mb-4">
+        <span class="material-symbols-outlined text-2xl">help_outline</span>
+      </div>
+      <h3 id="confirm-modal-title" class="text-base font-bold text-white mb-2">Konfirmasi Tindakan</h3>
+      <p id="confirm-modal-message" class="text-xs text-slate-400 leading-relaxed mb-6">
+        Apakah Anda yakin ingin melanjutkan tindakan ini?
+      </p>
+      <div class="flex items-center justify-center gap-3">
+        <button
+          onclick="closeConfirmModal()"
+          class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+        >
+          Batalkan
+        </button>
+        <button
+          id="confirm-modal-action-btn"
+          onclick="executeConfirmAction()"
+          class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-cyan-600 hover:bg-cyan-500 shadow-md transition-all"
+        >
+          Konfirmasi
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/admin-api.js"></script>
+  <script src="js/admin-dashboard.js"></script>
+</body>
+</html>
