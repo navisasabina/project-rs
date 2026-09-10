@@ -14,19 +14,45 @@ const JWT_EXPIRES_IN = '8h';
 const COOKIE_NAME = 'auth_token';
 const COOKIE_MAX_AGE_MS = 8 * 60 * 60 * 1000; // 8 hours
 
+const INSECURE_SECRETS = [
+  'dev-jwt-secret-rs-awal-bros-botania-minimum-32-chars',
+  'your-super-secret-jwt-key-here-minimum-32-characters',
+  'secret',
+  'changeme',
+  'password',
+  '12345678901234567890123456789012',
+  'admin',
+  'jwtsecret',
+];
+
+/**
+ * Validates JWT secret strength and fails fast in production if missing, too short, or using known default
+ * @param {string} [secret]
+ * @param {string} [env]
+ * @returns {string}
+ */
+function validateJwtSecret(secret = process.env.JWT_SECRET, env = process.env.NODE_ENV) {
+  if (env === 'production') {
+    if (!secret || typeof secret !== 'string') {
+      throw new Error('CRITICAL SECURITY CONFIGURATION: JWT_SECRET must be defined in production!');
+    }
+    const trimmed = secret.trim();
+    if (trimmed.length < 32) {
+      throw new Error('CRITICAL SECURITY CONFIGURATION: JWT_SECRET must be at least 32 characters in production!');
+    }
+    if (INSECURE_SECRETS.includes(trimmed.toLowerCase())) {
+      throw new Error('CRITICAL SECURITY CONFIGURATION: Default or example JWT_SECRET is not permitted in production!');
+    }
+    return trimmed;
+  }
+  return secret || 'dev-jwt-secret-rs-awal-bros-botania-minimum-32-chars';
+}
+
 /**
  * Returns JWT secret securely from environment, or fails if in production without secret
  */
 function getJwtSecret() {
-  const secret = process.env.JWT_SECRET;
-  if (!secret) {
-    if (process.env.NODE_ENV === 'production') {
-      throw new Error('CRITICAL SECURITY CONFIGURATION: JWT_SECRET must be defined in production!');
-    }
-    // Safe deterministic development secret fallback
-    return 'dev-jwt-secret-rs-awal-bros-botania-minimum-32-chars';
-  }
-  return secret;
+  return validateJwtSecret(process.env.JWT_SECRET, process.env.NODE_ENV);
 }
 
 /**
@@ -131,6 +157,8 @@ module.exports = {
   JWT_EXPIRES_IN,
   COOKIE_NAME,
   COOKIE_MAX_AGE_MS,
+  INSECURE_SECRETS,
+  validateJwtSecret,
   getJwtSecret,
   hashPassword,
   comparePassword,

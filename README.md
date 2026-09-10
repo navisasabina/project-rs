@@ -189,7 +189,89 @@ Platform menyediakan REST API untuk manajemen penuh kategori, panduan troublesho
   - Transisi ilegal lainnya ditolak dengan `HTTP 400`.
 - **`PUT /api/v1/admin/guides/:id/steps`**: Mengganti urutan langkah troubleshooting secara atomik dengan penomoran deterministik (1, 2, 3...) (`ADMIN`, `IT_MANAGER`).
 
-### 5. Membuka Frontend Langsung (Static Fallback)
+### 5. Admin Dashboard UI & User Management (M7 & M8)
+Portal administratif berbasis SPA modern diakses melalui `/admin/login` dan `/admin`:
+- **`GET /api/v1/admin/users`**: Daftar akun staf IT aktif dan non-aktif (`ADMIN`, `IT_MANAGER`, `IT_SUPPORT`).
+- **`GET /api/v1/admin/audit-logs`**: Log audit seluruh mutasi sistem dan aktivitas login.
+
+---
+
+## Deployment & Containerization (M9)
+
+Aplikasi RS Awal Bros Botania Knowledge Base telah dikemas dan diperkuat (*production-hardened*) untuk deployment enterprise berbasis container Docker.
+
+### 1. Prasyarat Sistem
+- **Docker Engine** v20.10+ atau **Docker Desktop**
+- **Docker Compose** v2.0+ (atau `docker compose`)
+
+### 2. Variabel Lingkungan Produksi (.env)
+Pastikan file `.env` diisi dengan kredensial produksi yang aman:
+```ini
+# Server Configuration
+PORT=3000
+NODE_ENV=production
+
+# Database Configuration (PostgreSQL)
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=ganti-dengan-password-database-yang-kuat!
+POSTGRES_DB=rs_awal_bros_kb
+POSTGRES_PORT=5432
+DATABASE_URL=postgresql://postgres:ganti-dengan-password-database-yang-kuat!@postgres:5432/rs_awal_bros_kb
+
+# Keamanan Autentikasi (WAJIB minimal 32 karakter unik di lingkungan production)
+JWT_SECRET=rahasia-jwt-produksi-rs-awal-bros-botania-sangat-aman-2026!
+```
+
+> [!IMPORTANT]
+> **Aturan Validasi Produksi (`NODE_ENV=production`)**:
+> Aplikasi memiliki pengaman fail-fast pada saat startup. Jika `JWT_SECRET` kosong, kurang dari 32 karakter, atau menggunakan placeholder default, server Express akan langsung menolak boot dan menghentikan proses dengan kode status 1.
+
+### 3. Menjalankan Stack dengan Docker Compose
+Untuk menjalankan seluruh stack (Node.js Express App + PostgreSQL Database) dalam satu perintah:
+
+```bash
+# Build dan jalankan container di background
+docker compose up --build -d
+
+# Memeriksa status kesehatan container
+docker compose ps
+
+# Memeriksa log aplikasi dan database secara realtime
+docker compose logs -f app
+```
+
+Akses aplikasi di browser:
+- **User Portal Publik**: `http://localhost:3000`
+- **Admin Dashboard**: `http://localhost:3000/admin/login`
+- **Liveness Probe**: `http://localhost:3000/api/v1/health`
+- **Readiness Probe**: `http://localhost:3000/api/v1/health/ready`
+
+### 4. Perilaku Otomatisasi Saat Container Dimulai
+Saat container `app` pertama kali boot (`docker-entrypoint.sh`):
+1. **Pemeriksaan Healthcheck Database**: Layanan `app` menunggu PostgreSQL hingga berstatus `healthy` (`pg_isready`).
+2. **Migrasi Database Otomatis**: Menjalankan `node database/migrate.js up` untuk memastikan seluruh tabel skema termutakhir telah diterapkan.
+3. **Seeding Awal Idempoten**: Menjalankan `node database/seed-sop-data.js` untuk mengisi 8 modul SOP dasar RS Awal Bros (hanya jika tabel panduan masih kosong).
+4. **Boot Server**: Menjalankan server aplikasi di bawah user unprivileged (`node`, non-root).
+
+### 5. Fitur Keamanan Produksi (*Hardening*)
+- **Container Non-Root**: Proses di dalam container berjalan di bawah akun `node` (`USER node`).
+- **HTTP Security Headers**: Dilengkapi `Content-Security-Policy` (dibatasi pada domain internal, Tailwind CDN, dan Google Fonts), `X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, dan `Strict-Transport-Security` (HSTS pada mode produksi).
+- **Authentication Rate Limiting**: Endpoint `POST /api/v1/auth/login` dibatasi maksimal **10 percobaan per 15 menit per IP**. Jika melebihi batas, server merespons dengan `HTTP 429 Too Many Requests` dan menyertakan header `Retry-After`.
+- **Trust Proxy Aware**: Dikonfigurasi dengan `app.set('trust proxy', 1)` agar IP klien tercatat secara akurat pada audit log dan rate limiter saat berada di balik reverse proxy atau Docker network.
+- **Graceful Shutdown**: Server mendengarkan sinyal `SIGTERM` dan `SIGINT` untuk menyelesaikan request aktif yang sedang berjalan sebelum memutus koneksi pool database secara bersih dalam batas waktu 10 detik.
+
+### 6. Menghentikan Layanan
+```bash
+# Menghentikan seluruh container dengan aman
+docker compose down
+
+# Atau menghentikan container sekaligus menghapus volume database (HATI-HATI: DATA AKAN HILANG)
+docker compose down -v
+```
+
+---
+
+### 7. Membuka Frontend Langsung (Static Fallback)
 Buka file `index.html` langsung di browser modern, atau gunakan HTTP server sederhana:
 ```bash
 python -m http.server 8000

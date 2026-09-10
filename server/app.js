@@ -1,10 +1,15 @@
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const securityHeaders = require('./middleware/security');
 
 const app = express();
 
-// Middleware: Body parser & Cookies
+// Configure trust proxy deliberately for container and reverse proxy networks (1 hop)
+app.set('trust proxy', 1);
+
+// Middleware: Security headers, Body parser & Cookies
+app.use(securityHeaders);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -14,13 +19,35 @@ app.use(cookieParser());
 const rootDir = path.resolve(__dirname, '..');
 app.use(express.static(rootDir));
 
-// M0 Health Check Foundation Endpoint
+// M0 Health Check Foundation Endpoint (Liveness Probe)
 app.get('/api/v1/health', (req, res) => {
   res.status(200).json({
     status: 'ok',
     environment: process.env.NODE_ENV || 'development',
     timestamp: new Date().toISOString()
   });
+});
+
+// M9 Operational Readiness Check Endpoint (Readiness Probe)
+app.get('/api/v1/health/ready', async (req, res) => {
+  try {
+    const db = require('./config/database');
+    await db.query('SELECT 1');
+    res.status(200).json({
+      status: 'ok',
+      database: 'connected',
+      environment: process.env.NODE_ENV || 'development',
+      timestamp: new Date().toISOString()
+    });
+  } catch (err) {
+    res.status(503).json({
+      status: 'unhealthy',
+      database: 'disconnected',
+      error: err.message,
+      environment: process.env.NODE_ENV || 'development',
+      timestamp: new Date().toISOString()
+    });
+  }
 });
 
 // M3 Public Knowledge Base API Routes

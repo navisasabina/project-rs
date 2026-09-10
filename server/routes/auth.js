@@ -18,12 +18,13 @@ const {
   recordAuditLog,
 } = require('../services/auth');
 const { requireAuth } = require('../middleware/auth');
+const { loginRateLimiter } = require('../middleware/rate-limiter');
 
 /**
  * POST /api/v1/auth/login
  * Body: { username, password }
  */
-router.post('/login', async (req, res) => {
+router.post('/login', loginRateLimiter, async (req, res) => {
   const ipAddress = req.ip || req.connection.remoteAddress;
   const userAgent = req.headers['user-agent'] || '';
 
