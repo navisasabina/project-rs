@@ -72,6 +72,22 @@
               <span class="material-symbols-outlined text-base">category</span>
               <span>Kategori Hardware</span>
             </button>
+            <button
+              id="tab-btn-users"
+              onclick="switchAdminTab('users')"
+              class="admin-nav-btn px-3.5 py-2 rounded-xl transition-all border border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5"
+            >
+              <span class="material-symbols-outlined text-base">group</span>
+              <span>Manajemen Pengguna</span>
+            </button>
+            <button
+              id="tab-btn-audit"
+              onclick="switchAdminTab('audit')"
+              class="admin-nav-btn px-3.5 py-2 rounded-xl transition-all border border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5"
+            >
+              <span class="material-symbols-outlined text-base">history</span>
+              <span>Log Audit</span>
+            </button>
           </nav>
         </div>
 
@@ -112,10 +128,12 @@
       </div>
 
       <!-- Mobile Tab Nav (Visible on small screens) -->
-      <div class="flex md:hidden items-center justify-around py-2.5 border-t border-slate-800 text-xs font-semibold">
-        <button onclick="switchAdminTab('overview')" class="px-2.5 py-1 text-slate-400 hover:text-white">Ringkasan</button>
-        <button onclick="switchAdminTab('guides')" class="px-2.5 py-1 text-slate-400 hover:text-white">Panduan SOP</button>
-        <button onclick="switchAdminTab('categories')" class="px-2.5 py-1 text-slate-400 hover:text-white">Kategori</button>
+      <div class="flex md:hidden items-center justify-around py-2.5 border-t border-slate-800 text-xs font-semibold overflow-x-auto gap-1">
+        <button onclick="switchAdminTab('overview')" class="px-2.5 py-1 text-slate-400 hover:text-white shrink-0">Ringkasan</button>
+        <button onclick="switchAdminTab('guides')" class="px-2.5 py-1 text-slate-400 hover:text-white shrink-0">Panduan SOP</button>
+        <button onclick="switchAdminTab('categories')" class="px-2.5 py-1 text-slate-400 hover:text-white shrink-0">Kategori</button>
+        <button onclick="switchAdminTab('users')" class="px-2.5 py-1 text-slate-400 hover:text-white shrink-0">Pengguna</button>
+        <button onclick="switchAdminTab('audit')" class="px-2.5 py-1 text-slate-400 hover:text-white shrink-0">Log Audit</button>
       </div>
     </div>
   </header>
@@ -448,6 +466,196 @@
         </div>
       </div>
 
+    </section>
+
+    <!-- =========================================================================
+         TAB 4: MANAJEMEN PENGGUNA / USER MANAGEMENT
+         ========================================================================= -->
+    <section id="view-users" class="admin-view-panel hidden space-y-6">
+      <!-- Section Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold font-brand text-white">Manajemen Pengguna & Staf IT</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+            Kelola akun operasional staf IT, penugasan hak akses/role, dan status aktivasi akun.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            onclick="openUserModal()"
+            class="rbac-mutation px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#0097A7] to-cyan-600 hover:from-cyan-600 hover:to-[#00828A] text-white text-xs font-bold shadow-lg shadow-cyan-900/30 transition-all flex items-center gap-1.5"
+          >
+            <span class="material-symbols-outlined text-base">person_add</span>
+            <span>+ Tambah Staf IT</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- User Stats Overview -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
+          <span class="text-xs font-medium text-slate-400 block mb-1">Total Staf IT</span>
+          <div id="user-stats-total" class="text-2xl font-bold font-mono text-white">0</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
+          <span class="text-xs font-medium text-emerald-400 block mb-1">Staf Aktif</span>
+          <div id="user-stats-active" class="text-2xl font-bold font-mono text-emerald-400">0</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
+          <span class="text-xs font-medium text-red-400 block mb-1">Staf Nonaktif</span>
+          <div id="user-stats-inactive" class="text-2xl font-bold font-mono text-red-400">0</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
+          <span class="text-xs font-medium text-cyan-400 block mb-1">Administrator / Manager</span>
+          <div id="user-stats-admins" class="text-2xl font-bold font-mono text-cyan-400">0</div>
+        </div>
+      </div>
+
+      <!-- Filters & Search Toolbar -->
+      <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 shadow-md">
+        <!-- Search -->
+        <div class="relative w-full md:w-80">
+          <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-lg">search</span>
+          <input
+            id="users-search-input"
+            type="text"
+            placeholder="Cari nama, username, atau email..."
+            oninput="handleUserSearch(this.value)"
+            class="w-full pl-10 pr-4 py-2 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+          />
+        </div>
+
+        <!-- Filters -->
+        <div class="flex items-center gap-2.5 w-full md:w-auto justify-end">
+          <select
+            id="users-filter-role"
+            onchange="handleUserRoleFilter(this.value)"
+            class="px-3 py-2 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+          >
+            <option value="ALL">Semua Role</option>
+            <option value="ADMIN">ADMIN</option>
+            <option value="IT_MANAGER">IT_MANAGER</option>
+            <option value="IT_SUPPORT">IT_SUPPORT</option>
+          </select>
+
+          <select
+            id="users-filter-status"
+            onchange="handleUserStatusFilter(this.value)"
+            class="px-3 py-2 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+          >
+            <option value="ALL">Semua Status</option>
+            <option value="active">Aktif</option>
+            <option value="inactive">Nonaktif</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Users Table -->
+      <div class="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="border-b border-slate-800 bg-slate-950/40 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                <th class="py-3 px-5">Nama Lengkap & Username</th>
+                <th class="py-3 px-4">Email</th>
+                <th class="py-3 px-4">Role Akses</th>
+                <th class="py-3 px-4">Status</th>
+                <th class="py-3 px-4">Terdaftar Sejak</th>
+                <th class="py-3 px-5 text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body" class="divide-y divide-slate-800/60 text-xs">
+              <tr>
+                <td colspan="6" class="py-12 text-center text-slate-500">Memuat data staf IT...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         TAB 5: LOG AUDIT AKTIVITAS / AUDIT TRAIL
+         ========================================================================= -->
+    <section id="view-audit" class="admin-view-panel hidden space-y-6">
+      <!-- Section Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold font-brand text-white">Log Audit Aktivitas Sistem</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+            Catatan kronologis immutable atas autentikasi, mutasi data SOP, dan manajemen akun staf IT.
+          </p>
+        </div>
+        <button
+          onclick="loadAuditLogs()"
+          class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition-colors flex items-center gap-1.5"
+        >
+          <span class="material-symbols-outlined text-base">refresh</span>
+          <span>Muat Ulang</span>
+        </button>
+      </div>
+
+      <!-- Audit Toolbar -->
+      <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 shadow-md">
+        <!-- Search -->
+        <div class="relative w-full md:w-80">
+          <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-lg">search</span>
+          <input
+            id="audit-search-input"
+            type="text"
+            placeholder="Cari pelaksana, aksi, atau entitas..."
+            oninput="handleAuditSearch(this.value)"
+            class="w-full pl-10 pr-4 py-2 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+          />
+        </div>
+
+        <!-- Filter Action Category -->
+        <div class="flex items-center gap-2.5 w-full md:w-auto justify-end">
+          <select
+            id="audit-filter-action"
+            onchange="handleAuditActionFilter(this.value)"
+            class="px-3 py-2 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+          >
+            <option value="ALL">Semua Aksi</option>
+            <option value="LOGIN_SUCCESS">Login Berhasil</option>
+            <option value="LOGIN_FAILED">Login Gagal</option>
+            <option value="LOGOUT">Logout</option>
+            <option value="ACCOUNT_CREATED">Akun Dibuat</option>
+            <option value="ACCOUNT_ACTIVATED">Akun Diaktifkan</option>
+            <option value="ACCOUNT_DISABLED">Akun Dinonaktifkan</option>
+            <option value="GUIDE_CREATED">Panduan Dibuat</option>
+            <option value="GUIDE_UPDATED">Panduan Diperbarui</option>
+            <option value="GUIDE_STATUS_CHANGED">Status Panduan Berubah</option>
+            <option value="GUIDE_STEPS_UPDATED">Langkah Panduan Diperbarui</option>
+            <option value="CATEGORY_CREATED">Kategori Dibuat</option>
+            <option value="CATEGORY_UPDATED">Kategori Diperbarui</option>
+            <option value="CATEGORY_STATUS_CHANGED">Status Kategori Berubah</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Audit Logs Table -->
+      <div class="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="border-b border-slate-800 bg-slate-950/40 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                <th class="py-3 px-5">Waktu (WIB)</th>
+                <th class="py-3 px-4">Pelaksana (Actor)</th>
+                <th class="py-3 px-4">Tindakan / Aksi</th>
+                <th class="py-3 px-4">Entitas Sasaran</th>
+                <th class="py-3 px-4">Alamat IP</th>
+                <th class="py-3 px-5 text-right">Detail</th>
+              </tr>
+            </thead>
+            <tbody id="audit-table-body" class="divide-y divide-slate-800/60 text-xs">
+              <tr>
+                <td colspan="6" class="py-12 text-center text-slate-500">Memuat data log audit...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </section>
 
   </main>
@@ -855,6 +1063,153 @@
           class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-cyan-600 hover:bg-cyan-500 shadow-md transition-all"
         >
           Konfirmasi
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 5: TAMBAH STAF IT (USER PROVISIONING)
+       ========================================================================= -->
+  <div id="user-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
+    <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 my-8 relative">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+        <h3 class="text-lg font-bold font-brand text-white flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#0097A7]">person_add</span>
+          <span>Tambah Akun Staf IT Baru</span>
+        </h3>
+        <button
+          type="button"
+          onclick="closeUserModal()"
+          class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+        >
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <form id="user-form" onsubmit="handleUserFormSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+            Nama Lengkap <span class="text-red-400">*</span>
+          </label>
+          <input
+            id="user-form-name"
+            type="text"
+            required
+            placeholder="Contoh: Budi Santoso"
+            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+          />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Username <span class="text-red-400">*</span>
+            </label>
+            <input
+              id="user-form-username"
+              type="text"
+              required
+              placeholder="budi.santoso"
+              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white font-mono placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            />
+            <span class="text-[10px] text-slate-500 block mt-1">3-50 karakter (huruf, angka, titik, underscore)</span>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Alamat Email <span class="text-red-400">*</span>
+            </label>
+            <input
+              id="user-form-email"
+              type="email"
+              required
+              placeholder="budi@rsawalbros.com"
+              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+            Hak Akses / Role Akun <span class="text-red-400">*</span>
+          </label>
+          <select
+            id="user-form-role"
+            required
+            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+          >
+            <!-- Injected by applyRBAC / openUserModal based on hierarchy -->
+          </select>
+          <span id="user-form-role-hint" class="text-[10px] text-slate-500 block mt-1">
+            Role menentukan batas otorisasi dan fungsi di portal.
+          </span>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+            Kata Sandi Awal <span class="text-red-400">*</span>
+          </label>
+          <input
+            id="user-form-password"
+            type="password"
+            required
+            minlength="8"
+            placeholder="Minimal 8 karakter"
+            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+          />
+        </div>
+
+        <div class="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+          <button
+            type="button"
+            onclick="closeUserModal()"
+            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+          >
+            Batal
+          </button>
+          <button
+            id="user-form-submit-btn"
+            type="submit"
+            class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#0097A7] to-cyan-600 hover:from-cyan-600 hover:to-[#00828A] shadow-lg shadow-cyan-900/30 transition-all flex items-center gap-1.5"
+          >
+            <span class="material-symbols-outlined text-base">person_add</span>
+            <span>Simpan Akun Staf</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 6: DETAIL LOG AUDIT (INSPECTION MODAL)
+       ========================================================================= -->
+  <div id="audit-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
+    <div class="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 my-8 relative">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+        <h3 class="text-lg font-bold font-brand text-white flex items-center gap-2">
+          <span class="material-symbols-outlined text-cyan-400">policy</span>
+          <span>Detail Log Audit Aktivitas</span>
+        </h3>
+        <button
+          type="button"
+          onclick="closeAuditDetailModal()"
+          class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+        >
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <div id="audit-detail-content" class="space-y-4 text-xs">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <div class="pt-4 border-t border-slate-800 flex justify-end">
+        <button
+          onclick="closeAuditDetailModal()"
+          class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+        >
+          Tutup
         </button>
       </div>
     </div>

@@ -27,6 +27,61 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-
 const ALLOWED_ROLES = ['ADMIN', 'IT_MANAGER', 'IT_SUPPORT'];
 
 /**
+ * GET /api/v1/admin/users
+ * Protected: All authenticated IT staff (ADMIN, IT_MANAGER, IT_SUPPORT)
+ * Query: ?role=...&status=...&search=...
+ */
+router.get('/', requireAuth, async (req, res) => {
+  try {
+    const { role, status, search } = req.query;
+
+    let queryText = `
+      SELECT id, full_name, username, email, role, is_active, created_at, updated_at
+      FROM users
+      WHERE 1=1
+    `;
+    const queryParams = [];
+
+    if (role && ALLOWED_ROLES.includes(role)) {
+      queryParams.push(role);
+      queryText += ` AND role = $${queryParams.length}`;
+    }
+
+    if (status === 'active') {
+      queryText += ` AND is_active = TRUE`;
+    } else if (status === 'inactive') {
+      queryText += ` AND is_active = FALSE`;
+    }
+
+    if (search && typeof search === 'string' && search.trim().length > 0) {
+      queryParams.push(`%${search.trim().toLowerCase()}%`);
+      queryText += ` AND (LOWER(full_name) LIKE $${queryParams.length} OR LOWER(username) LIKE $${queryParams.length} OR LOWER(email) LIKE $${queryParams.length})`;
+    }
+
+    queryText += ` ORDER BY created_at ASC`;
+
+    const result = await db.query(queryText, queryParams);
+
+    return res.status(200).json({
+      success: true,
+      data: result.rows,
+      meta: {
+        total: result.rows.length,
+      },
+    });
+  } catch (err) {
+    console.error('[Admin Users Error - GET /]:', err);
+    return res.status(500).json({
+      success: false,
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Terjadi kesalahan sistem saat mengambil daftar staf IT.',
+      },
+    });
+  }
+});
+
+/**
  * POST /api/v1/admin/users
  * Protected: ADMIN and IT_MANAGER only
  * Body: { full_name, username, email, password, role }

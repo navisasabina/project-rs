@@ -226,6 +226,69 @@
         return res.data;
       },
     },
+
+    users: {
+      /**
+       * Get list of IT staff users
+       * @param {object} [filters] { role, status, search }
+       */
+      async getAll(filters = {}) {
+        const params = new URLSearchParams();
+        if (filters.role && filters.role !== 'ALL') params.append('role', filters.role);
+        if (filters.status && filters.status !== 'ALL') params.append('status', filters.status);
+        if (filters.search && filters.search.trim()) params.append('search', filters.search.trim());
+        const query = params.toString() ? `?${params.toString()}` : '';
+        const res = await apiRequest(`/admin/users${query}`, {
+          method: 'GET',
+        });
+        return res.data;
+      },
+
+      /**
+       * Create new IT staff user
+       * @param {object} userData { full_name, username, email, password, role }
+       */
+      async create(userData) {
+        const res = await apiRequest('/admin/users', {
+          method: 'POST',
+          body: userData,
+        });
+        return res.data;
+      },
+
+      /**
+       * Toggle active/inactive status of IT staff user
+       * @param {string} id
+       * @param {boolean} isActive
+       */
+      async toggleStatus(id, isActive) {
+        const res = await apiRequest(`/admin/users/${encodeURIComponent(id)}/status`, {
+          method: 'PATCH',
+          body: { is_active: isActive },
+        });
+        return res.data;
+      },
+    },
+
+    auditLogs: {
+      /**
+       * Get read-only list of audit events
+       * @param {object} [filters] { action, entity, search, limit, offset }
+       */
+      async getAll(filters = {}) {
+        const params = new URLSearchParams();
+        if (filters.action && filters.action !== 'ALL') params.append('action', filters.action);
+        if (filters.entity && filters.entity !== 'ALL') params.append('entity', filters.entity);
+        if (filters.search && filters.search.trim()) params.append('search', filters.search.trim());
+        if (filters.limit) params.append('limit', filters.limit);
+        if (filters.offset) params.append('offset', filters.offset);
+        const query = params.toString() ? `?${params.toString()}` : '';
+        const res = await apiRequest(`/admin/audit-logs${query}`, {
+          method: 'GET',
+        });
+        return res.data;
+      },
+    },
   };
 
   // Expose globally to window

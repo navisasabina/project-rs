@@ -44,6 +44,10 @@ const adminGuidesRouter = require('./routes/admin-guides');
 app.use('/api/v1/admin/categories', adminCategoriesRouter);
 app.use('/api/v1/admin/guides', adminGuidesRouter);
 
+// M8 Admin Audit Trail Route
+const adminAuditLogsRouter = require('./routes/admin-audit-logs');
+app.use('/api/v1/admin/audit-logs', adminAuditLogsRouter);
+
 // M7 Admin Dashboard Web Pages
 app.get('/admin/login', (req, res) => {
   res.sendFile(path.resolve(rootDir, 'admin-login.html'));

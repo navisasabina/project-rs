@@ -20,6 +20,17 @@
     categories: [],
     guides: [],
     filteredGuides: [],
+    users: [],
+    userFilter: {
+      search: '',
+      role: 'ALL',
+      status: 'ALL',
+    },
+    auditLogs: [],
+    auditFilter: {
+      search: '',
+      action: 'ALL',
+    },
     activeTab: 'overview',
     guideFilter: {
       status: 'ALL',
@@ -65,6 +76,7 @@
       await Promise.all([
         loadCategories(),
         loadGuides(),
+        loadUsers(),
       ]);
 
       renderOverviewKPIs();
@@ -166,6 +178,10 @@
       renderGuidesTable();
     } else if (tabName === 'categories') {
       renderCategoriesList();
+    } else if (tabName === 'users') {
+      loadUsers().then(() => renderUsersTable());
+    } else if (tabName === 'audit') {
+      loadAuditLogs();
     }
   };
 
@@ -1205,6 +1221,523 @@
     if (status === 'PUBLISHED') return 'bg-emerald-400';
     if (status === 'DRAFT') return 'bg-amber-400';
     return 'bg-slate-500';
+  }
+
+  /* ==========================================================================
+     8. USER MANAGEMENT MODULE (MILESTONE M8)
+     ========================================================================== */
+
+  async function loadUsers() {
+    try {
+      const users = await window.AdminAPI.users.getAll();
+      state.users = users || [];
+
+      // Update User Stats
+      const total = state.users.length;
+      const active = state.users.filter((u) => u.is_active).length;
+      const inactive = total - active;
+      const admins = state.users.filter((u) => u.role === 'ADMIN' || u.role === 'IT_MANAGER').length;
+
+      const totalEl = document.getElementById('user-stats-total');
+      const activeEl = document.getElementById('user-stats-active');
+      const inactiveEl = document.getElementById('user-stats-inactive');
+      const adminsEl = document.getElementById('user-stats-admins');
+
+      if (totalEl) totalEl.textContent = total;
+      if (activeEl) activeEl.textContent = active;
+      if (inactiveEl) inactiveEl.textContent = inactive;
+      if (adminsEl) adminsEl.textContent = admins;
+
+      return state.users;
+    } catch (err) {
+      console.error('[AdminDashboard] Failed to load IT staff users:', err);
+      showToast(err.message || 'Gagal memuat data staf IT.', 'error');
+      return [];
+    }
+  }
+
+  function renderUsersTable() {
+    const tbody = document.getElementById('users-table-body');
+    if (!tbody) return;
+
+    let users = [...state.users];
+
+    // Filter by Search
+    if (state.userFilter.search) {
+      const q = state.userFilter.search;
+      users = users.filter((u) =>
+        (u.full_name && u.full_name.toLowerCase().includes(q)) ||
+        (u.username && u.username.toLowerCase().includes(q)) ||
+        (u.email && u.email.toLowerCase().includes(q))
+      );
+    }
+
+    // Filter by Role
+    if (state.userFilter.role && state.userFilter.role !== 'ALL') {
+      users = users.filter((u) => u.role === state.userFilter.role);
+    }
+
+    // Filter by Status
+    if (state.userFilter.status === 'active') {
+      users = users.filter((u) => u.is_active);
+    } else if (state.userFilter.status === 'inactive') {
+      users = users.filter((u) => !u.is_active);
+    }
+
+    state.filteredUsers = users;
+
+    if (users.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="py-12 text-center text-slate-500">
+            <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-slate-800/80 mb-2">
+              <span class="material-symbols-outlined text-slate-400">person_off</span>
+            </div>
+            <p class="text-xs font-semibold text-slate-400">Tidak ada staf IT yang cocok dengan filter pencarian.</p>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    const currentActor = state.currentUser;
+    const isActorReadOnly = currentActor && currentActor.role === 'IT_SUPPORT';
+
+    tbody.innerHTML = users.map((u) => {
+      const isSelf = currentActor && currentActor.id === u.id;
+      const isActorManager = currentActor && currentActor.role === 'IT_MANAGER';
+      const isTargetHigherOrEqual = u.role === 'ADMIN' || u.role === 'IT_MANAGER';
+
+      let roleBadgeClass = 'bg-blue-500/10 text-blue-400 border-blue-500/30';
+      if (u.role === 'ADMIN') {
+        roleBadgeClass = 'bg-red-500/10 text-red-400 border-red-500/30';
+      } else if (u.role === 'IT_MANAGER') {
+        roleBadgeClass = 'bg-[#0097A7]/10 text-cyan-400 border-[#0097A7]/30';
+      }
+
+      const statusBadge = u.is_active
+        ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <span>Aktif</span>
+          </span>`
+        : `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-red-500/10 text-red-400 border border-red-500/30">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span>
+            <span>Nonaktif</span>
+          </span>`;
+
+      // Action Button
+      let actionBtnHTML = '';
+      if (isActorReadOnly) {
+        actionBtnHTML = `<span class="text-[11px] text-slate-500 italic">Read-Only</span>`;
+      } else if (isSelf) {
+        actionBtnHTML = `
+          <button disabled class="px-2.5 py-1 rounded-lg text-slate-500 bg-slate-800/40 border border-slate-700/40 text-[11px] font-semibold cursor-not-allowed" title="Anda tidak dapat menonaktifkan akun sendiri">
+            Akun Anda
+          </button>
+        `;
+      } else if (isActorManager && isTargetHigherOrEqual) {
+        actionBtnHTML = `
+          <button disabled class="px-2.5 py-1 rounded-lg text-slate-500 bg-slate-800/40 border border-slate-700/40 text-[11px] font-semibold cursor-not-allowed" title="IT Manager hanya berwenang mengelola IT Support">
+            Dibatasi
+          </button>
+        `;
+      } else if (u.is_active) {
+        actionBtnHTML = `
+          <button
+            onclick="confirmToggleUserStatus('${u.id}', '${escapeHTML(u.username)}', true)"
+            class="rbac-mutation px-2.5 py-1 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/30 text-[11px] font-semibold transition-colors flex items-center gap-1"
+            title="Nonaktifkan akun staf"
+          >
+            <span class="material-symbols-outlined text-sm">block</span>
+            <span>Nonaktifkan</span>
+          </button>
+        `;
+      } else {
+        actionBtnHTML = `
+          <button
+            onclick="confirmToggleUserStatus('${u.id}', '${escapeHTML(u.username)}', false)"
+            class="rbac-mutation px-2.5 py-1 rounded-lg text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-semibold transition-colors flex items-center gap-1"
+            title="Aktifkan kembali akun staf"
+          >
+            <span class="material-symbols-outlined text-sm">check_circle</span>
+            <span>Aktifkan</span>
+          </button>
+        `;
+      }
+
+      return `
+        <tr class="hover:bg-slate-800/40 transition-colors">
+          <td class="py-3 px-5">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 font-bold flex items-center justify-center text-xs shrink-0">
+                ${escapeHTML(u.full_name ? u.full_name.charAt(0).toUpperCase() : 'U')}
+              </div>
+              <div class="min-w-0">
+                <span class="font-bold text-slate-200 block truncate leading-tight">${escapeHTML(u.full_name)}</span>
+                <span class="text-[11px] font-mono text-slate-400 block mt-0.5">@${escapeHTML(u.username)}</span>
+              </div>
+            </div>
+          </td>
+          <td class="py-3 px-4 text-slate-300 font-mono text-[11px] truncate max-w-[200px]">
+            ${escapeHTML(u.email)}
+          </td>
+          <td class="py-3 px-4">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${roleBadgeClass}">
+              ${escapeHTML(u.role)}
+            </span>
+          </td>
+          <td class="py-3 px-4">
+            ${statusBadge}
+          </td>
+          <td class="py-3 px-4 text-slate-400 text-[11px]">
+            ${formatDate(u.created_at)}
+          </td>
+          <td class="py-3 px-5 text-right">
+            <div class="flex items-center justify-end gap-2">
+              ${actionBtnHTML}
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  window.handleUserSearch = function (value) {
+    state.userFilter.search = (value || '').toLowerCase().trim();
+    renderUsersTable();
+  };
+
+  window.handleUserRoleFilter = function (value) {
+    state.userFilter.role = value;
+    renderUsersTable();
+  };
+
+  window.handleUserStatusFilter = function (value) {
+    state.userFilter.status = value;
+    renderUsersTable();
+  };
+
+  window.openUserModal = function () {
+    const modal = document.getElementById('user-modal');
+    if (!modal) return;
+
+    // Reset Form
+    const form = document.getElementById('user-form');
+    if (form) form.reset();
+
+    // Populate role choices based on actor role
+    const roleSelect = document.getElementById('user-form-role');
+    const roleHint = document.getElementById('user-form-role-hint');
+
+    if (roleSelect) {
+      roleSelect.innerHTML = '';
+      const actorRole = state.currentUser ? state.currentUser.role : 'IT_SUPPORT';
+
+      if (actorRole === 'ADMIN') {
+        roleSelect.innerHTML = `
+          <option value="IT_SUPPORT" selected>IT_SUPPORT (Read-Only Portal Staf)</option>
+          <option value="IT_MANAGER">IT_MANAGER (Manajer Operasional IT)</option>
+          <option value="ADMIN">ADMIN (Super Administrator)</option>
+        `;
+        if (roleHint) roleHint.textContent = 'Administrator dapat membuat seluruh jenis role staf IT.';
+      } else if (actorRole === 'IT_MANAGER') {
+        roleSelect.innerHTML = `
+          <option value="IT_SUPPORT" selected>IT_SUPPORT (Read-Only Portal Staf)</option>
+        `;
+        if (roleHint) roleHint.textContent = 'IT Manager hanya berwenang membuat akun IT Support.';
+      } else {
+        roleSelect.innerHTML = `<option value="" disabled selected>Akses Tidak Diizinkan</option>`;
+      }
+    }
+
+    modal.classList.remove('hidden');
+  };
+
+  window.closeUserModal = function () {
+    const modal = document.getElementById('user-modal');
+    if (modal) modal.classList.add('hidden');
+  };
+
+  window.handleUserFormSubmit = async function (event) {
+    event.preventDefault();
+
+    const nameInput = document.getElementById('user-form-name');
+    const usernameInput = document.getElementById('user-form-username');
+    const emailInput = document.getElementById('user-form-email');
+    const roleInput = document.getElementById('user-form-role');
+    const passwordInput = document.getElementById('user-form-password');
+    const submitBtn = document.getElementById('user-form-submit-btn');
+
+    const fullName = nameInput ? nameInput.value.trim() : '';
+    const username = usernameInput ? usernameInput.value.trim().toLowerCase() : '';
+    const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+    const role = roleInput ? roleInput.value : '';
+    const password = passwordInput ? passwordInput.value : '';
+
+    if (!fullName || !username || !email || !role || !password) {
+      showToast('Seluruh field formulir staf wajib diisi.', 'error');
+      return;
+    }
+
+    if (password.length < 8) {
+      showToast('Password minimal harus terdiri dari 8 karakter.', 'error');
+      return;
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `
+        <span class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span>
+        <span>Menyimpan...</span>
+      `;
+    }
+
+    try {
+      await window.AdminAPI.users.create({
+        full_name: fullName,
+        username,
+        email,
+        password,
+        role,
+      });
+
+      showToast(`Akun staf "${username}" (${role}) berhasil dibuat.`, 'success');
+      closeUserModal();
+      await loadUsers();
+      renderUsersTable();
+    } catch (err) {
+      console.error('[AdminDashboard] Create user failed:', err);
+      showToast(err.message || 'Gagal membuat akun staf IT.', 'error');
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+          <span class="material-symbols-outlined text-base">person_add</span>
+          <span>Simpan Akun Staf</span>
+        `;
+      }
+    }
+  };
+
+  window.confirmToggleUserStatus = function (userId, username, willDeactivate) {
+    const title = willDeactivate ? 'Nonaktifkan Akun Staf' : 'Aktifkan Akun Staf';
+    const message = willDeactivate
+      ? `Apakah Anda yakin ingin menonaktifkan akun staf "${username}"? Pengguna tidak akan dapat login atau memperpanjang sesi aktif hingga diaktifkan kembali.`
+      : `Apakah Anda yakin ingin mengaktifkan kembali akun staf "${username}"? Pengguna akan dapat segera login kembali ke portal.`;
+
+    openConfirmModal({
+      title,
+      message,
+      confirmText: willDeactivate ? 'Ya, Nonaktifkan' : 'Ya, Aktifkan',
+      confirmClass: willDeactivate ? 'bg-red-600 hover:bg-red-500 text-white' : 'bg-emerald-600 hover:bg-emerald-500 text-white',
+      execute: async () => {
+        try {
+          await window.AdminAPI.users.toggleStatus(userId, !willDeactivate);
+          showToast(`Akun "${username}" berhasil ${willDeactivate ? 'dinonaktifkan' : 'diaktifkan kembali'}.`, 'success');
+          await loadUsers();
+          renderUsersTable();
+        } catch (err) {
+          console.error('[AdminDashboard] Toggle user status failed:', err);
+          showToast(err.message || 'Gagal memperbarui status akun.', 'error');
+        }
+      },
+    });
+  };
+
+  /* ==========================================================================
+     9. AUDIT TRAIL MODULE (MILESTONE M8)
+     ========================================================================= */
+
+  async function loadAuditLogs() {
+    const tbody = document.getElementById('audit-table-body');
+    if (tbody) {
+      tbody.innerHTML = `<tr><td colspan="6" class="py-12 text-center text-slate-500 text-xs">Mengambil riwayat log audit sistem...</td></tr>`;
+    }
+
+    try {
+      const logs = await window.AdminAPI.auditLogs.getAll({ limit: 100 });
+      state.auditLogs = logs || [];
+      renderAuditTable();
+      return state.auditLogs;
+    } catch (err) {
+      console.error('[AdminDashboard] Failed to load audit logs:', err);
+      showToast(err.message || 'Gagal memuat log audit aktivitas.', 'error');
+      if (tbody) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-red-400 text-xs">${escapeHTML(err.message || 'Gagal memuat log audit.')}</td></tr>`;
+      }
+      return [];
+    }
+  }
+
+  function renderAuditTable() {
+    const tbody = document.getElementById('audit-table-body');
+    if (!tbody) return;
+
+    let logs = [...state.auditLogs];
+
+    // Filter search
+    if (state.auditFilter.search) {
+      const q = state.auditFilter.search;
+      logs = logs.filter((log) => {
+        const actorName = log.actor ? `${log.actor.username || ''} ${log.actor.full_name || ''}`.toLowerCase() : '';
+        const action = (log.action || '').toLowerCase();
+        const entity = (log.entity_name || '').toLowerCase();
+        return actorName.includes(q) || action.includes(q) || entity.includes(q);
+      });
+    }
+
+    // Filter action
+    if (state.auditFilter.action && state.auditFilter.action !== 'ALL') {
+      logs = logs.filter((log) => log.action === state.auditFilter.action);
+    }
+
+    state.filteredAuditLogs = logs;
+
+    if (logs.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="py-12 text-center text-slate-500">
+            <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-slate-800/80 mb-2">
+              <span class="material-symbols-outlined text-slate-400">history_toggle_off</span>
+            </div>
+            <p class="text-xs font-semibold text-slate-400">Belum ada rekaman audit yang sesuai dengan filter.</p>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = logs.map((log) => {
+      // Action Badge
+      let actionBadgeClass = 'bg-slate-700/30 text-slate-300 border-slate-600';
+      if (log.action.includes('CREATED') || log.action === 'LOGIN_SUCCESS' || log.action === 'ACCOUNT_ACTIVATED') {
+        actionBadgeClass = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+      } else if (log.action.includes('UPDATED') || log.action.includes('CHANGED')) {
+        actionBadgeClass = 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+      } else if (log.action.includes('DISABLED') || log.action === 'LOGIN_FAILED' || log.action.includes('ARCHIVED')) {
+        actionBadgeClass = 'bg-red-500/10 text-red-400 border-red-500/30';
+      } else if (log.action === 'LOGOUT') {
+        actionBadgeClass = 'bg-blue-500/10 text-blue-400 border-blue-500/30';
+      }
+
+      // Actor info
+      const actorUsername = log.actor ? log.actor.username : 'Sistem / Anonim';
+      const actorRole = log.actor ? log.actor.role : 'GUEST';
+
+      return `
+        <tr class="hover:bg-slate-800/40 transition-colors">
+          <td class="py-3 px-5 text-slate-400 font-mono text-[11px] whitespace-nowrap">
+            ${formatDateTime(log.created_at)}
+          </td>
+          <td class="py-3 px-4">
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-slate-200">@${escapeHTML(actorUsername)}</span>
+              <span class="text-[9px] px-1.5 py-0.2 rounded border border-slate-700 text-slate-400">${escapeHTML(actorRole)}</span>
+            </div>
+          </td>
+          <td class="py-3 px-4">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${actionBadgeClass}">
+              ${escapeHTML(log.action)}
+            </span>
+          </td>
+          <td class="py-3 px-4 text-slate-300 font-mono text-[11px]">
+            <span class="uppercase font-bold text-slate-400">${escapeHTML(log.entity_name)}</span>
+            <span class="text-[10px] text-slate-500 block truncate max-w-[140px]" title="${escapeHTML(log.entity_id)}">${escapeHTML(log.entity_id)}</span>
+          </td>
+          <td class="py-3 px-4 text-slate-400 font-mono text-[11px]">
+            ${escapeHTML(log.ip_address || '-')}
+          </td>
+          <td class="py-3 px-5 text-right">
+            <button
+              onclick="openAuditDetailModal('${log.id}')"
+              class="px-2.5 py-1 rounded-lg text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 border border-cyan-500/30 text-[11px] font-semibold transition-colors inline-flex items-center gap-1"
+            >
+              <span class="material-symbols-outlined text-sm">visibility</span>
+              <span>Detail</span>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  window.handleAuditSearch = function (value) {
+    state.auditFilter.search = (value || '').toLowerCase().trim();
+    renderAuditTable();
+  };
+
+  window.handleAuditActionFilter = function (value) {
+    state.auditFilter.action = value;
+    renderAuditTable();
+  };
+
+  window.openAuditDetailModal = function (auditId) {
+    const modal = document.getElementById('audit-detail-modal');
+    const container = document.getElementById('audit-detail-content');
+    if (!modal || !container) return;
+
+    const log = state.auditLogs.find((item) => item.id === auditId);
+    if (!log) return;
+
+    const actor = log.actor || { username: 'Sistem', role: 'SYSTEM' };
+
+    container.innerHTML = `
+      <div class="grid grid-cols-2 gap-3 p-3 rounded-xl bg-slate-950/60 border border-slate-800 text-xs">
+        <div>
+          <span class="text-slate-500 block text-[10px] uppercase font-bold">Waktu Kejadian</span>
+          <span class="font-mono text-slate-200 font-semibold">${formatDateTime(log.created_at)}</span>
+        </div>
+        <div>
+          <span class="text-slate-500 block text-[10px] uppercase font-bold">Pelaksana (Actor)</span>
+          <span class="text-slate-200 font-semibold">@${escapeHTML(actor.username)} (${escapeHTML(actor.role)})</span>
+        </div>
+        <div>
+          <span class="text-slate-500 block text-[10px] uppercase font-bold">Aksi / Tindakan</span>
+          <span class="font-mono text-cyan-400 font-bold">${escapeHTML(log.action)}</span>
+        </div>
+        <div>
+          <span class="text-slate-500 block text-[10px] uppercase font-bold">Objek Sasaran</span>
+          <span class="text-slate-200 font-semibold">${escapeHTML(log.entity_name)} (${escapeHTML(log.entity_id)})</span>
+        </div>
+        <div>
+          <span class="text-slate-500 block text-[10px] uppercase font-bold">Alamat IP</span>
+          <span class="font-mono text-slate-400">${escapeHTML(log.ip_address || '-')}</span>
+        </div>
+        <div>
+          <span class="text-slate-500 block text-[10px] uppercase font-bold">User-Agent</span>
+          <span class="font-mono text-slate-400 truncate block text-[10px]" title="${escapeHTML(log.user_agent || '-')}">${escapeHTML(log.user_agent || '-')}</span>
+        </div>
+      </div>
+
+      <div>
+        <span class="text-xs font-bold text-slate-300 block mb-2">Payload Data Perubahan (Sanitized Changes):</span>
+        <pre class="bg-slate-950 p-4 rounded-xl text-emerald-400 font-mono text-[11px] overflow-x-auto border border-slate-800 leading-relaxed max-h-60">${escapeHTML(JSON.stringify(log.changes || {}, null, 2))}</pre>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+  };
+
+  window.closeAuditDetailModal = function () {
+    const modal = document.getElementById('audit-detail-modal');
+    if (modal) modal.classList.add('hidden');
+  };
+
+  function formatDateTime(isoStr) {
+    if (!isoStr) return '-';
+    try {
+      const d = new Date(isoStr);
+      return d.toLocaleString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      });
+    } catch (e) {
+      return '-';
+    }
   }
 
   function formatDate(isoStr) {
