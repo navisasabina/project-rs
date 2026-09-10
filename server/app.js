@@ -1,11 +1,13 @@
 const express = require('express');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
-// Middleware: Body parser
+// Middleware: Body parser & Cookies
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Serve existing User Portal static files from root directory
 // Ensures index.html, css/, js/, and images work with zero regression
@@ -27,6 +29,20 @@ const guidesRouter = require('./routes/guides');
 
 app.use('/api/v1/categories', categoriesRouter);
 app.use('/api/v1/guides', guidesRouter);
+
+// M5 Authentication & Account Provisioning Routes
+const authRouter = require('./routes/auth');
+const adminUsersRouter = require('./routes/admin-users');
+
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/admin/users', adminUsersRouter);
+
+// M6 Admin Knowledge Base Management API Routes (CRUD Categories, Guides, Steps, Status)
+const adminCategoriesRouter = require('./routes/admin-categories');
+const adminGuidesRouter = require('./routes/admin-guides');
+
+app.use('/api/v1/admin/categories', adminCategoriesRouter);
+app.use('/api/v1/admin/guides', adminGuidesRouter);
 
 // Fallback 404 handler for unmatched /api/* requests
 app.use('/api/*', (req, res) => {

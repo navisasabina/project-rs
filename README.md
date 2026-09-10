@@ -148,10 +148,53 @@ Platform menyediakan Public REST API read-only berbasis PostgreSQL:
   }
   ```
 
-### 3. Membuka Frontend Langsung (Static Fallback)
+### 3. Admin Authentication & Provisioning API (M5)
+Platform menyediakan sistem autentikasi internal berbasis session JWT di dalam HttpOnly Cookie, tanpa registrasi publik:
+
+- **`POST /api/v1/auth/login`**: Login staf IT (body: `{ username, password }`). Menghasilkan HttpOnly cookie aman (`SameSite=Strict`).
+- **`POST /api/v1/auth/logout`**: Mengakhiri sesi dan membersihkan auth cookie.
+- **`GET /api/v1/auth/me`**: Mendapatkan data profil aktif staf yang sedang login.
+- **`POST /api/v1/admin/users`**: Pembuatan akun baru internal (hanya dapat diakses oleh `ADMIN` atau `IT_MANAGER`).
+  - `ADMIN`: Dapat membuat akun `ADMIN`, `IT_MANAGER`, dan `IT_SUPPORT`.
+  - `IT_MANAGER`: Hanya dapat membuat akun `IT_SUPPORT` (privilege escalation ditolak dengan HTTP 403).
+  - `IT_SUPPORT`: Tidak dapat membuat akun (HTTP 403).
+- **`PATCH /api/v1/admin/users/:id/status`**: Mengaktifkan atau menonaktifkan akun (`{ is_active: boolean }`).
+
+#### Bootstrap Administrator CLI:
+Untuk inisialisasi akun Administrator pertama secara aman:
+```bash
+npm run seed:admin
+# Atau dengan custom arguments:
+node database/seed-admin.js [username] [password] [fullName] [email]
+```
+
+### 4. Admin Knowledge Base Management API (M6)
+Platform menyediakan REST API untuk manajemen penuh kategori, panduan troubleshooting, langkah-langkah SOP, dan transisi siklus hidup panduan dengan autentikasi berbasis role dan audit logging:
+
+#### Categories Management:
+- **`GET /api/v1/admin/categories`**: Mendapatkan semua kategori (termasuk non-aktif) beserta jumlah panduan terkait (`ADMIN`, `IT_MANAGER`, `IT_SUPPORT`).
+- **`POST /api/v1/admin/categories`**: Menambahkan kategori baru (`ADMIN`, `IT_MANAGER`). Validasi slug unik dan otomatis.
+- **`PATCH /api/v1/admin/categories/:id`**: Memperbarui informasi kategori (`ADMIN`, `IT_MANAGER`).
+- **`PATCH /api/v1/admin/categories/:id/status`**: Mengaktifkan/menonaktifkan status kategori (`ADMIN`, `IT_MANAGER`).
+
+#### Guides & Steps Management:
+- **`GET /api/v1/admin/guides`**: Mendapatkan seluruh panduan troubleshooting lintas status (`DRAFT`, `PUBLISHED`, `ARCHIVED`) dengan filter opsional `?status=` dan `?category=` (`ADMIN`, `IT_MANAGER`, `IT_SUPPORT`).
+- **`GET /api/v1/admin/guides/:id`**: Mendapatkan detail lengkap panduan beserta langkah-langkah (steps) dan relasi kategori (`ADMIN`, `IT_MANAGER`, `IT_SUPPORT`).
+- **`POST /api/v1/admin/guides`**: Menambahkan masalah troubleshooting baru lengkap dengan langkah-langkah dalam transaksi atomik (`ADMIN`, `IT_MANAGER`).
+- **`PATCH /api/v1/admin/guides/:id`**: Memperbarui metadata panduan (`ADMIN`, `IT_MANAGER`).
+- **`PATCH /api/v1/admin/guides/:id/status`**: Mengubah status siklus hidup panduan secara deterministik:
+  - `DRAFT` → `PUBLISHED` (otomatis menetapkan `published_at` dan panduan langsung aktif di Public API)
+  - `PUBLISHED` → `ARCHIVED` (panduan langsung dihapus dari Public API)
+  - `DRAFT` → `ARCHIVED`
+  - Transisi ilegal lainnya ditolak dengan `HTTP 400`.
+- **`PUT /api/v1/admin/guides/:id/steps`**: Mengganti urutan langkah troubleshooting secara atomik dengan penomoran deterministik (1, 2, 3...) (`ADMIN`, `IT_MANAGER`).
+
+### 5. Membuka Frontend Langsung (Static Fallback)
 Buka file `index.html` langsung di browser modern, atau gunakan HTTP server sederhana:
 ```bash
 python -m http.server 8000
 ```
+
+
 
 
