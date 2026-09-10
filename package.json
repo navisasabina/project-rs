@@ -22,7 +22,8 @@
     "test:admin-m8": "node scripts/test-admin-m8.js",
     "test:m9": "node scripts/test-production-m9.js",
     "test:m10": "node scripts/test-ai-search-m10.js",
-    "test": "node scripts/test-db.js && node scripts/test-seed.js && node scripts/test-api.js && node scripts/test-frontend-api.js && node scripts/test-auth.js && node scripts/test-admin-kb.js && node scripts/test-frontend-admin.js && node scripts/test-admin-m8.js && node scripts/test-production-m9.js && node scripts/test-ai-search-m10.js && node scripts/test-health.js"
+    "test:m11": "node scripts/test-observability-m11.js",
+    "test": "node scripts/test-db.js && node scripts/test-seed.js && node scripts/test-api.js && node scripts/test-frontend-api.js && node scripts/test-auth.js && node scripts/test-admin-kb.js && node scripts/test-frontend-admin.js && node scripts/test-admin-m8.js && node scripts/test-production-m9.js && node scripts/test-ai-search-m10.js && node scripts/test-observability-m11.js && node scripts/test-health.js"
   },
   "keywords": [
     "it-support",

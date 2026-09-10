@@ -11,11 +11,15 @@
  * - Trust proxy-aware via req.ip
  */
 
+const metrics = require('../utils/metrics');
+const logger = require('../utils/logger');
+
 function createRateLimiter(options = {}) {
   const windowMs = options.windowMs || 15 * 60 * 1000; // 15 minutes default
   const max = options.max || 10; // 10 attempts default
   const message = options.message || 'Terlalu banyak percobaan login. Silakan tunggu beberapa saat sebelum mencoba kembali.';
   const code = options.code || 'TOO_MANY_REQUESTS';
+  const type = options.type || 'generic';
 
   // Map of clientIp -> { count: number, resetTime: number }
   const store = new Map();
@@ -56,12 +60,24 @@ function createRateLimiter(options = {}) {
     if (entry.count > max) {
       const retryAfterSeconds = Math.max(1, Math.ceil((entry.resetTime - now) / 1000));
       res.setHeader('Retry-After', String(retryAfterSeconds));
+
+      // Instrument rate limit event in metrics and structured logger
+      metrics.recordRateLimit(type);
+      logger.warn('Rate limit threshold exceeded', {
+        requestId: req.id,
+        type,
+        clientIp,
+        code,
+        retryAfter: retryAfterSeconds,
+      });
+
       return res.status(429).json({
         success: false,
         error: {
           code,
           message,
           retryAfter: retryAfterSeconds,
+          requestId: req.id,
         },
       });
     }
@@ -79,6 +95,7 @@ function createRateLimiter(options = {}) {
 const loginRateLimiter = createRateLimiter({
   windowMs: 15 * 60 * 1000,
   max: 10,
+  type: 'login',
 });
 
 // Pre-configured AI diagnostic rate limiter: 15 requests per 15 minutes per IP
@@ -87,6 +104,7 @@ const aiRateLimiter = createRateLimiter({
   max: 15,
   message: 'Terlalu banyak permintaan diagnosa AI. Silakan tunggu beberapa saat sebelum mencoba kembali.',
   code: 'AI_RATE_LIMIT_EXCEEDED',
+  type: 'ai',
 });
 
 module.exports = {

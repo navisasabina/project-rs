@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 const { aiRateLimiter } = require('../middleware/rate-limiter');
+const metrics = require('../utils/metrics');
+const logger = require('../utils/logger');
 
 // Medical and clinical trigger terms for patient safety boundary
 const CLINICAL_REFUSAL_TERMS = [
@@ -64,6 +66,7 @@ function computeGuideRelevance(guide, query) {
  */
 router.post('/diagnose', aiRateLimiter, async (req, res) => {
   try {
+    metrics.recordAiEvent('request');
     const { message, question, prompt } = req.body || {};
     const rawQuery = typeof message === 'string' ? message : (typeof question === 'string' ? question : (typeof prompt === 'string' ? prompt : null));
 
@@ -74,6 +77,7 @@ router.post('/diagnose', aiRateLimiter, async (req, res) => {
         error: {
           code: 'INVALID_INPUT',
           message: 'Pesan kendala atau pertanyaan tidak boleh kosong.',
+          requestId: req.id,
         },
       });
     }
@@ -85,12 +89,16 @@ router.post('/diagnose', aiRateLimiter, async (req, res) => {
         error: {
           code: 'INPUT_TOO_LONG',
           message: 'Pertanyaan melebihi batas maksimal 500 karakter.',
+          requestId: req.id,
         },
       });
     }
 
     // 2. Safety Refusal for Clinical/Medical Queries
     if (isClinicalQuery(trimmedQuery)) {
+      metrics.recordAiEvent('safety_refusal');
+      logger.info('Clinical medical inquiry safely refused', { requestId: req.id });
+
       return res.status(200).json({
         success: true,
         data: {
@@ -107,6 +115,7 @@ router.post('/diagnose', aiRateLimiter, async (req, res) => {
         },
       });
     }
+
 
     // 3. Grounding: Retrieve Published SOPs from PostgreSQL
     const guidesQuery = `
@@ -189,6 +198,7 @@ router.post('/diagnose', aiRateLimiter, async (req, res) => {
       !apiKey.startsWith('dummy_');
 
     if (!isApiKeyConfigured) {
+      metrics.recordAiEvent('db_grounded');
       // Graceful local degradation: PostgreSQL SOP is the source of truth
       return res.status(200).json({
         success: true,
@@ -201,6 +211,7 @@ router.post('/diagnose', aiRateLimiter, async (req, res) => {
 
     // 5. Call Gemini AI with Grounded Context and strict safety timeout
     try {
+      metrics.recordAiEvent('gemini_attempt');
       const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
       const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
 
@@ -277,6 +288,7 @@ BATASAN KETAT:
       }
 
       if (parsedAI && parsedAI.title && Array.isArray(parsedAI.steps) && parsedAI.steps.length > 0) {
+        metrics.recordAiEvent('gemini_success');
         return res.status(200).json({
           success: true,
           data: {
@@ -294,7 +306,12 @@ BATASAN KETAT:
       throw new Error('Incomplete structure in Gemini response');
     } catch (aiErr) {
       // Graceful local degradation: PostgreSQL SOP is returned reliably
-      console.warn('[AI Diagnostic] Gemini generation unavailable or timed out, returning PostgreSQL SOP fallback:', aiErr.name || 'Error');
+      metrics.recordAiEvent('gemini_fallback');
+      logger.warn('Gemini generation unavailable or timed out, returning PostgreSQL SOP fallback', {
+        requestId: req.id,
+        errorName: aiErr.name || 'Error',
+      });
+
       return res.status(200).json({
         success: true,
         data: {
@@ -304,12 +321,13 @@ BATASAN KETAT:
       });
     }
   } catch (err) {
-    console.error('[AI Diagnostic Error]:', err);
+    logger.error('AI Diagnostic Error', { requestId: req.id, error: err });
     return res.status(500).json({
       success: false,
       error: {
         code: 'INTERNAL_SERVER_ERROR',
         message: 'Terjadi kesalahan saat memproses diagnosa IT.',
+        requestId: req.id,
       },
     });
   }

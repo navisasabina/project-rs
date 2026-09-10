@@ -295,13 +295,65 @@ Platform kini mengintegrasikan PostgreSQL Full-Text Search dan Asisten AI Diagno
    # Menjalankan test suite mandiri M10:
    npm run test:m10
 
-   # Atau seluruh rangkaian pengujian sistem M0–M10:
+   # Atau seluruh rangkaian pengujian sistem M0–M11:
    npm test
    ```
 
 ---
 
-### 8. Membuka Frontend Langsung (Static Fallback)
+### 8. Observabilitas, Penanganan Error Terpusat & Diagnostik Operasional (M11)
+
+Platform kini dilengkapi fondasi observabilitas dan penanganan error terpusat tanpa dependensi eksternal (*zero third-party logging/monitoring dependencies*):
+
+1. **Korelasi Request (*Request Correlation ID*)**:
+   - Setiap request HTTP secara otomatis diberikan `X-Request-Id` berbasis Node.js `crypto.randomUUID()`.
+   - Mendukung pelestarian header `X-Request-Id` aman dari klien (8–64 karakter alfanumerik) untuk penelusuran terpadu (*end-to-end tracing*). Header yang tidak valid atau berbahaya secara otomatis diganti dengan UUID v4 aman.
+   - Header `X-Request-Id` dikembalikan pada setiap respon HTTP dan dicantumkan pada seluruh objek payload error.
+
+2. **Logger Terstruktur Terpusat (*Centralized Structured Logger*)**:
+   - `server/utils/logger.js` mendukung level log `info`, `warn`, `error`, dan `debug`.
+   - Mengeluarkan format JSON terstruktur pada lingkungan produksi (`NODE_ENV=production` atau `LOG_FORMAT=json`) dan format human-readable terstruktur pada lingkungan pengembangan.
+   - **Redaksi Rahasia Otomatis**: Secara rekursif menyamarkan data sensitif seperti kata sandi (`password`, `password_hash`), token JWT (`jwt`, `token`), cookies, `Authorization` header, dan `GEMINI_API_KEY` menjadi `[REDACTED]`.
+
+3. **Penanganan Error Terpusat (*Global Centralized Error Handler*)**:
+   - Middleware `server/middleware/error-handler.js` menjamin seluruh error API dikembalikan dalam format JSON terstandarisasi:
+     ```json
+     {
+       "success": false,
+       "error": {
+         "code": "INTERNAL_SERVER_ERROR",
+         "message": "Terjadi kesalahan internal pada server.",
+         "requestId": "a0a4b963-d501-4fd0-83fa-4fc73a92f6da"
+       }
+     }
+     ```
+   - Menangani error parsing payload JSON (`express.json()`) dengan kode `INVALID_JSON_PAYLOAD` (HTTP 400).
+   - Menjamin tidak ada kebocoran *stack trace*, query SQL, maupun path internal server ke klien publik.
+
+4. **Metrik Operasional Ringan In-Memory**:
+   - `server/utils/metrics.js` melacak waktu aktif (*uptime*), penggunaan memori (*heap* dan *RSS*), jumlah request berdasarkan status family (`2xx`, `3xx`, `4xx`, `5xx`), rata-rata latensi respon, event rate limit, event diagnostik AI (permintaan, penolakan medis, fallback SOP), dan latensi pencarian SOP.
+
+5. **Endpoint Metrik Terproteksi RBAC (`GET /api/v1/admin/metrics`)**:
+   - Hanya dapat diakses oleh peran berwenang (`ADMIN` dan `IT_MANAGER`).
+   - Peran `IT_SUPPORT` menerima penolakan `HTTP 403 Forbidden` (`FORBIDDEN_RESOURCE`).
+   - Request tanpa autentikasi menerima `HTTP 401 Unauthorized`.
+
+6. **Diagnostik Liveness & Kesiapan Sistem**:
+   - `GET /api/v1/health` diperkaya dengan informasi runtime `uptime` dan ringkasan penggunaan memori tanpa merusak kontrak respons `status: "ok"`.
+   - `GET /api/v1/health/ready` mempertahankan kontrak kesiapan koneksi pool PostgreSQL.
+
+7. **Menjalankan Pengujian M11**:
+   ```bash
+   # Menjalankan test suite mandiri M11:
+   npm run test:m11
+
+   # Menjalankan seluruh pengujian regresi lengkap M0–M11 (12 test suite):
+   npm test
+   ```
+
+---
+
+### 9. Membuka Frontend Langsung (Static Fallback)
 Buka file `index.html` langsung di browser modern, atau gunakan HTTP server sederhana:
 ```bash
 python -m http.server 8000

@@ -33,6 +33,7 @@ services:
       PORT: 3000
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-rs_awal_bros_kb}
       JWT_SECRET: ${JWT_SECRET:-awal-bros-botania-prod-jwt-secret-min-32-chars}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
     ports:
       - "${PORT:-3000}:3000"
     healthcheck:

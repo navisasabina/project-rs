@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
+const metrics = require('../utils/metrics');
+const logger = require('../utils/logger');
 
 // UUID validation regex (v4 / general uuid)
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -56,6 +58,7 @@ router.get('/', async (req, res) => {
           error: {
             code: 'INVALID_QUERY_PARAMETER',
             message: 'Parameter category tidak valid.',
+            requestId: req.id,
           },
         });
       }
@@ -65,6 +68,7 @@ router.get('/', async (req, res) => {
 
     let result;
     if (search) {
+      const searchStart = Date.now();
       try {
         // Attempt 1: PostgreSQL Full-Text Search via search_vector & plainto_tsquery
         const ftsParams = [...queryParams, search, `%${search}%`];
@@ -81,6 +85,7 @@ router.get('/', async (req, res) => {
           ORDER BY ts_rank(g.search_vector, plainto_tsquery('indonesian', $${searchParamIdx})) DESC, c.display_order ASC, g.title ASC;
         `;
         result = await db.query(ftsQuery, ftsParams);
+        metrics.recordSearch(Date.now() - searchStart, true);
       } catch (ftsErr) {
         // Attempt 2: Safe ILIKE Fallback (e.g. pg-mem mock or missing tsvector dictionary)
         const fallbackParams = [...queryParams, `%${search}%`];
@@ -96,12 +101,12 @@ router.get('/', async (req, res) => {
           ORDER BY c.display_order ASC, g.title ASC;
         `;
         result = await db.query(fallbackQuery, fallbackParams);
+        metrics.recordSearch(Date.now() - searchStart, false);
       }
     } else {
       const defaultQuery = `${baseQueryText} ORDER BY c.display_order ASC, g.title ASC;`;
       result = await db.query(defaultQuery, queryParams);
     }
-
 
     // Format category object nested cleanly
     const guides = result.rows.map((row) => ({
@@ -131,16 +136,18 @@ router.get('/', async (req, res) => {
       },
     });
   } catch (err) {
-    console.error('[Public API Error - GET /guides]:', err);
+    logger.error('Public API Error - GET /guides', { requestId: req.id, error: err });
     return res.status(500).json({
       success: false,
       error: {
         code: 'INTERNAL_SERVER_ERROR',
         message: 'Terjadi kesalahan internal pada server.',
+        requestId: req.id,
       },
     });
   }
 });
+
 
 /**
  * GET /api/v1/guides/:id_or_key
