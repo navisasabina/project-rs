@@ -105,6 +105,22 @@
         });
         return res.data;
       },
+
+      /**
+       * Change current active user's password (Self-service)
+       * @param {object} param0 { currentPassword, newPassword, confirmPassword }
+       */
+      async changePassword({ currentPassword, newPassword, confirmPassword }) {
+        const res = await apiRequest('/auth/password', {
+          method: 'PATCH',
+          body: {
+            current_password: currentPassword,
+            new_password: newPassword,
+            confirm_password: confirmPassword,
+          },
+        });
+        return res;
+      },
     },
 
     categories: {
@@ -276,6 +292,32 @@
         const res = await apiRequest(`/admin/users/${encodeURIComponent(id)}/status`, {
           method: 'PATCH',
           body: { is_active: isActive },
+        });
+        return res.data;
+      },
+
+      /**
+       * Reset password for an IT staff user (Admin reset)
+       * @param {string} id
+       * @param {string} newPassword
+       */
+      async resetPassword(id, newPassword) {
+        const res = await apiRequest(`/admin/users/${encodeURIComponent(id)}/password`, {
+          method: 'PATCH',
+          body: { new_password: newPassword },
+        });
+        return res.data;
+      },
+
+      /**
+       * Update IT staff user profile metadata (full_name, email, role)
+       * @param {string} id
+       * @param {object} userData
+       */
+      async update(id, userData) {
+        const res = await apiRequest(`/admin/users/${encodeURIComponent(id)}`, {
+          method: 'PATCH',
+          body: userData,
         });
         return res.data;
       },

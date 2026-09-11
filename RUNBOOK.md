@@ -23,6 +23,7 @@ Buku panduan operasional ini disusun untuk tim IT Support, Database Administrato
 - [O. Important Warnings & Destructive Operations (Peringatan Bahaya)](#o-important-warnings--destructive-operations-peringatan-bahaya)
 - [P. What is NOT Automatically Backed Up (Batasan Backup Otomatis)](#p-what-is-not-automatically-backed-up-batasan-backup-otomatis)
 - [Q. Recommended Operational Backup Scheduling Approach (Jadwal Otomasi)](#q-recommended-operational-backup-scheduling-approach-jadwal-otomasi)
+- [R. User Credential Lifecycle & Password Management (Prosedur Kredensial dan Kata Sandi)](#r-user-credential-lifecycle--password-management-prosedur-kredensial-dan-kata-sandi)
 
 ---
 
@@ -426,4 +427,58 @@ Bila aplikasi di-host pada Windows Server:
    - Start in: `C:\inetpub\rs-awal-bros-hardware-guidebook` (sesuaikan direktori aplikasi).
 
 ---
-*Dokumen ini merupakan standar operasional prosedur resmi M12 RS Awal Bros Botania.*
+
+## R. User Credential Lifecycle & Password Management (Prosedur Kredensial dan Kata Sandi)
+
+Standar Operasional Prosedur pengelolaan kata sandi dan kredensial staf IT RS Awal Bros Botania:
+
+### 1. Mandiri: Ganti Kata Sandi Sendiri (Self-Service Password Change)
+Setiap staf IT yang sedang aktif login (`ADMIN`, `IT_MANAGER`, `IT_SUPPORT`) dapat memperbarui kata sandi akunnya secara mandiri:
+1. Klik tombol **Ganti Password** (ikon kunci) pada header navigasi kanan atas.
+2. Masukkan kata sandi saat ini (`current_password`) untuk verifikasi identitas.
+3. Masukkan kata sandi baru (minimal 8 karakter) dan ulangi pada kolom konfirmasi. Kata sandi baru tidak boleh sama dengan kata sandi lama.
+4. Klik **Perbarui Sandi**. Sistem akan mengenkripsi kata sandi baru menggunakan bcrypt (12 rounds) dan mencatat log audit `PASSWORD_CHANGED`.
+
+### 2. Administrator: Reset Kata Sandi Staf IT
+Bila staf IT lupa kata sandi atau terjadi rotasi teknisi:
+1. Buka tab **Manajemen Pengguna**.
+2. Cari akun staf target pada tabel, lalu klik tombol **Reset Password** (ikon kunci warna kuning).
+3. Masukkan kata sandi sementara baru (minimal 8 karakter) dan konfirmasi.
+4. Klik **Reset Kata Sandi**. Tindakan ini dicatat dalam log audit sebagai `PASSWORD_RESET`.
+5. Berikan kata sandi sementara kepada staf melalui kanal aman langsung (bukan pesan terbuka). Minta staf untuk segera mengganti kata sandi setelah login pertama kali.
+
+### 3. Batasan Otorisasi IT Manager (Role Hierarchy)
+- **ADMIN**: Berwenang mereset kata sandi dan memperbarui profil akun apa pun (`ADMIN`, `IT_MANAGER`, `IT_SUPPORT`).
+- **IT_MANAGER**: Hanya berwenang mereset kata sandi dan mengelola profil akun teknisi **IT_SUPPORT**. Percobaan mereset kata sandi atau mengedit sesama IT Manager atau Admin akan ditolak oleh sistem dengan `HTTP 403 Forbidden`.
+- **IT_SUPPORT**: Tidak memiliki wewenang mereset kata sandi atau mengedit akun lain (`HTTP 403 Forbidden`).
+
+### 4. Prosedur Insiden: Staf Lupa Kata Sandi (Forgotten Password SOP)
+1. Staf IT yang bersangkutan menghubungi Administrator IT atau IT Manager bertugas secara langsung / tatap muka / sambungan telepon internal PABX RS Awal Bros.
+2. Administrator memverifikasi identitas staf (nama lengkap, NIK/NPP staf RS).
+3. Administrator membuka Dashboard -> Manajemen Pengguna -> Reset Password.
+4. Administrator menetapkan kata sandi acak sementara dan menyerahkannya secara privat.
+5. Staf melakukan login di `/admin/login` dan segera menjalankan fitur *Ganti Kata Sandi Sendiri* untuk mengganti kata sandi sementara menjadi kata sandi pribadi yang hanya diketahui staf tersebut.
+
+### 5. Rotasi Kredensial Bootstrap Awal Pabrik
+Saat instalasi baru pertama kali dijalankan, sistem membuat akun default Administrator (`admin.it`).
+> [!IMPORTANT]
+> **WAJIB ROTASI PADA LINGKUNGAN PRODUKSI:**
+> 1. Segera setelah server aplikasi pertama kali di-deploy di RS Awal Bros, Administrator IT wajib login menggunakan akun awal pabrik (`admin.it`).
+> 2. Buka menu **Ganti Password** dan ubah kata sandi default pabrik (`AwalBrosIT@2026`) menjadi kata sandi yang memenuhi standar keamanan rumah sakit (minimal 12 karakter kombinasi huruf besar, kecil, angka, dan simbol).
+> 3. Buat akun personal untuk masing-masing staf IT melalui menu **Manajemen Pengguna** -> **Tambah Akun Staf Baru**, dan hindari berbagi satu akun Administrator secara bersamaan (*shared account*).
+
+### 6. Peringatan Keamanan Kredensial
+> [!CAUTION]
+> **KEBIJAKAN KERAHASIAAN KATA SANDI:**
+> - Kata sandi staf rumah sakit **TIDAK PERNAH** boleh dibagikan melalui grup chat WhatsApp, pesan email tidak terenkripsi, tiket helpdesk, atau dicatat pada stiker meja/layar monitor.
+> - Sistem backend RS Awal Bros tidak pernah menyimpan kata sandi dalam bentuk plaintext maupun menampilkannya kembali pada respons API atau log audit.
+> - Kata sandi yang di-hash dengan bcrypt bersifat satu arah (*one-way hash*) dan tidak dapat di-dekripsi oleh administrator mana pun.
+
+### 7. Verifikasi Pasca-Reset Kata Sandi
+Setelah melakukan reset kata sandi:
+1. Pastikan staf target dapat login dengan sukses di `/admin/login` menggunakan kata sandi baru.
+2. Pastikan upaya login dengan kata sandi lama menerima respons penolakan aman (`HTTP 401 INVALID_CREDENTIALS`).
+3. Buka tab **Log Audit** untuk memastikan event `PASSWORD_RESET` atau `PASSWORD_CHANGED` telah tercatat dengan metadata pengguna tanpa kebocoran string kata sandi.
+
+---
+*Dokumen ini merupakan standar operasional prosedur resmi M12 & M13 RS Awal Bros Botania.*

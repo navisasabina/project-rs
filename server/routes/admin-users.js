@@ -328,4 +328,385 @@ router.patch('/:id/status', requireAuth, requireRoles('ADMIN', 'IT_MANAGER'), as
   }
 });
 
+/**
+ * PATCH /api/v1/admin/users/:id/password
+ * Protected: ADMIN and IT_MANAGER
+ * Body: { new_password }
+ */
+router.patch('/:id/password', requireAuth, requireRoles('ADMIN', 'IT_MANAGER'), async (req, res) => {
+  const actor = req.user;
+  const { id } = req.params;
+  const ipAddress = req.ip || req.connection.remoteAddress;
+  const userAgent = req.headers['user-agent'] || '';
+
+  try {
+    if (!UUID_REGEX.test(id)) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'INVALID_ID',
+          message: 'Format ID pengguna tidak valid.',
+          requestId: req.id,
+        },
+      });
+    }
+
+    const { new_password } = req.body || {};
+    if (!new_password || typeof new_password !== 'string') {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Field new_password wajib diisi.',
+          requestId: req.id,
+        },
+      });
+    }
+
+    if (new_password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Kata sandi baru minimal 8 karakter.',
+          requestId: req.id,
+        },
+      });
+    }
+
+    // Lookup target user
+    const targetRes = await db.query(
+      'SELECT id, username, role, is_active FROM users WHERE id = $1',
+      [id]
+    );
+
+    if (targetRes.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          code: 'USER_NOT_FOUND',
+          message: 'Akun pengguna tidak ditemukan.',
+          requestId: req.id,
+        },
+      });
+    }
+
+    const targetUser = targetRes.rows[0];
+
+    // Enforce role hierarchy:
+    // IT_MANAGER can ONLY reset IT_SUPPORT
+    if (actor.role === 'IT_MANAGER' && targetUser.role !== 'IT_SUPPORT') {
+      return res.status(403).json({
+        success: false,
+        error: {
+          code: 'FORBIDDEN',
+          message: 'IT Manager hanya berwenang mereset kata sandi akun IT Support.',
+          requestId: req.id,
+        },
+      });
+    }
+
+    // Hash with bcrypt 12 rounds
+    const newHash = await hashPassword(new_password);
+
+    // Update password
+    await db.query(
+      'UPDATE users SET password_hash = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
+      [newHash, targetUser.id]
+    );
+
+    // Record sanitized audit event
+    await recordAuditLog({
+      userId: actor.id,
+      action: 'PASSWORD_RESET',
+      entityName: 'user',
+      entityId: targetUser.id,
+      changes: {
+        target_username: targetUser.username,
+        target_role: targetUser.role,
+        reset_by_role: actor.role,
+      },
+      ipAddress,
+      userAgent,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: `Kata sandi untuk pengguna ${targetUser.username} berhasil direset.`,
+      data: {
+        id: targetUser.id,
+        username: targetUser.username,
+      },
+    });
+  } catch (err) {
+    console.error('[Admin Users Error - PATCH /:id/password]:', err);
+    return res.status(500).json({
+      success: false,
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Terjadi kesalahan sistem saat mereset kata sandi.',
+        requestId: req.id,
+      },
+    });
+  }
+});
+
+/**
+ * PATCH /api/v1/admin/users/:id
+ * Protected: ADMIN and IT_MANAGER
+ * Body: { full_name, email, role } (partial update allowed)
+ */
+router.patch('/:id', requireAuth, requireRoles('ADMIN', 'IT_MANAGER'), async (req, res) => {
+  const actor = req.user;
+  const { id } = req.params;
+  const ipAddress = req.ip || req.connection.remoteAddress;
+  const userAgent = req.headers['user-agent'] || '';
+
+  try {
+    if (!UUID_REGEX.test(id)) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'INVALID_ID',
+          message: 'Format ID pengguna tidak valid.',
+          requestId: req.id,
+        },
+      });
+    }
+
+    const ALLOWED_UPDATE_FIELDS = ['full_name', 'email', 'role'];
+    const bodyKeys = Object.keys(req.body || {});
+
+    // Check for unsupported fields
+    const unsupportedKeys = bodyKeys.filter((k) => !ALLOWED_UPDATE_FIELDS.includes(k));
+    if (unsupportedKeys.length > 0) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'UNSUPPORTED_FIELD',
+          message: `Field tidak didukung: ${unsupportedKeys.join(', ')}.`,
+          requestId: req.id,
+        },
+      });
+    }
+
+    if (bodyKeys.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Setidaknya satu field (full_name, email, role) harus disediakan.',
+          requestId: req.id,
+        },
+      });
+    }
+
+    // Lookup target user
+    const targetRes = await db.query(
+      'SELECT id, full_name, username, email, role, is_active FROM users WHERE id = $1',
+      [id]
+    );
+
+    if (targetRes.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          code: 'USER_NOT_FOUND',
+          message: 'Akun pengguna tidak ditemukan.',
+          requestId: req.id,
+        },
+      });
+    }
+
+    const targetUser = targetRes.rows[0];
+
+    // Enforce role hierarchy:
+    // IT_MANAGER can ONLY update IT_SUPPORT
+    if (actor.role === 'IT_MANAGER' && targetUser.role !== 'IT_SUPPORT') {
+      return res.status(403).json({
+        success: false,
+        error: {
+          code: 'FORBIDDEN',
+          message: 'IT Manager hanya berwenang mengelola akun IT Support.',
+          requestId: req.id,
+        },
+      });
+    }
+
+    const { full_name, email, role } = req.body;
+    const updates = [];
+    const values = [];
+    const changes = { previous: {}, updated: {} };
+
+    // Validate and process full_name
+    if (full_name !== undefined) {
+      if (typeof full_name !== 'string' || full_name.trim().length < 2 || full_name.trim().length > 100) {
+        return res.status(400).json({
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Nama lengkap harus antara 2 dan 100 karakter.',
+            requestId: req.id,
+          },
+        });
+      }
+      const trimmedName = full_name.trim();
+      values.push(trimmedName);
+      updates.push(`full_name = $${values.length}`);
+      changes.previous.full_name = targetUser.full_name;
+      changes.updated.full_name = trimmedName;
+    }
+
+    // Validate and process email
+    if (email !== undefined) {
+      const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (typeof email !== 'string' || !EMAIL_REGEX.test(email.trim()) || email.trim().length > 100) {
+        return res.status(400).json({
+          success: false,
+          error: {
+            code: 'INVALID_EMAIL',
+            message: 'Format alamat email tidak valid.',
+            requestId: req.id,
+          },
+        });
+      }
+      const trimmedEmail = email.trim().toLowerCase();
+
+      // Check if email already in use by another user
+      const emailCheck = await db.query(
+        'SELECT id FROM users WHERE LOWER(email) = $1 AND id != $2',
+        [trimmedEmail, targetUser.id]
+      );
+      if (emailCheck.rows.length > 0) {
+        return res.status(409).json({
+          success: false,
+          error: {
+            code: 'DUPLICATE_EMAIL',
+            message: 'Alamat email tersebut sudah terdaftar.',
+            requestId: req.id,
+          },
+        });
+      }
+
+      values.push(trimmedEmail);
+      updates.push(`email = $${values.length}`);
+      changes.previous.email = targetUser.email;
+      changes.updated.email = trimmedEmail;
+    }
+
+    // Validate and process role
+    if (role !== undefined) {
+      if (!ALLOWED_ROLES.includes(role)) {
+        return res.status(400).json({
+          success: false,
+          error: {
+            code: 'INVALID_ROLE',
+            message: `Role tidak valid. Pilihan role: ${ALLOWED_ROLES.join(', ')}.`,
+            requestId: req.id,
+          },
+        });
+      }
+
+      // Hierarchy check:
+      // IT_MANAGER cannot promote to ADMIN or IT_MANAGER
+      if (actor.role === 'IT_MANAGER' && role !== 'IT_SUPPORT') {
+        return res.status(403).json({
+          success: false,
+          error: {
+            code: 'PRIVILEGE_ESCALATION_DENIED',
+            message: `IT Manager tidak memiliki izin untuk mengubah role menjadi ${role}.`,
+            requestId: req.id,
+          },
+        });
+      }
+
+      // Anti-self-demotion: ADMIN cannot demote self from ADMIN
+      if (actor.id === targetUser.id && role !== 'ADMIN') {
+        return res.status(400).json({
+          success: false,
+          error: {
+            code: 'CANNOT_DEMOTE_SELF',
+            message: 'Anda tidak dapat menurunkan role akun Administrator Anda sendiri.',
+            requestId: req.id,
+          },
+        });
+      }
+
+      values.push(role);
+      updates.push(`role = $${values.length}`);
+      changes.previous.role = targetUser.role;
+      changes.updated.role = role;
+    }
+
+    if (updates.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'NO_CHANGES',
+          message: 'Tidak ada perubahan yang dilakukan.',
+          requestId: req.id,
+        },
+      });
+    }
+
+    updates.push('updated_at = CURRENT_TIMESTAMP');
+    values.push(targetUser.id);
+    const updateQuery = `
+      UPDATE users
+      SET ${updates.join(', ')}
+      WHERE id = $${values.length}
+      RETURNING id, full_name, username, email, role, is_active, updated_at;
+    `;
+
+    let updateRes;
+    try {
+      updateRes = await db.query(updateQuery, values);
+    } catch (dbErr) {
+      if (dbErr.code === '23505') {
+        return res.status(409).json({
+          success: false,
+          error: {
+            code: 'DUPLICATE_EMAIL',
+            message: 'Alamat email tersebut sudah terdaftar.',
+            requestId: req.id,
+          },
+        });
+      }
+      throw dbErr;
+    }
+
+    const updatedUser = updateRes.rows[0];
+
+    // Record audit log
+    await recordAuditLog({
+      userId: actor.id,
+      action: 'USER_UPDATED',
+      entityName: 'user',
+      entityId: updatedUser.id,
+      changes: {
+        target_username: targetUser.username,
+        ...changes,
+      },
+      ipAddress,
+      userAgent,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Profil staf IT berhasil diperbarui.',
+      data: updatedUser,
+    });
+  } catch (err) {
+    console.error('[Admin Users Error - PATCH /:id]:', err);
+    return res.status(500).json({
+      success: false,
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Terjadi kesalahan sistem saat memperbarui profil pengguna.',
+        requestId: req.id,
+      },
+    });
+  }
+});
+
 module.exports = router;

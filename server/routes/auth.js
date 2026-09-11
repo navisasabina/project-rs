@@ -12,6 +12,7 @@ const router = express.Router();
 const db = require('../config/database');
 const {
   comparePassword,
+  hashPassword,
   signToken,
   getCookieOptions,
   COOKIE_NAME,
@@ -229,6 +230,140 @@ router.get('/me', requireAuth, (req, res) => {
       is_active: req.user.is_active,
     },
   });
+});
+
+/**
+ * PATCH /api/v1/auth/password
+ * Self-service password change for authenticated active user
+ * Body: { current_password, new_password, confirm_password }
+ */
+router.patch('/password', requireAuth, async (req, res) => {
+  const ipAddress = req.ip || req.connection.remoteAddress;
+  const userAgent = req.headers['user-agent'] || '';
+
+  try {
+    const { current_password, new_password, confirm_password } = req.body || {};
+
+    if (
+      !current_password ||
+      !new_password ||
+      !confirm_password ||
+      typeof current_password !== 'string' ||
+      typeof new_password !== 'string' ||
+      typeof confirm_password !== 'string'
+    ) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Seluruh field (current_password, new_password, confirm_password) wajib diisi.',
+          requestId: req.id,
+        },
+      });
+    }
+
+    if (new_password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Kata sandi baru minimal 8 karakter.',
+          requestId: req.id,
+        },
+      });
+    }
+
+    if (new_password !== confirm_password) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Konfirmasi kata sandi baru tidak cocok.',
+          requestId: req.id,
+        },
+      });
+    }
+
+    // Retrieve user's current password_hash from DB
+    const userRes = await db.query(
+      'SELECT id, username, password_hash, is_active FROM users WHERE id = $1',
+      [req.user.id]
+    );
+
+    if (userRes.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          code: 'USER_NOT_FOUND',
+          message: 'Pengguna tidak ditemukan.',
+          requestId: req.id,
+        },
+      });
+    }
+
+    const user = userRes.rows[0];
+
+    // Verify current password
+    const isCurrentValid = await comparePassword(current_password, user.password_hash);
+    if (!isCurrentValid) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'INVALID_CREDENTIALS',
+          message: 'Kata sandi saat ini salah.',
+          requestId: req.id,
+        },
+      });
+    }
+
+    // Prevent new password being identical to current password
+    const isSame = await comparePassword(new_password, user.password_hash);
+    if (isSame) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'SAME_PASSWORD',
+          message: 'Kata sandi baru tidak boleh sama dengan kata sandi saat ini.',
+          requestId: req.id,
+        },
+      });
+    }
+
+    // Hash new password using 12 bcrypt rounds
+    const newHash = await hashPassword(new_password);
+
+    // Update password_hash atomically
+    await db.query(
+      'UPDATE users SET password_hash = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
+      [newHash, user.id]
+    );
+
+    // Record sanitized audit event
+    await recordAuditLog({
+      userId: user.id,
+      action: 'PASSWORD_CHANGED',
+      entityName: 'user',
+      entityId: user.id,
+      changes: { reason: 'self_service_update' },
+      ipAddress,
+      userAgent,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Kata sandi berhasil diperbarui.',
+    });
+  } catch (err) {
+    console.error('[Auth Route Error - PATCH /password]:', err);
+    return res.status(500).json({
+      success: false,
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Terjadi kesalahan sistem saat memperbarui kata sandi.',
+        requestId: req.id,
+      },
+    });
+  }
 });
 
 module.exports = router;

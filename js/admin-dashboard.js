@@ -1357,40 +1357,72 @@
       let actionBtnHTML = '';
       if (isActorReadOnly) {
         actionBtnHTML = `<span class="text-[11px] text-slate-500 italic">Read-Only</span>`;
-      } else if (isSelf) {
-        actionBtnHTML = `
-          <button disabled class="px-2.5 py-1 rounded-lg text-slate-500 bg-slate-800/40 border border-slate-700/40 text-[11px] font-semibold cursor-not-allowed" title="Anda tidak dapat menonaktifkan akun sendiri">
-            Akun Anda
-          </button>
-        `;
-      } else if (isActorManager && isTargetHigherOrEqual) {
-        actionBtnHTML = `
-          <button disabled class="px-2.5 py-1 rounded-lg text-slate-500 bg-slate-800/40 border border-slate-700/40 text-[11px] font-semibold cursor-not-allowed" title="IT Manager hanya berwenang mengelola IT Support">
-            Dibatasi
-          </button>
-        `;
-      } else if (u.is_active) {
-        actionBtnHTML = `
-          <button
-            onclick="confirmToggleUserStatus('${u.id}', '${escapeHTML(u.username)}', true)"
-            class="rbac-mutation px-2.5 py-1 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/30 text-[11px] font-semibold transition-colors flex items-center gap-1"
-            title="Nonaktifkan akun staf"
-          >
-            <span class="material-symbols-outlined text-sm">block</span>
-            <span>Nonaktifkan</span>
-          </button>
-        `;
       } else {
-        actionBtnHTML = `
-          <button
-            onclick="confirmToggleUserStatus('${u.id}', '${escapeHTML(u.username)}', false)"
-            class="rbac-mutation px-2.5 py-1 rounded-lg text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-semibold transition-colors flex items-center gap-1"
-            title="Aktifkan kembali akun staf"
-          >
-            <span class="material-symbols-outlined text-sm">check_circle</span>
-            <span>Aktifkan</span>
-          </button>
-        `;
+        const canManageTarget = currentActor && (currentActor.role === 'ADMIN' || (currentActor.role === 'IT_MANAGER' && u.role === 'IT_SUPPORT'));
+
+        let editBtn = '';
+        let resetBtn = '';
+
+        if (canManageTarget) {
+          editBtn = `
+            <button
+              onclick="openEditUserModal('${u.id}')"
+              class="rbac-mutation p-1.5 rounded-lg text-slate-400 hover:text-cyan-300 hover:bg-slate-800 border border-slate-700/60 hover:border-cyan-500/40 text-[11px] font-semibold transition-colors flex items-center"
+              title="Edit profil staf"
+            >
+              <span class="material-symbols-outlined text-sm">edit</span>
+            </button>
+          `;
+
+          resetBtn = `
+            <button
+              onclick="openResetPasswordModal('${u.id}', '${escapeHTML(u.username)}', '${escapeHTML(u.full_name || '')}')"
+              class="rbac-mutation p-1.5 rounded-lg text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 border border-amber-500/30 text-[11px] font-semibold transition-colors flex items-center"
+              title="Reset kata sandi staf"
+            >
+              <span class="material-symbols-outlined text-sm">key</span>
+            </button>
+          `;
+        }
+
+        let statusBtn = '';
+        if (isSelf) {
+          statusBtn = `
+            <button disabled class="px-2.5 py-1 rounded-lg text-slate-500 bg-slate-800/40 border border-slate-700/40 text-[11px] font-semibold cursor-not-allowed" title="Anda tidak dapat menonaktifkan akun sendiri">
+              Akun Anda
+            </button>
+          `;
+        } else if (isActorManager && isTargetHigherOrEqual) {
+          statusBtn = `
+            <button disabled class="px-2.5 py-1 rounded-lg text-slate-500 bg-slate-800/40 border border-slate-700/40 text-[11px] font-semibold cursor-not-allowed" title="IT Manager hanya berwenang mengelola IT Support">
+              Dibatasi
+            </button>
+          `;
+        } else if (u.is_active) {
+          statusBtn = `
+            <button
+              onclick="confirmToggleUserStatus('${u.id}', '${escapeHTML(u.username)}', true)"
+              class="rbac-mutation px-2.5 py-1 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/30 text-[11px] font-semibold transition-colors flex items-center gap-1"
+              title="Nonaktifkan akun staf"
+            >
+              <span class="material-symbols-outlined text-sm">block</span>
+              <span>Nonaktifkan</span>
+            </button>
+          `;
+        } else {
+          statusBtn = `
+            <button
+              onclick="confirmToggleUserStatus('${u.id}', '${escapeHTML(u.username)}', false)"
+              class="rbac-mutation px-2.5 py-1 rounded-lg text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-semibold transition-colors flex items-center gap-1"
+              title="Aktifkan kembali akun staf"
+            >
+              <span class="material-symbols-outlined text-sm">check_circle</span>
+              <span>Aktifkan</span>
+            </button>
+          `;
+        }
+
+        actionBtnHTML = `${editBtn}${resetBtn}${statusBtn}`;
       }
 
       return `
@@ -1570,6 +1602,270 @@
         }
       },
     });
+  };
+
+  /* ==========================================================================
+     8B. USER CREDENTIAL & PROFILE LIFECYCLE (MILESTONE M13)
+     ========================================================================== */
+
+  window.openChangePasswordModal = function () {
+    const modal = document.getElementById('change-password-modal');
+    const form = document.getElementById('change-password-form');
+    if (form) form.reset();
+    if (modal) modal.classList.remove('hidden');
+  };
+
+  window.closeChangePasswordModal = function () {
+    const modal = document.getElementById('change-password-modal');
+    const form = document.getElementById('change-password-form');
+    if (form) form.reset();
+    if (modal) modal.classList.add('hidden');
+  };
+
+  window.handleChangePasswordSubmit = async function (event) {
+    event.preventDefault();
+    const currentInput = document.getElementById('change-pw-current');
+    const newInput = document.getElementById('change-pw-new');
+    const confirmInput = document.getElementById('change-pw-confirm');
+    const submitBtn = document.getElementById('change-password-submit-btn');
+
+    const currentPassword = currentInput ? currentInput.value : '';
+    const newPassword = newInput ? newInput.value : '';
+    const confirmPassword = confirmInput ? confirmInput.value : '';
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      showToast('Seluruh field kata sandi wajib diisi.', 'error');
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      showToast('Kata sandi baru minimal harus 8 karakter.', 'error');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      showToast('Konfirmasi kata sandi baru tidak cocok.', 'error');
+      return;
+    }
+
+    if (currentPassword === newPassword) {
+      showToast('Kata sandi baru tidak boleh sama dengan kata sandi saat ini.', 'error');
+      return;
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `
+        <span class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span>
+        <span>Menyimpan...</span>
+      `;
+    }
+
+    try {
+      await window.AdminAPI.auth.changePassword({
+        currentPassword,
+        newPassword,
+        confirmPassword,
+      });
+
+      showToast('Kata sandi Anda berhasil diperbarui.', 'success');
+      closeChangePasswordModal();
+    } catch (err) {
+      console.error('[AdminDashboard] Change password failed:', err);
+      showToast(err.message || 'Gagal memperbarui kata sandi.', 'error');
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+          <span class="material-symbols-outlined text-base">save</span>
+          <span>Perbarui Sandi</span>
+        `;
+      }
+    }
+  };
+
+  window.openResetPasswordModal = function (userId, username, fullName) {
+    const modal = document.getElementById('reset-password-modal');
+    const form = document.getElementById('reset-password-form');
+    const targetIdInput = document.getElementById('reset-pw-target-id');
+    const targetNameEl = document.getElementById('reset-pw-target-name');
+    const targetUserEl = document.getElementById('reset-pw-target-user');
+
+    if (form) form.reset();
+    if (targetIdInput) targetIdInput.value = userId;
+    if (targetNameEl) targetNameEl.textContent = fullName || username;
+    if (targetUserEl) targetUserEl.textContent = `@${username}`;
+
+    if (modal) modal.classList.remove('hidden');
+  };
+
+  window.closeResetPasswordModal = function () {
+    const modal = document.getElementById('reset-password-modal');
+    const form = document.getElementById('reset-password-form');
+    if (form) form.reset();
+    if (modal) modal.classList.add('hidden');
+  };
+
+  window.handleResetPasswordSubmit = async function (event) {
+    event.preventDefault();
+    const targetIdInput = document.getElementById('reset-pw-target-id');
+    const newInput = document.getElementById('reset-pw-new');
+    const confirmInput = document.getElementById('reset-pw-confirm');
+    const submitBtn = document.getElementById('reset-password-submit-btn');
+
+    const targetId = targetIdInput ? targetIdInput.value : '';
+    const newPassword = newInput ? newInput.value : '';
+    const confirmPassword = confirmInput ? confirmInput.value : '';
+
+    if (!targetId) {
+      showToast('ID pengguna tidak valid.', 'error');
+      return;
+    }
+
+    if (!newPassword || !confirmPassword) {
+      showToast('Kata sandi baru dan konfirmasi wajib diisi.', 'error');
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      showToast('Kata sandi baru minimal harus 8 karakter.', 'error');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      showToast('Konfirmasi kata sandi baru tidak cocok.', 'error');
+      return;
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `
+        <span class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span>
+        <span>Mereset...</span>
+      `;
+    }
+
+    try {
+      await window.AdminAPI.users.resetPassword(targetId, newPassword);
+      showToast('Kata sandi staf IT berhasil direset.', 'success');
+      closeResetPasswordModal();
+    } catch (err) {
+      console.error('[AdminDashboard] Reset password failed:', err);
+      showToast(err.message || 'Gagal mereset kata sandi staf.', 'error');
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+          <span class="material-symbols-outlined text-base">lock_reset</span>
+          <span>Reset Kata Sandi</span>
+        `;
+      }
+    }
+  };
+
+  window.openEditUserModal = function (userId) {
+    const user = state.users.find((u) => u.id === userId);
+    if (!user) {
+      showToast('Data staf tidak ditemukan.', 'error');
+      return;
+    }
+
+    const modal = document.getElementById('edit-user-modal');
+    const targetIdInput = document.getElementById('edit-user-target-id');
+    const nameInput = document.getElementById('edit-user-name');
+    const usernameInput = document.getElementById('edit-user-username');
+    const emailInput = document.getElementById('edit-user-email');
+    const roleSelect = document.getElementById('edit-user-role');
+    const roleHint = document.getElementById('edit-user-role-hint');
+
+    if (targetIdInput) targetIdInput.value = user.id;
+    if (nameInput) nameInput.value = user.full_name || '';
+    if (usernameInput) usernameInput.value = user.username || '';
+    if (emailInput) emailInput.value = user.email || '';
+
+    // Populate role options based on actor role
+    const currentActor = state.currentUser;
+    if (roleSelect) {
+      roleSelect.innerHTML = '';
+      if (currentActor && currentActor.role === 'ADMIN') {
+        roleSelect.innerHTML = `
+          <option value="IT_SUPPORT">IT Support (Teknisi / Helpdesk - Read Only Master)</option>
+          <option value="IT_MANAGER">IT Manager (Supervisor - Kelola SOP & Akun Teknisi)</option>
+          <option value="ADMIN">Super Administrator (Akses Penuh Sistem)</option>
+        `;
+        if (roleHint) {
+          roleHint.textContent = 'Administrator dapat menetapkan role apa pun.';
+        }
+      } else if (currentActor && currentActor.role === 'IT_MANAGER') {
+        roleSelect.innerHTML = `
+          <option value="IT_SUPPORT">IT Support (Teknisi / Helpdesk)</option>
+        `;
+        if (roleHint) {
+          roleHint.textContent = 'IT Manager hanya berwenang menetapkan role IT Support.';
+        }
+      }
+      roleSelect.value = user.role;
+    }
+
+    if (modal) modal.classList.remove('hidden');
+  };
+
+  window.closeEditUserModal = function () {
+    const modal = document.getElementById('edit-user-modal');
+    const form = document.getElementById('edit-user-form');
+    if (form) form.reset();
+    if (modal) modal.classList.add('hidden');
+  };
+
+  window.handleEditUserSubmit = async function (event) {
+    event.preventDefault();
+    const targetIdInput = document.getElementById('edit-user-target-id');
+    const nameInput = document.getElementById('edit-user-name');
+    const emailInput = document.getElementById('edit-user-email');
+    const roleSelect = document.getElementById('edit-user-role');
+    const submitBtn = document.getElementById('edit-user-submit-btn');
+
+    const targetId = targetIdInput ? targetIdInput.value : '';
+    const fullName = nameInput ? nameInput.value.trim() : '';
+    const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+    const role = roleSelect ? roleSelect.value : '';
+
+    if (!targetId || !fullName || !email || !role) {
+      showToast('Seluruh field profil wajib diisi.', 'error');
+      return;
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `
+        <span class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span>
+        <span>Menyimpan...</span>
+      `;
+    }
+
+    try {
+      await window.AdminAPI.users.update(targetId, {
+        full_name: fullName,
+        email,
+        role,
+      });
+
+      showToast('Profil staf IT berhasil diperbarui.', 'success');
+      closeEditUserModal();
+      await loadUsers();
+      renderUsersTable();
+    } catch (err) {
+      console.error('[AdminDashboard] Update user failed:', err);
+      showToast(err.message || 'Gagal memperbarui profil staf IT.', 'error');
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+          <span class="material-symbols-outlined text-base">save</span>
+          <span>Simpan Perubahan</span>
+        `;
+      }
+    }
   };
 
   /* ==========================================================================
