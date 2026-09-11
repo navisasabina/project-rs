@@ -1065,4 +1065,113 @@ router.put('/:id/steps', requireAuth, requireRoles('ADMIN', 'IT_MANAGER'), async
   }
 });
 
+/**
+ * DELETE /api/v1/admin/guides/:id
+ * Protected: ADMIN, IT_MANAGER
+ * Permanently deletes a guide and its associated guide_steps atomically.
+ */
+router.delete('/:id', requireAuth, requireRoles('ADMIN', 'IT_MANAGER'), async (req, res) => {
+  const actor = req.user;
+  const { id } = req.params;
+  const ipAddress = req.ip || req.connection.remoteAddress;
+  const userAgent = req.headers['user-agent'] || '';
+
+  try {
+    if (!UUID_REGEX.test(id)) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'INVALID_ID',
+          message: 'Format ID panduan tidak valid.',
+        },
+      });
+    }
+
+    const client = await db.pool.connect();
+    let deletedGuide = null;
+    let deletedStepsCount = 0;
+
+    try {
+      await client.query('BEGIN');
+
+      // 1. Verify guide exists and lock row FOR UPDATE
+      const guideRes = await client.query(`
+        SELECT id, key_code, title, status, category_id, location_scope
+        FROM guides
+        WHERE id = $1
+        FOR UPDATE;
+      `, [id]);
+
+      if (guideRes.rows.length === 0) {
+        await client.query('ROLLBACK');
+        return res.status(404).json({
+          success: false,
+          error: {
+            code: 'GUIDE_NOT_FOUND',
+            message: 'Panduan tidak ditemukan atau telah dihapus.',
+          },
+        });
+      }
+
+      deletedGuide = guideRes.rows[0];
+
+      // 2. Count existing steps for audit metadata and explicitly delete steps
+      const stepsCountRes = await client.query(
+        'SELECT count(*)::int AS count FROM guide_steps WHERE guide_id = $1',
+        [id]
+      );
+      deletedStepsCount = stepsCountRes.rows[0].count;
+
+      await client.query('DELETE FROM guide_steps WHERE guide_id = $1', [id]);
+
+      // 3. Delete the parent guide record
+      await client.query('DELETE FROM guides WHERE id = $1', [id]);
+
+      await client.query('COMMIT');
+    } catch (txErr) {
+      await client.query('ROLLBACK').catch(() => {});
+      throw txErr;
+    } finally {
+      client.release();
+    }
+
+    // 4. Record audit log
+    await recordAuditLog({
+      userId: actor.id,
+      action: 'GUIDE_DELETED',
+      entityName: 'guide',
+      entityId: deletedGuide.id,
+      changes: {
+        key_code: deletedGuide.key_code,
+        title: deletedGuide.title,
+        status: deletedGuide.status,
+        category_id: deletedGuide.category_id,
+        deleted_steps_count: deletedStepsCount,
+      },
+      ipAddress,
+      userAgent,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Panduan troubleshooting berhasil dihapus secara permanen.',
+      data: {
+        id: deletedGuide.id,
+        key_code: deletedGuide.key_code,
+        title: deletedGuide.title,
+        deleted_steps_count: deletedStepsCount,
+      },
+    });
+  } catch (err) {
+    console.error('[Admin Guides Error - DELETE /:id]:', err);
+    return res.status(500).json({
+      success: false,
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Terjadi kesalahan sistem saat menghapus panduan.',
+      },
+    });
+  }
+});
+
 module.exports = router;

@@ -479,6 +479,15 @@
               ${guide.status === 'ARCHIVED' ? `
                 <span class="px-2 py-0.5 text-[10px] text-slate-500 italic">Arsip</span>
               ` : ''}
+
+              <!-- Delete Guide (ADMIN & IT_MANAGER) -->
+              <button
+                onclick="confirmDeleteGuide('${guide.id}', '${escapeHTML(guide.title)}')"
+                class="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                title="Hapus Panduan Permanen"
+              >
+                <span class="material-symbols-outlined text-lg">delete</span>
+              </button>
             ` : ''}
           </div>
         </td>
@@ -910,6 +919,25 @@
           renderOverviewKPIs();
         } catch (err) {
           showToast(err.message || 'Gagal mengubah status panduan.', 'error');
+        }
+      },
+    });
+  };
+
+  window.confirmDeleteGuide = function (guideId, guideTitle) {
+    openConfirmModal({
+      title: 'Hapus Panduan SOP Secara Permanen',
+      message: `PERINGATAN: Apakah Anda yakin ingin menghapus panduan "${guideTitle}" secara permanen? Seluruh langkah troubleshooting terkait akan dihapus dari sistem. Tindakan ini bersifat destruktif dan TIDAK DAPAT DIBATALKAN.`,
+      confirmText: 'Hapus Permanen',
+      confirmClass: 'bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-900/40',
+      execute: async () => {
+        try {
+          await window.AdminAPI.guides.delete(guideId);
+          showToast('Panduan troubleshooting berhasil dihapus secara permanen.', 'success');
+          await loadGuides();
+          renderOverviewKPIs();
+        } catch (err) {
+          showToast(err.message || 'Gagal menghapus panduan.', 'error');
         }
       },
     });

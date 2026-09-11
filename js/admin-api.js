@@ -225,6 +225,17 @@
         });
         return res.data;
       },
+
+      /**
+       * Delete guide permanently
+       * @param {string} id
+       */
+      async delete(id) {
+        const res = await apiRequest(`/admin/guides/${encodeURIComponent(id)}`, {
+          method: 'DELETE',
+        });
+        return res.data;
+      },
     },
 
     users: {

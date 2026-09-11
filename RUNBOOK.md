@@ -382,6 +382,7 @@ Tim IT RS Awal Bros disarankan melakukan gladi bersih pemulihan data (Disaster R
 > 1. **Perintah Restore (`database/restore.js`)**: Menghapus dan menimpa skema tabel pada database aktif. Jangan pernah menjalankan perintah restore di lingkungan produksi tanpa backup mutakhir.
 > 2. **Seeding Paksa (`--force`)**: Menjalankan `node database/seed-sop-data.js --force` akan mereset 8 modul SOP dasar ke konfigurasi awal pabrik dan menghapus langkah-langkah kustom yang ditambahkan teknisi IT. **Mode `--force` tidak boleh dimasukkan ke dalam script startup otomatis.**
 > 3. **Penghapusan Kategori**: Menghapus kategori pada database yang memiliki panduan aktif akan memicu penolakan constraint relational foreign key.
+> 4. **Penghapusan Panduan Permanen (Hard Delete)**: Menghapus panduan troubleshooting secara permanen (`DELETE /api/v1/admin/guides/:id`) akan menghapus data panduan dan seluruh langkah terkait dari database. Fitur ini ditujukan untuk SOP kustom, draft, data uji coba, atau entri keliru. Untuk 8 SOP baseline pabrik, jika ingin dinonaktifkan tanpa ter-reseed otomatis saat startup container, gunakan status `ARCHIVED` bukan hard delete.
 
 ---
 
