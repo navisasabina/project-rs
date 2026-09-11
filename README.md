@@ -405,7 +405,55 @@ Platform kini dilengkapi fondasi observabilitas dan penanganan error terpusat ta
 
 ---
 
-### 9. Membuka Frontend Langsung (Static Fallback)
+### 9. Disaster Recovery, Backup Otomatis & Operasional (M12)
+
+Platform kini dilengkapi sistem Disaster Recovery, pencadangan database mandiri, dan prosedur operasional handoff:
+
+1. **Backup Database (`npm run db:backup`)**:
+   - Menghasilkan berkas cadangan PostgreSQL terstempel waktu (`rs_awal_bros_kb_backup_YYYY-MM-DD_HH-mm-ss.sql`).
+   - Direktori penyimpanan dapat dikonfigurasi melalui `BACKUP_DIR` (default: `backups/`).
+   - Format dump SQL standar mencakup seluruh tabel (`schema_migrations`, `categories`, `guides`, `guide_steps`, `users`, `audit_logs`), urutan sequence, dan constraint integritas data.
+   - Kredensial tidak pernah terekspos dalam log terminal.
+
+2. **Retensi Cadangan Otomatis**:
+   - Membersihkan berkas backup usang berdasarkan `BACKUP_RETENTION_DAYS` (default: 7 hari).
+   - Hanya menghapus berkas resmi yang sesuai pola `^rs_awal_bros_kb_backup_.*\.sql$` dan tidak menyentuh berkas lain.
+   - Pembersihan hanya dieksekusi setelah proses backup berhasil 100%.
+
+3. **Pemulihan Database Terproteksi (`npm run db:restore`)**:
+   - Eksekusi wajib menyertakan flag konfirmasi:
+     ```bash
+     node database/restore.js <path-ke-backup.sql> --confirm
+     ```
+   - Validasi ketat target database untuk mencegah penimpaan database sistem (`postgres`, `template1`).
+   - Melakukan verifikasi integritas baris data relasional pasca-restore.
+
+4. **Seeding SOP Aman & Non-Destruktif**:
+   - `npm run seed:sop` secara default mempertahankan SOP yang sudah ada, judul, status rilis, dan langkah kustom teknisi IT.
+   - Penimpaan master template hanya berjalan jika flag `--force` disertakan secara eksplisit.
+   - `docker-entrypoint.sh` secara ketat menjalankan mode aman tanpa `--force`.
+
+5. **Pengerasan Kredensial & Jaringan Produksi**:
+   - Fallback compose publik (`awal-bros-botania-prod-jwt-secret-min-32-chars`) secara tegas ditolak pada `NODE_ENV=production`.
+   - Nilai `JWT_SECRET` wajib disediakan pada environment produksi minimal 32 karakter unik.
+   - Port PostgreSQL pada `docker-compose.yml` terikat secara lokal (`127.0.0.1:5432`).
+   - Batas koneksi pool PostgreSQL dikonfigurasi eksplisit (`max: 15`, `idleTimeout: 30000ms`, `connectionTimeout: 5000ms`).
+
+6. **Panduan Operasional Lengkap**:
+   - Seluruh prosedur handoff IT, rotasi kunci JWT, troubleshooting koneksi, dan simulasi disaster recovery didokumentasikan pada [RUNBOOK.md](RUNBOOK.md).
+
+7. **Menjalankan Pengujian M12**:
+   ```bash
+   # Menjalankan pengujian mandiri M12:
+   npm run test:m12
+
+   # Menjalankan seluruh pengujian regresi lengkap M0–M12 (13 test suite):
+   npm test
+   ```
+
+---
+
+### 10. Membuka Frontend Langsung (Static Fallback)
 Buka file `index.html` langsung di browser modern, atau gunakan HTTP server sederhana:
 ```bash
 python -m http.server 8000

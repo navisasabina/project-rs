@@ -123,14 +123,26 @@ function readSourceSOPData() {
 }
 
 /**
- * Seeds all SOP data into PostgreSQL idempotently
+ * Seeds all SOP data into PostgreSQL idempotently and safely.
+ * By default (safe mode), existing guides are preserved to protect administrative edits.
+ * Pass --force (or options.force = true / FORCE_SEED=true) to intentionally overwrite baseline records.
  */
-async function seedSOPData(targetPool = pool) {
+async function seedSOPData(targetPool = pool, options = {}) {
   const client = await targetPool.connect();
   const sourceSOP = readSourceSOPData();
   const sopKeys = Object.keys(sourceSOP);
 
-  console.log(`[Seed SOP] Found ${sopKeys.length} SOP records in js/sop-data.js.`);
+  const isForce = (typeof options === 'object' && options.force === true) ||
+    process.argv.includes('--force') ||
+    process.env.FORCE_SEED === 'true';
+
+  if (isForce) {
+    console.log('[Seed SOP] Mode: FORCE (penimpaan master template aktif).');
+  } else {
+    console.log('[Seed SOP] Mode: SAFE / NON-DESTRUCTIVE (mempertahankan panduan yang sudah ada).');
+  }
+
+  console.log(`[Seed SOP] Ditemukan ${sopKeys.length} modul SOP dalam js/sop-data.js.`);
 
   try {
     await client.query('BEGIN');
@@ -173,9 +185,9 @@ async function seedSOPData(targetPool = pool) {
 
       categoryIdMap.set(categoryName, catRes.rows[0].id);
     }
-    console.log(`[Seed SOP] Seeded/Verified ${categoryIdMap.size} categories.`);
+    console.log(`[Seed SOP] Diverifikasi ${categoryIdMap.size} kategori.`);
 
-    // 3. Seed Guides and Steps (Idempotent)
+    // 3. Seed Guides and Steps
     let seededGuideCount = 0;
     let seededStepCount = 0;
 
@@ -190,7 +202,33 @@ async function seedSOPData(targetPool = pool) {
       const keywords = GUIDE_KEYWORDS_MAPPING[key] || '';
       const possibleCauses = GUIDE_POSSIBLE_CAUSES_MAPPING[key] || '';
 
-      // Insert or Update Guide
+      const steps = [
+        { number: 1, title: item.step1Title, instruction: item.step1Desc },
+        { number: 2, title: item.step2Title, instruction: item.step2Desc },
+        { number: 3, title: item.step3Title, instruction: item.step3Desc },
+      ];
+
+      // If NOT in force mode, check if guide already exists
+      if (!isForce) {
+        const existingRes = await client.query(
+          'SELECT id, title, status FROM guides WHERE key_code = $1',
+          [item.key]
+        );
+
+        if (existingRes.rows.length > 0) {
+          const existingGuide = existingRes.rows[0];
+          console.log(`[Seed SOP] Panduan "${key}" (${existingGuide.title}) sudah ada. Melewati (modifikasi admin dipertahankan).`);
+          seededGuideCount++;
+          const stepsRes = await client.query(
+            'SELECT count(*) as c FROM guide_steps WHERE guide_id = $1',
+            [existingGuide.id]
+          );
+          seededStepCount += parseInt(stepsRes.rows[0].c, 10);
+          continue;
+        }
+      }
+
+      // Insert or Force Update Guide
       const guideRes = await client.query(`
         INSERT INTO guides (
           category_id,
@@ -240,14 +278,7 @@ async function seedSOPData(targetPool = pool) {
       const guideId = guideRes.rows[0].id;
       seededGuideCount++;
 
-      // Steps mapping: Step 1, Step 2, Step 3
-      const steps = [
-        { number: 1, title: item.step1Title, instruction: item.step1Desc },
-        { number: 2, title: item.step2Title, instruction: item.step2Desc },
-        { number: 3, title: item.step3Title, instruction: item.step3Desc },
-      ];
-
-      // Clean existing steps for this guide to ensure idempotent refresh
+      // Clean existing steps for this guide only if forcing or inserting
       await client.query('DELETE FROM guide_steps WHERE guide_id = $1', [guideId]);
 
       for (const step of steps) {
@@ -260,7 +291,7 @@ async function seedSOPData(targetPool = pool) {
     }
 
     await client.query('COMMIT');
-    console.log(`[Seed SOP] Successfully seeded ${seededGuideCount} guides and ${seededStepCount} guide steps.`);
+    console.log(`[Seed SOP] Selesai: ${seededGuideCount} modul panduan dan ${seededStepCount} langkah terverifikasi.`);
 
     return {
       guidesCount: seededGuideCount,

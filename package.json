@@ -11,6 +11,8 @@
     "migrate:status": "node database/migrate.js status",
     "seed:sop": "node database/seed-sop-data.js",
     "seed:admin": "node database/seed-admin.js",
+    "db:backup": "node database/backup.js",
+    "db:restore": "node database/restore.js",
     "setup": "node database/migrate.js up && node database/seed-sop-data.js && node database/seed-admin.js",
     "test:health": "node scripts/test-health.js",
     "test:db": "node scripts/test-db.js",
@@ -24,7 +26,8 @@
     "test:m9": "node scripts/test-production-m9.js",
     "test:m10": "node scripts/test-ai-search-m10.js",
     "test:m11": "node scripts/test-observability-m11.js",
-    "test": "node scripts/test-db.js && node scripts/test-seed.js && node scripts/test-api.js && node scripts/test-frontend-api.js && node scripts/test-auth.js && node scripts/test-admin-kb.js && node scripts/test-frontend-admin.js && node scripts/test-admin-m8.js && node scripts/test-production-m9.js && node scripts/test-ai-search-m10.js && node scripts/test-observability-m11.js && node scripts/test-health.js"
+    "test:m12": "node scripts/test-disaster-recovery-m12.js",
+    "test": "node scripts/test-db.js && node scripts/test-seed.js && node scripts/test-api.js && node scripts/test-frontend-api.js && node scripts/test-auth.js && node scripts/test-admin-kb.js && node scripts/test-frontend-admin.js && node scripts/test-admin-m8.js && node scripts/test-production-m9.js && node scripts/test-ai-search-m10.js && node scripts/test-observability-m11.js && node scripts/test-disaster-recovery-m12.js && node scripts/test-health.js"
   },
   "keywords": [
     "it-support",

@@ -17,6 +17,7 @@ const COOKIE_MAX_AGE_MS = 8 * 60 * 60 * 1000; // 8 hours
 const INSECURE_SECRETS = [
   'dev-jwt-secret-rs-awal-bros-botania-minimum-32-chars',
   'your-super-secret-jwt-key-here-minimum-32-characters',
+  'awal-bros-botania-prod-jwt-secret-min-32-chars',
   'secret',
   'changeme',
   'password',
