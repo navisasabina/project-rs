@@ -33,25 +33,27 @@
 
   <!-- Top Navigation Header -->
   <header class="sticky top-0 z-40 bg-slate-900/90 border-b border-slate-800 backdrop-blur-md shadow-lg">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20">
+    <div class="max-w-7xl 2xl:max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-wrap xl:flex-nowrap items-center justify-between min-h-[4.5rem] md:min-h-20 py-2.5 xl:py-0 gap-y-3">
         
         <!-- Left: Branding & Organization -->
-        <div class="flex items-center gap-4">
-          <a href="/admin" class="flex items-center gap-3 group">
-            <img alt="RS Awal Bros" class="h-8 md:h-9 w-auto object-contain rounded-md transition-transform group-hover:scale-105" src="/logo.png"/>
-            <div class="pl-3 border-l border-slate-800 hidden sm:block">
-              <span class="text-[11px] font-extrabold uppercase tracking-wider text-[#0097A7] block leading-none">Admin Knowledge Base</span>
-              <span class="text-xs text-slate-400 font-medium">RS Awal Bros Botania</span>
+        <div class="flex items-center gap-3 sm:gap-4 shrink-0">
+          <a href="/admin" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
+            <img alt="RS Awal Bros" class="h-8 md:h-9 w-auto object-contain rounded-md transition-transform group-hover:scale-105 shrink-0" src="/logo.png"/>
+            <div class="pl-2.5 sm:pl-3 border-l border-slate-800 flex flex-col justify-center shrink-0">
+              <span class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wider text-[#0097A7] block leading-tight whitespace-nowrap">Admin Knowledge Base</span>
+              <span class="text-[11px] sm:text-xs text-slate-400 font-medium block leading-tight whitespace-nowrap mt-0.5">RS Awal Bros Botania</span>
             </div>
           </a>
+        </div>
 
-          <!-- Navigation Tabs -->
-          <nav class="hidden md:flex items-center gap-1.5 ml-6 border-l border-slate-800 pl-6 text-xs font-semibold">
+        <!-- Navigation Tabs Wrapper with scroll affordance -->
+        <div id="admin-nav-wrapper" class="relative w-full xl:flex-1 min-w-0 order-3 xl:order-2 flex flex-col justify-center border-t border-slate-800/80 xl:border-t-0 xl:border-l xl:border-slate-800 xl:pl-5 2xl:pl-6 xl:ml-3 2xl:ml-4 py-1.5 xl:py-0">
+          <nav id="admin-main-nav" class="scrollbar-none flex items-center overflow-x-auto gap-1 sm:gap-1.5 text-xs font-semibold scroll-smooth w-full py-0.5 xl:py-0">
             <button
               id="tab-btn-overview"
               onclick="switchAdminTab('overview')"
-              class="admin-nav-btn px-3.5 py-2 rounded-xl transition-all border border-[#0097A7] text-[#0097A7] bg-slate-800 flex items-center gap-1.5"
+              class="admin-nav-btn px-3 py-2 rounded-xl transition-all border border-[#0097A7] text-[#0097A7] bg-slate-800 flex items-center gap-1.5 shrink-0 whitespace-nowrap"
             >
               <span class="material-symbols-outlined text-base">dashboard</span>
               <span>Ringkasan</span>
@@ -59,7 +61,7 @@
             <button
               id="tab-btn-guides"
               onclick="switchAdminTab('guides')"
-              class="admin-nav-btn px-3.5 py-2 rounded-xl transition-all border border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5"
+              class="admin-nav-btn px-3 py-2 rounded-xl transition-all border border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5 shrink-0 whitespace-nowrap"
             >
               <span class="material-symbols-outlined text-base">menu_book</span>
               <span>Basis Pengetahuan SOP</span>
@@ -67,7 +69,7 @@
             <button
               id="tab-btn-categories"
               onclick="switchAdminTab('categories')"
-              class="admin-nav-btn px-3.5 py-2 rounded-xl transition-all border border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5"
+              class="admin-nav-btn px-3 py-2 rounded-xl transition-all border border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5 shrink-0 whitespace-nowrap"
             >
               <span class="material-symbols-outlined text-base">category</span>
               <span>Kategori Hardware</span>
@@ -75,7 +77,7 @@
             <button
               id="tab-btn-users"
               onclick="switchAdminTab('users')"
-              class="admin-nav-btn px-3.5 py-2 rounded-xl transition-all border border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5"
+              class="admin-nav-btn px-3 py-2 rounded-xl transition-all border border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5 shrink-0 whitespace-nowrap"
             >
               <span class="material-symbols-outlined text-base">group</span>
               <span>Manajemen Pengguna</span>
@@ -83,21 +85,28 @@
             <button
               id="tab-btn-audit"
               onclick="switchAdminTab('audit')"
-              class="admin-nav-btn px-3.5 py-2 rounded-xl transition-all border border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5"
+              class="admin-nav-btn px-3 py-2 rounded-xl transition-all border border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5 shrink-0 whitespace-nowrap"
             >
               <span class="material-symbols-outlined text-base">history</span>
               <span>Log Audit</span>
             </button>
           </nav>
+
+          <!-- Custom Thin Scroll Indicator (Visible whenever navigation content overflows) -->
+          <div id="nav-scroll-indicator" class="pointer-events-none relative w-full pt-1" style="display: none;">
+            <div id="nav-scroll-track" class="relative w-full h-[2.5px] bg-slate-700/70 rounded-full overflow-hidden">
+              <div id="nav-scroll-thumb" class="absolute top-0 bottom-0 left-0 bg-[#0097A7] rounded-full will-change-transform" style="width: 24px; transform: translateX(0);"></div>
+            </div>
+          </div>
         </div>
 
         <!-- Right: User Profile & Actions -->
-        <div class="flex items-center gap-3">
+        <div class="order-2 xl:order-3 flex items-center gap-2 sm:gap-3 shrink-0">
           <!-- View Public Portal Button -->
           <a
             href="/"
             target="_blank"
-            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-colors"
+            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-colors shrink-0"
             title="Buka Portal Pengguna di Tab Baru"
           >
             <span>Portal Pengguna</span>
@@ -105,12 +114,12 @@
           </a>
 
           <!-- User Badge & Profile Info -->
-          <div class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800">
-            <div id="user-avatar-initial" class="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#002541] to-[#0097A7] text-white flex items-center justify-center font-bold text-xs shadow-inner">
+          <div class="flex items-center gap-2.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 shrink-0">
+            <div id="user-avatar-initial" class="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#002541] to-[#0097A7] text-white flex items-center justify-center font-bold text-xs shadow-inner shrink-0">
               A
             </div>
             <div class="text-left hidden md:block">
-              <span id="user-full-name" class="text-xs font-bold text-slate-200 block leading-tight truncate max-w-[130px]">Memuat...</span>
+              <span id="user-full-name" class="text-xs font-bold text-slate-200 block leading-tight truncate max-w-[120px] 2xl:max-w-[150px]">Memuat...</span>
               <span id="user-role-badge" class="px-1.5 py-0.2 text-[9px] font-bold rounded text-slate-400 border border-slate-700 block mt-0.5">ROLE</span>
             </div>
           </div>
@@ -119,32 +128,23 @@
           <button
             id="btn-change-own-password"
             onclick="openChangePasswordModal()"
-            class="p-2 text-slate-400 hover:text-cyan-400 hover:bg-slate-800/80 rounded-xl border border-slate-800 hover:border-cyan-500/30 transition-colors flex items-center gap-1.5"
+            class="p-2 text-slate-400 hover:text-cyan-400 hover:bg-slate-800/80 rounded-xl border border-slate-800 hover:border-cyan-500/30 transition-colors flex items-center gap-1.5 shrink-0"
             title="Ganti Kata Sandi Saya"
           >
             <span class="material-symbols-outlined text-lg">key</span>
-            <span class="hidden xl:inline text-xs font-semibold">Ganti Password</span>
+            <span class="hidden 2xl:inline text-xs font-semibold">Ganti Password</span>
           </button>
 
           <!-- Logout Button -->
           <button
             onclick="confirmLogout()"
-            class="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-xl border border-slate-800 hover:border-red-500/30 transition-colors"
+            class="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-xl border border-slate-800 hover:border-red-500/30 transition-colors shrink-0"
             title="Keluar Sesi Portal IT"
           >
             <span class="material-symbols-outlined text-lg">logout</span>
           </button>
         </div>
 
-      </div>
-
-      <!-- Mobile Tab Nav (Visible on small screens) -->
-      <div class="flex md:hidden items-center justify-around py-2.5 border-t border-slate-800 text-xs font-semibold overflow-x-auto gap-1">
-        <button onclick="switchAdminTab('overview')" class="px-2.5 py-1 text-slate-400 hover:text-white shrink-0">Ringkasan</button>
-        <button onclick="switchAdminTab('guides')" class="px-2.5 py-1 text-slate-400 hover:text-white shrink-0">Panduan SOP</button>
-        <button onclick="switchAdminTab('categories')" class="px-2.5 py-1 text-slate-400 hover:text-white shrink-0">Kategori</button>
-        <button onclick="switchAdminTab('users')" class="px-2.5 py-1 text-slate-400 hover:text-white shrink-0">Pengguna</button>
-        <button onclick="switchAdminTab('audit')" class="px-2.5 py-1 text-slate-400 hover:text-white shrink-0">Log Audit</button>
       </div>
     </div>
   </header>

@@ -50,6 +50,7 @@
 
   document.addEventListener('DOMContentLoaded', async () => {
     initUnauthorizedListener();
+    initNavScrollAffordance();
     await verifySessionAndBoot();
   });
 
@@ -162,6 +163,9 @@
     if (activeBtn) {
       activeBtn.classList.remove('border-transparent', 'text-slate-400');
       activeBtn.classList.add('border-[#0097A7]', 'text-[#0097A7]', 'bg-slate-800');
+      if (typeof activeBtn.scrollIntoView === 'function') {
+        activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      }
     }
 
     // Update Tab Panels View
@@ -185,7 +189,73 @@
     } else if (tabName === 'audit') {
       loadAuditLogs();
     }
+
+    if (typeof window.updateNavScrollIndicator === 'function') {
+      window.updateNavScrollIndicator();
+    }
   };
+
+  function initNavScrollAffordance() {
+    const nav = document.getElementById('admin-main-nav');
+    const indicator = document.getElementById('nav-scroll-indicator');
+    const track = document.getElementById('nav-scroll-track');
+    const thumb = document.getElementById('nav-scroll-thumb');
+    if (!nav || !indicator || !track || !thumb) return;
+
+    function updateIndicator() {
+      const clientWidth = nav.clientWidth;
+      const scrollWidth = nav.scrollWidth;
+      const maxScroll = scrollWidth - clientWidth;
+      // Real overflow condition: strictly based on actual DOM measurements
+      const hasOverflow = maxScroll > 1 && clientWidth > 0;
+
+      if (hasOverflow) {
+        indicator.style.display = 'block';
+
+        const trackWidth = track.clientWidth || clientWidth;
+        const visibleRatio = Math.min(1, clientWidth / scrollWidth);
+        const thumbWidth = Math.max(24, Math.round(trackWidth * visibleRatio));
+        thumb.style.width = `${thumbWidth}px`;
+
+        const scrollRatio = maxScroll > 0 ? Math.min(1, Math.max(0, nav.scrollLeft / maxScroll)) : 0;
+        const thumbTravel = Math.max(0, trackWidth - thumbWidth);
+        const thumbPosition = Math.round(thumbTravel * scrollRatio);
+        thumb.style.transform = `translateX(${thumbPosition}px)`;
+      } else {
+        indicator.style.display = 'none';
+      }
+    }
+
+    window.updateNavScrollIndicator = updateIndicator;
+
+    nav.addEventListener('scroll', updateIndicator, { passive: true });
+    window.addEventListener('resize', updateIndicator, { passive: true });
+
+    // Enable horizontal scrolling with mouse wheel
+    nav.addEventListener('wheel', (e) => {
+      if (e.deltaY !== 0 && nav.scrollWidth > nav.clientWidth) {
+        e.preventDefault();
+        nav.scrollBy({ left: e.deltaY, behavior: 'smooth' });
+      }
+    }, { passive: false });
+
+    // Observe element and wrapper resizing dynamically via ResizeObserver
+    if (typeof ResizeObserver !== 'undefined') {
+      const ro = new ResizeObserver(() => updateIndicator());
+      ro.observe(nav);
+      const wrapper = document.getElementById('admin-nav-wrapper');
+      if (wrapper) ro.observe(wrapper);
+    }
+
+    // Recalculate on DOM readiness, font load, and delayed render checks
+    updateIndicator();
+    setTimeout(updateIndicator, 50);
+    setTimeout(updateIndicator, 200);
+    window.addEventListener('load', updateIndicator, { passive: true });
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(updateIndicator);
+    }
+  }
 
   /* ==========================================================================
      3. DATA FETCHING & STATE
