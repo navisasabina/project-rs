@@ -29,7 +29,8 @@
     "test:m12": "node scripts/test-disaster-recovery-m12.js",
     "test:m12x": "node scripts/test-delete-guide-m12x.js",
     "test:m13": "node scripts/test-user-security-m13.js",
-    "test": "node scripts/test-db.js && node scripts/test-seed.js && node scripts/test-api.js && node scripts/test-frontend-api.js && node scripts/test-auth.js && node scripts/test-admin-kb.js && node scripts/test-frontend-admin.js && node scripts/test-admin-m8.js && node scripts/test-production-m9.js && node scripts/test-ai-search-m10.js && node scripts/test-observability-m11.js && node scripts/test-disaster-recovery-m12.js && node scripts/test-delete-guide-m12x.js && node scripts/test-user-security-m13.js && node scripts/test-health.js"
+    "test:m14": "node scripts/test-audit-export-m14.js",
+    "test": "node scripts/test-db.js && node scripts/test-seed.js && node scripts/test-api.js && node scripts/test-frontend-api.js && node scripts/test-auth.js && node scripts/test-admin-kb.js && node scripts/test-frontend-admin.js && node scripts/test-admin-m8.js && node scripts/test-production-m9.js && node scripts/test-ai-search-m10.js && node scripts/test-observability-m11.js && node scripts/test-disaster-recovery-m12.js && node scripts/test-delete-guide-m12x.js && node scripts/test-user-security-m13.js && node scripts/test-audit-export-m14.js && node scripts/test-health.js"
   },
   "keywords": [
     "it-support",

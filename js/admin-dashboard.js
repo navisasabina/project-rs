@@ -30,6 +30,8 @@
     auditFilter: {
       search: '',
       action: 'ALL',
+      from: '',
+      to: '',
     },
     activeTab: 'overview',
     guideFilter: {
@@ -1879,7 +1881,21 @@
     }
 
     try {
-      const logs = await window.AdminAPI.auditLogs.getAll({ limit: 100 });
+      const params = { limit: 100 };
+      if (state.auditFilter.action && state.auditFilter.action !== 'ALL') {
+        params.action = state.auditFilter.action;
+      }
+      if (state.auditFilter.from) {
+        params.from = state.auditFilter.from;
+      }
+      if (state.auditFilter.to) {
+        params.to = state.auditFilter.to;
+      }
+      if (state.auditFilter.search) {
+        params.search = state.auditFilter.search;
+      }
+
+      const logs = await window.AdminAPI.auditLogs.getAll(params);
       state.auditLogs = logs || [];
       renderAuditTable();
       return state.auditLogs;
@@ -1892,6 +1908,7 @@
       return [];
     }
   }
+  window.loadAuditLogs = loadAuditLogs;
 
   function renderAuditTable() {
     const tbody = document.getElementById('audit-table-body');
@@ -1936,9 +1953,9 @@
       let actionBadgeClass = 'bg-slate-700/30 text-slate-300 border-slate-600';
       if (log.action.includes('CREATED') || log.action === 'LOGIN_SUCCESS' || log.action === 'ACCOUNT_ACTIVATED') {
         actionBadgeClass = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
-      } else if (log.action.includes('UPDATED') || log.action.includes('CHANGED')) {
+      } else if (log.action.includes('UPDATED') || log.action.includes('CHANGED') || log.action.includes('PASSWORD')) {
         actionBadgeClass = 'bg-amber-500/10 text-amber-400 border-amber-500/30';
-      } else if (log.action.includes('DISABLED') || log.action === 'LOGIN_FAILED' || log.action.includes('ARCHIVED')) {
+      } else if (log.action.includes('DISABLED') || log.action === 'LOGIN_FAILED' || log.action.includes('ARCHIVED') || log.action.includes('DELETED')) {
         actionBadgeClass = 'bg-red-500/10 text-red-400 border-red-500/30';
       } else if (log.action === 'LOGOUT') {
         actionBadgeClass = 'bg-blue-500/10 text-blue-400 border-blue-500/30';
@@ -1990,9 +2007,63 @@
     renderAuditTable();
   };
 
-  window.handleAuditActionFilter = function (value) {
+  window.handleAuditActionFilter = async function (value) {
     state.auditFilter.action = value;
-    renderAuditTable();
+    await loadAuditLogs();
+  };
+
+  window.handleAuditDateFilter = async function () {
+    const fromInput = document.getElementById('audit-filter-from');
+    const toInput = document.getElementById('audit-filter-to');
+    state.auditFilter.from = fromInput ? fromInput.value : '';
+    state.auditFilter.to = toInput ? toInput.value : '';
+    await loadAuditLogs();
+  };
+
+  window.clearAuditDateFilter = async function () {
+    const fromInput = document.getElementById('audit-filter-from');
+    const toInput = document.getElementById('audit-filter-to');
+    if (fromInput) fromInput.value = '';
+    if (toInput) toInput.value = '';
+    state.auditFilter.from = '';
+    state.auditFilter.to = '';
+    await loadAuditLogs();
+  };
+
+  window.handleExportAuditLogs = async function (format = 'csv') {
+    const csvBtn = document.getElementById('btn-export-audit-csv');
+    const jsonBtn = document.getElementById('btn-export-audit-json');
+    const targetBtn = format === 'json' ? jsonBtn : csvBtn;
+    const originalHtml = targetBtn ? targetBtn.innerHTML : '';
+
+    if (targetBtn) {
+      targetBtn.disabled = true;
+      targetBtn.innerHTML = `
+        <span class="animate-spin inline-block w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full mr-1.5"></span>
+        <span>Mengekspor...</span>
+      `;
+    }
+
+    try {
+      const exportOptions = {
+        format,
+        action: state.auditFilter.action,
+        search: state.auditFilter.search,
+        from: state.auditFilter.from,
+        to: state.auditFilter.to,
+      };
+
+      const result = await window.AdminAPI.audit.export(exportOptions);
+      showToast(`Log audit (${format.toUpperCase()}) berhasil diekspor.`, 'success');
+    } catch (err) {
+      console.error('[AdminDashboard] Export audit logs failed:', err);
+      showToast(err.message || `Gagal mengekspor log audit (${format.toUpperCase()}).`, 'error');
+    } finally {
+      if (targetBtn) {
+        targetBtn.disabled = false;
+        targetBtn.innerHTML = originalHtml;
+      }
+    }
   };
 
   window.openAuditDetailModal = function (auditId) {

@@ -326,13 +326,15 @@
     auditLogs: {
       /**
        * Get read-only list of audit events
-       * @param {object} [filters] { action, entity, search, limit, offset }
+       * @param {object} [filters] { action, entity, search, from, to, limit, offset }
        */
       async getAll(filters = {}) {
         const params = new URLSearchParams();
         if (filters.action && filters.action !== 'ALL') params.append('action', filters.action);
         if (filters.entity && filters.entity !== 'ALL') params.append('entity', filters.entity);
         if (filters.search && filters.search.trim()) params.append('search', filters.search.trim());
+        if (filters.from && filters.from.trim()) params.append('from', filters.from.trim());
+        if (filters.to && filters.to.trim()) params.append('to', filters.to.trim());
         if (filters.limit) params.append('limit', filters.limit);
         if (filters.offset) params.append('offset', filters.offset);
         const query = params.toString() ? `?${params.toString()}` : '';
@@ -341,8 +343,74 @@
         });
         return res.data;
       },
+
+      /**
+       * Export audit logs as CSV or JSON and trigger browser download
+       * @param {object} [options] { format, action, entity, from, to, search }
+       */
+      async export(options = {}) {
+        const format = (options.format || 'csv').toLowerCase();
+        const params = new URLSearchParams();
+        params.append('format', format);
+        if (options.action && options.action !== 'ALL') params.append('action', options.action);
+        if (options.entity && options.entity !== 'ALL') params.append('entity', options.entity);
+        if (options.search && options.search.trim()) params.append('search', options.search.trim());
+        if (options.from && options.from.trim()) params.append('from', options.from.trim());
+        if (options.to && options.to.trim()) params.append('to', options.to.trim());
+
+        const query = params.toString() ? `?${params.toString()}` : '';
+        const url = `/api/v1/admin/audit-logs/export${query}`;
+
+        const response = await fetch(url, {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Accept': format === 'json' ? 'application/json' : 'text/csv',
+          },
+        });
+
+        if (!response.ok) {
+          let errorData;
+          try {
+            errorData = await response.json();
+          } catch (_) {
+            errorData = { error: { message: `Ekspor gagal dengan kode status ${response.status}` } };
+          }
+          const err = new Error(errorData.error?.message || 'Gagal mengekspor data log audit.');
+          err.code = errorData.error?.code || 'EXPORT_ERROR';
+          err.status = response.status;
+          throw err;
+        }
+
+        // Extract filename from Content-Disposition header if available
+        let filename = `audit_logs_${Date.now()}.${format === 'json' ? 'json' : 'csv'}`;
+        const disposition = response.headers.get('content-disposition');
+        if (disposition && disposition.includes('filename=')) {
+          const match = disposition.match(/filename="?([^"]+)"?/);
+          if (match && match[1]) {
+            filename = match[1];
+          }
+        }
+
+        const blob = await response.blob();
+        if (typeof window !== 'undefined' && window.document) {
+          const downloadUrl = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = downloadUrl;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(downloadUrl);
+        }
+
+        return { success: true, filename };
+      },
     },
   };
+
+  // Provide audit alias for compatibility with AdminAPI.audit.export()
+  AdminAPI.audit = AdminAPI.auditLogs;
 
   // Expose globally to window
   window.AdminAPI = AdminAPI;

@@ -24,6 +24,7 @@ Buku panduan operasional ini disusun untuk tim IT Support, Database Administrato
 - [P. What is NOT Automatically Backed Up (Batasan Backup Otomatis)](#p-what-is-not-automatically-backed-up-batasan-backup-otomatis)
 - [Q. Recommended Operational Backup Scheduling Approach (Jadwal Otomasi)](#q-recommended-operational-backup-scheduling-approach-jadwal-otomasi)
 - [R. User Credential Lifecycle & Password Management (Prosedur Kredensial dan Kata Sandi)](#r-user-credential-lifecycle--password-management-prosedur-kredensial-dan-kata-sandi)
+- [S. Audit Trail Compliance Export & Forensic Archiving (Ekspor Log Audit & Investigasi Forensik)](#s-audit-trail-compliance-export--forensic-archiving-ekspor-log-audit--investigasi-forensik)
 
 ---
 
@@ -481,4 +482,61 @@ Setelah melakukan reset kata sandi:
 3. Buka tab **Log Audit** untuk memastikan event `PASSWORD_RESET` atau `PASSWORD_CHANGED` telah tercatat dengan metadata pengguna tanpa kebocoran string kata sandi.
 
 ---
-*Dokumen ini merupakan standar operasional prosedur resmi M12 & M13 RS Awal Bros Botania.*
+
+## S. Audit Trail Compliance Export & Forensic Archiving (Ekspor Log Audit & Investigasi Forensik)
+
+Modul ini menyediakan kapabilitas ekspor rekaman jejak audit sistem ke dalam format standar RFC 4180 CSV dan JSON untuk keperluan audit kepatuhan IT rumah sakit, pelaporan tata kelola, dan investigasi insiden keamanan.
+
+### 1. Hak Akses & Otorisasi Ekspor
+- **ADMIN**: Memiliki wewenang penuh untuk mengekspor seluruh log audit.
+- **IT_MANAGER**: Memiliki wewenang penuh untuk mengekspor log audit guna analisis operasional.
+- **IT_SUPPORT**: **Ditolak (`HTTP 403 Forbidden`)**. Staf level teknisi hanya memiliki hak baca pada tabel UI dashboard dan tidak berwenang mengunduh arsip log massal (*bulk export*).
+- **Unauthenticated / Publik**: **Ditolak (`HTTP 401 Unauthorized`)**.
+
+### 2. Prosedur Ekspor CSV melalui Admin Dashboard
+1. Login ke Dashboard Administrasi menggunakan akun dengan peran `ADMIN` atau `IT_MANAGER`.
+2. Buka tab **Log Audit**.
+3. *(Opsional)* Terapkan filter pencarian, filter aksi, atau tentukan rentang tanggal (kolom **Dari** dan **Sampai**).
+4. Klik tombol **Ekspor CSV** di sudut kanan atas toolbar audit.
+5. Browser akan mengunduh berkas dengan penamaan terstruktur: `audit_logs_rs_awal_bros_YYYYMMDD_HHmmss.csv`.
+6. Buka berkas menggunakan Microsoft Excel, LibreOffice Calc, atau perkakas analisis data lainnya.
+
+### 3. Prosedur Ekspor JSON
+Ekspor JSON ditujukan untuk integrasi dengan SIEM rumah sakit atau pemrosesan skrip forensik:
+1. Pada tab **Log Audit**, klik tombol **Ekspor JSON**.
+2. Berkas terstruktur JSON akan diunduh dengan nama `audit_logs_rs_awal_bros_YYYYMMDD_HHmmss.json`.
+3. Format JSON memuat metadata waktu ekspor, filter yang diterapkan, dan array objek rekaman audit.
+
+### 4. Parameter & Semantik Filter Rentang Tanggal
+Endpoint ekspor (`GET /api/v1/admin/audit-logs/export`) dan tabel live mendukung parameter filter:
+- `action`: Aksi audit spesifik (contoh: `PASSWORD_RESET`, `LOGIN_FAILED`, `GUIDE_DELETED`) atau `ALL`.
+- `entity`: Entitas target (`user`, `guide`, `category`, `system`) atau `ALL`.
+- `search`: Kata kunci pencarian nama staf, aksi, atau entitas.
+- `from`: Batas bawah tanggal awal inklusif (`YYYY-MM-DD` atau ISO 8601).
+  - Contoh: `from=2026-09-01` diinterpretasikan sebagai `2026-09-01T00:00:00.000Z`.
+- `to`: Batas atas tanggal akhir inklusif.
+  - **Semantik Hari Penuh**: Jika diberikan format tanggal `to=2026-09-30`, sistem secara otomatis menyertakan seluruh kejadian hingga akhir hari tersebut (`2026-09-30T23:59:59.999Z`), mencegah kejadian pada sore/malam hari tanggal tersebut terpotong.
+
+### 5. Alur Kerja Investigasi Insiden Keamanan (Forensic Workflow)
+Bila terdeteksi indikasi anomali sistem (contoh: lonjakan login gagal atau penghapusan panduan tanpa izin):
+1. **Identifikasi Rentang Waktu**: Tentukan perkiraan waktu insiden.
+2. **Filter & Ekspor**: Masukkan tanggal kejadian pada kolom *Dari* dan *Sampai*, pilih aksi terkait (misal: `LOGIN_FAILED` atau `GUIDE_DELETED`), lalu klik **Ekspor CSV**.
+3. **Analisis Forensik**:
+   - Periksa kolom `IP Address` untuk melacak terminal/workstation asal.
+   - Periksa kolom `User Agent` untuk memeriksa aplikasi/browser klien.
+   - Periksa kolom `Sanitized Changes JSON` untuk melihat rincian perubahan status atau data sebelum/sesudah kejadian.
+4. **Dokumentasi & Berita Acara**: Lampirkan berkas CSV hasil ekspor ke dalam Berita Acara Pemeriksaan (BAP) Tim Keamanan Informasi RS Awal Bros.
+
+### 6. Peringatan Keamanan & Batasan Berkas Ekspor
+> [!WARNING]
+> **PERLINDUNGAN BERKAS LOG HASIL EKSPOR:**
+> - Berkas ekspor log audit mengandung riwayat aktivitas operasional, alamat IP internal rumah sakit, dan username staf. **JANGAN PERNAH** mengunggah berkas ekspor ke penyimpanan awan publik (*public cloud*), repository publik, atau membagikannya kepada pihak yang tidak berwenang.
+> - Rekaman jejak audit pada database PostgreSQL bersifat **immutable (tidak dapat diedit/dihapus)**. Berkas ekspor tidak boleh dimanipulasi secara manual untuk menjaga validitas pembuktian forensik.
+> - Seluruh data perubahan sensitif (kata sandi, hash, token JWT, cookie sesi) telah disaring (*sanitized*) oleh sistem backend sebelum berkas ekspor dihasilkan.
+
+### 7. Rekomendasi Penyimpanan Arsip & Retensi
+- Simpan salinan ekspor audit berkala (bulanan/kuartalan) pada media penyimpanan terproteksi sandi (*encrypted storage*) yang dikelola oleh Departemen IT RS Awal Bros.
+- Rekomendasi masa simpan arsip log audit internal adalah minimal 1 (satu) tahun sesuai dengan panduan tata kelola teknologi informasi rumah sakit.
+
+---
+*Dokumen ini merupakan standar operasional prosedur resmi M12, M13 & M14 RS Awal Bros Botania.*
