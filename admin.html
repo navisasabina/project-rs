@@ -17,22 +17,22 @@
   <!-- Custom Styles -->
   <link href="/css/styles.css" rel="stylesheet"/>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col selection:bg-[#0097A7] selection:text-white relative">
+<body class="bg-slate-50/60 text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-[#03B1C0] selection:text-white relative">
 
   <!-- Fullscreen Loading Skeleton (Dismissed on session verify) -->
-  <div id="dashboard-loading-overlay" class="fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center transition-opacity duration-300">
-    <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#002541] text-cyan-400 border border-slate-800 shadow-xl mb-4">
-      <span class="animate-spin inline-block w-6 h-6 border-2 border-[#0097A7] border-t-transparent rounded-full"></span>
+  <div id="dashboard-loading-overlay" class="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center transition-opacity duration-300">
+    <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-slate-50 text-[#03B1C0] border border-slate-200 shadow-sm mb-4">
+      <span class="animate-spin inline-block w-6 h-6 border-2 border-[#03B1C0] border-t-transparent rounded-full"></span>
     </div>
-    <p class="text-sm font-semibold text-slate-200">Memverifikasi Sesi Staf IT...</p>
-    <p class="text-xs text-slate-500 mt-1">RS Awal Bros Botania Knowledge Base</p>
+    <p class="text-sm font-semibold text-slate-800">Memverifikasi Sesi Staf IT...</p>
+    <p class="text-xs text-slate-400 mt-1">RS Awal Bros Botania Knowledge Base</p>
   </div>
 
   <!-- Toast Notification Container -->
   <div id="admin-toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none *:pointer-events-auto"></div>
 
   <!-- Top Navigation Header -->
-  <header class="sticky top-0 z-40 bg-slate-900/90 border-b border-slate-800 backdrop-blur-md shadow-lg">
+  <header class="sticky top-0 z-40 bg-white/95 border-b border-slate-200 backdrop-blur-md shadow-xs">
     <div class="max-w-7xl 2xl:max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-wrap xl:flex-nowrap items-center justify-between min-h-[4.5rem] md:min-h-20 py-2.5 xl:py-0 gap-y-3">
         
@@ -40,20 +40,20 @@
         <div class="flex items-center gap-3 sm:gap-4 shrink-0">
           <a href="/admin" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
             <img alt="RS Awal Bros" class="h-8 md:h-9 w-auto object-contain rounded-md transition-transform group-hover:scale-105 shrink-0" src="/logo.png"/>
-            <div class="pl-2.5 sm:pl-3 border-l border-slate-800 flex flex-col justify-center shrink-0">
-              <span class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wider text-[#0097A7] block leading-tight whitespace-nowrap">Admin Knowledge Base</span>
-              <span class="text-[11px] sm:text-xs text-slate-400 font-medium block leading-tight whitespace-nowrap mt-0.5">RS Awal Bros Botania</span>
+            <div class="pl-2.5 sm:pl-3 border-l border-slate-200 flex flex-col justify-center shrink-0">
+              <span class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wider text-[#03B1C0] block leading-tight whitespace-nowrap">Admin Knowledge Base</span>
+              <span class="text-[11px] sm:text-xs text-slate-500 font-medium block leading-tight whitespace-nowrap mt-0.5">RS Awal Bros Botania</span>
             </div>
           </a>
         </div>
 
         <!-- Navigation Tabs Wrapper with scroll affordance -->
-        <div id="admin-nav-wrapper" class="relative w-full xl:flex-1 min-w-0 order-3 xl:order-2 flex flex-col justify-center border-t border-slate-800/80 xl:border-t-0 xl:border-l xl:border-slate-800 xl:pl-5 2xl:pl-6 xl:ml-3 2xl:ml-4 py-1.5 xl:py-0">
+        <div id="admin-nav-wrapper" class="relative w-full xl:flex-1 min-w-0 order-3 xl:order-2 flex flex-col justify-center border-t border-slate-200 xl:border-t-0 xl:border-l xl:border-slate-200 xl:pl-5 2xl:pl-6 xl:ml-3 2xl:ml-4 py-1.5 xl:py-0">
           <nav id="admin-main-nav" class="scrollbar-none flex items-center overflow-x-auto gap-1 sm:gap-1.5 text-xs font-semibold scroll-smooth w-full py-0.5 xl:py-0">
             <button
               id="tab-btn-overview"
               onclick="switchAdminTab('overview')"
-              class="admin-nav-btn px-3 py-2 rounded-xl transition-all border border-[#0097A7] text-[#0097A7] bg-slate-800 flex items-center gap-1.5 shrink-0 whitespace-nowrap"
+              class="admin-nav-btn px-3 py-2 rounded-xl transition-all border border-[#03B1C0] text-[#03B1C0] bg-[#03B1C0]/5 flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer font-bold"
             >
               <span class="material-symbols-outlined text-base">dashboard</span>
               <span>Ringkasan</span>
@@ -61,7 +61,7 @@
             <button
               id="tab-btn-guides"
               onclick="switchAdminTab('guides')"
-              class="admin-nav-btn px-3 py-2 rounded-xl transition-all border border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5 shrink-0 whitespace-nowrap"
+              class="admin-nav-btn px-3 py-2 rounded-xl transition-all border border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer"
             >
               <span class="material-symbols-outlined text-base">menu_book</span>
               <span>Basis Pengetahuan SOP</span>
@@ -69,7 +69,7 @@
             <button
               id="tab-btn-categories"
               onclick="switchAdminTab('categories')"
-              class="admin-nav-btn px-3 py-2 rounded-xl transition-all border border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5 shrink-0 whitespace-nowrap"
+              class="admin-nav-btn px-3 py-2 rounded-xl transition-all border border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer"
             >
               <span class="material-symbols-outlined text-base">category</span>
               <span>Kategori Hardware</span>
@@ -77,7 +77,7 @@
             <button
               id="tab-btn-users"
               onclick="switchAdminTab('users')"
-              class="admin-nav-btn px-3 py-2 rounded-xl transition-all border border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5 shrink-0 whitespace-nowrap"
+              class="admin-nav-btn px-3 py-2 rounded-xl transition-all border border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer"
             >
               <span class="material-symbols-outlined text-base">group</span>
               <span>Manajemen Pengguna</span>
@@ -85,7 +85,7 @@
             <button
               id="tab-btn-audit"
               onclick="switchAdminTab('audit')"
-              class="admin-nav-btn px-3 py-2 rounded-xl transition-all border border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5 shrink-0 whitespace-nowrap"
+              class="admin-nav-btn px-3 py-2 rounded-xl transition-all border border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer"
             >
               <span class="material-symbols-outlined text-base">history</span>
               <span>Log Audit</span>
@@ -94,8 +94,8 @@
 
           <!-- Custom Thin Scroll Indicator (Visible whenever navigation content overflows) -->
           <div id="nav-scroll-indicator" class="pointer-events-none relative w-full pt-1" style="display: none;">
-            <div id="nav-scroll-track" class="relative w-full h-[2.5px] bg-slate-700/70 rounded-full overflow-hidden">
-              <div id="nav-scroll-thumb" class="absolute top-0 bottom-0 left-0 bg-[#0097A7] rounded-full will-change-transform" style="width: 24px; transform: translateX(0);"></div>
+            <div id="nav-scroll-track" class="relative w-full h-[2.5px] bg-slate-200 rounded-full overflow-hidden">
+              <div id="nav-scroll-thumb" class="absolute top-0 bottom-0 left-0 bg-[#03B1C0] rounded-full will-change-transform" style="width: 24px; transform: translateX(0);"></div>
             </div>
           </div>
         </div>
@@ -106,7 +106,7 @@
           <a
             href="/"
             target="_blank"
-            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-colors shrink-0"
+            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-[#03B1C0] bg-white hover:bg-slate-50 border border-slate-200 hover:border-[#03B1C0]/40 transition-colors shrink-0 shadow-xs"
             title="Buka Portal Pengguna di Tab Baru"
           >
             <span>Portal Pengguna</span>
@@ -114,13 +114,13 @@
           </a>
 
           <!-- User Badge & Profile Info -->
-          <div class="flex items-center gap-2.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 shrink-0">
-            <div id="user-avatar-initial" class="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#002541] to-[#0097A7] text-white flex items-center justify-center font-bold text-xs shadow-inner shrink-0">
+          <div class="flex items-center gap-2.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white border border-slate-200 shrink-0 shadow-xs">
+            <div id="user-avatar-initial" class="w-7 h-7 rounded-lg bg-[#03B1C0] text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
               A
             </div>
             <div class="text-left hidden md:block">
-              <span id="user-full-name" class="text-xs font-bold text-slate-200 block leading-tight truncate max-w-[120px] 2xl:max-w-[150px]">Memuat...</span>
-              <span id="user-role-badge" class="px-1.5 py-0.2 text-[9px] font-bold rounded text-slate-400 border border-slate-700 block mt-0.5">ROLE</span>
+              <span id="user-full-name" class="text-xs font-bold text-slate-800 block leading-tight truncate max-w-[120px] 2xl:max-w-[150px]">Memuat...</span>
+              <span id="user-role-badge" class="px-1.5 py-0.2 text-[9px] font-bold rounded text-slate-500 border border-slate-200 block mt-0.5">ROLE</span>
             </div>
           </div>
 
@@ -128,7 +128,7 @@
           <button
             id="btn-change-own-password"
             onclick="openChangePasswordModal()"
-            class="p-2 text-slate-400 hover:text-cyan-400 hover:bg-slate-800/80 rounded-xl border border-slate-800 hover:border-cyan-500/30 transition-colors flex items-center gap-1.5 shrink-0"
+            class="p-2 text-slate-500 hover:text-[#03B1C0] hover:bg-slate-50 rounded-xl border border-slate-200 hover:border-[#03B1C0]/40 transition-colors flex items-center gap-1.5 shrink-0 bg-white shadow-xs cursor-pointer"
             title="Ganti Kata Sandi Saya"
           >
             <span class="material-symbols-outlined text-lg">key</span>
@@ -138,7 +138,7 @@
           <!-- Logout Button -->
           <button
             onclick="confirmLogout()"
-            class="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-xl border border-slate-800 hover:border-red-500/30 transition-colors shrink-0"
+            class="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl border border-slate-200 transition-colors shrink-0 bg-white shadow-xs cursor-pointer"
             title="Keluar Sesi Portal IT"
           >
             <span class="material-symbols-outlined text-lg">logout</span>
@@ -153,11 +153,11 @@
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
     <!-- Read-Only Banner for IT_SUPPORT -->
-    <div id="read-only-banner" class="hidden mb-6 p-4 rounded-2xl bg-blue-950/40 border border-blue-800/60 text-xs text-blue-200 flex items-start gap-3 shadow-lg">
-      <span class="material-symbols-outlined text-blue-400 text-lg shrink-0 mt-0.5">info</span>
+    <div id="read-only-banner" class="hidden mb-6 p-4 rounded-2xl bg-white border border-slate-200 text-xs text-slate-700 flex items-start gap-3 shadow-xs">
+      <span class="material-symbols-outlined text-[#03B1C0] text-lg shrink-0 mt-0.5">info</span>
       <div>
-        <strong class="font-bold text-blue-300 block mb-0.5">Hak Akses Terbatas (Read-Only)</strong>
-        <p class="text-slate-300 leading-relaxed">
+        <strong class="font-bold text-slate-800 block mb-0.5">Hak Akses Terbatas (Read-Only)</strong>
+        <p class="text-slate-600 leading-relaxed">
           Akun Anda memiliki role <strong>IT_SUPPORT</strong>. Anda dapat melihat seluruh daftar panduan, detail langkah, dan kategori.
           Tindakan penambahan, perubahan, publikasi, dan pengarsipan dibatasi untuk <strong>ADMIN</strong> dan <strong>IT_MANAGER</strong>.
         </p>
@@ -172,15 +172,15 @@
       <!-- Greeting Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 class="text-xl sm:text-2xl font-bold font-brand text-white">Dashboard Monitoring IT</h2>
-          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+          <h2 class="text-xl sm:text-2xl font-bold font-brand text-slate-900">Dashboard Monitoring IT</h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
             Ringkasan status basis pengetahuan, panduan aktif, dan kategori hardware RS Awal Bros.
           </p>
         </div>
         <div class="flex items-center gap-2">
           <button
             onclick="openCreateGuideModal()"
-            class="rbac-mutation px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#0097A7] to-cyan-600 hover:from-cyan-600 hover:to-[#00828A] text-white text-xs font-bold shadow-lg shadow-cyan-900/30 transition-all flex items-center gap-1.5"
+            class="rbac-mutation px-4 py-2.5 rounded-xl bg-[#03B1C0] hover:bg-[#0298a5] text-white text-xs font-bold shadow-sm hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <span class="material-symbols-outlined text-base">add</span>
             <span>Tambah Panduan Baru</span>
@@ -192,53 +192,53 @@
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         
         <!-- Total Guides -->
-        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
-          <div class="flex items-center justify-between text-slate-400 mb-2">
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
+          <div class="flex items-center justify-between text-slate-500 mb-2">
             <span class="text-xs font-medium">Total Panduan</span>
-            <span class="material-symbols-outlined text-lg text-cyan-400">auto_stories</span>
+            <span class="material-symbols-outlined text-lg text-[#03B1C0]">auto_stories</span>
           </div>
-          <div id="kpi-total-guides" class="text-2xl font-bold font-mono text-white">0</div>
-          <span class="text-[10px] text-slate-500 mt-1 block">Seluruh status</span>
+          <div id="kpi-total-guides" class="text-2xl font-bold font-mono text-slate-900">0</div>
+          <span class="text-[10px] text-slate-400 mt-1 block">Seluruh status</span>
         </div>
 
         <!-- Published Guides -->
-        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
-          <div class="flex items-center justify-between text-slate-400 mb-2">
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
+          <div class="flex items-center justify-between text-slate-500 mb-2">
             <span class="text-xs font-medium">Panduan Publik</span>
-            <span class="material-symbols-outlined text-lg text-emerald-400">check_circle</span>
+            <span class="material-symbols-outlined text-lg text-[#03B1C0]">check_circle</span>
           </div>
-          <div id="kpi-published-guides" class="text-2xl font-bold font-mono text-emerald-400">0</div>
-          <span class="text-[10px] text-emerald-500/80 mt-1 block">Aktif di Portal Pengguna</span>
+          <div id="kpi-published-guides" class="text-2xl font-bold font-mono text-[#03B1C0]">0</div>
+          <span class="text-[10px] text-slate-500 mt-1 block">Aktif di Portal Pengguna</span>
         </div>
 
         <!-- Draft Guides -->
-        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
-          <div class="flex items-center justify-between text-slate-400 mb-2">
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
+          <div class="flex items-center justify-between text-slate-500 mb-2">
             <span class="text-xs font-medium">Draf Belum Rilis</span>
-            <span class="material-symbols-outlined text-lg text-amber-400">edit_note</span>
+            <span class="material-symbols-outlined text-lg text-slate-600">edit_note</span>
           </div>
-          <div id="kpi-draft-guides" class="text-2xl font-bold font-mono text-amber-400">0</div>
-          <span class="text-[10px] text-amber-500/80 mt-1 block">Internal tim IT</span>
+          <div id="kpi-draft-guides" class="text-2xl font-bold font-mono text-slate-800">0</div>
+          <span class="text-[10px] text-slate-400 mt-1 block">Internal tim IT</span>
         </div>
 
         <!-- Archived Guides -->
-        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
-          <div class="flex items-center justify-between text-slate-400 mb-2">
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
+          <div class="flex items-center justify-between text-slate-500 mb-2">
             <span class="text-xs font-medium">Diarsipkan</span>
             <span class="material-symbols-outlined text-lg text-slate-400">archive</span>
           </div>
-          <div id="kpi-archived-guides" class="text-2xl font-bold font-mono text-slate-300">0</div>
-          <span class="text-[10px] text-slate-500 mt-1 block">Tidak tampil di publik</span>
+          <div id="kpi-archived-guides" class="text-2xl font-bold font-mono text-slate-600">0</div>
+          <span class="text-[10px] text-slate-400 mt-1 block">Tidak tampil di publik</span>
         </div>
 
         <!-- Total Categories -->
-        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md col-span-2 sm:col-span-1">
-          <div class="flex items-center justify-between text-slate-400 mb-2">
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs col-span-2 sm:col-span-1">
+          <div class="flex items-center justify-between text-slate-500 mb-2">
             <span class="text-xs font-medium">Kategori Hardware</span>
-            <span class="material-symbols-outlined text-lg text-cyan-400">category</span>
+            <span class="material-symbols-outlined text-lg text-[#03B1C0]">category</span>
           </div>
-          <div id="kpi-total-categories" class="text-2xl font-bold font-mono text-white">0</div>
-          <span class="text-[10px] text-slate-500 mt-1 block">Klasifikasi perangkat</span>
+          <div id="kpi-total-categories" class="text-2xl font-bold font-mono text-slate-900">0</div>
+          <span class="text-[10px] text-slate-400 mt-1 block">Klasifikasi perangkat</span>
         </div>
 
       </div>
@@ -247,13 +247,13 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         <!-- Left 2 cols: Recent Guides Table -->
-        <div class="lg:col-span-2 bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl">
+        <div class="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-6 shadow-xs">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-              <span class="material-symbols-outlined text-cyan-400 text-lg">history</span>
+            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#03B1C0] text-lg">history</span>
               <span>Daftar Panduan Terkini</span>
             </h3>
-            <button onclick="switchAdminTab('guides')" class="text-xs text-cyan-400 hover:text-cyan-300 font-semibold inline-flex items-center gap-1">
+            <button onclick="switchAdminTab('guides')" class="text-xs text-[#03B1C0] hover:text-[#0298a5] font-semibold inline-flex items-center gap-1 cursor-pointer">
               <span>Kelola Semua</span>
               <span class="material-symbols-outlined text-sm">arrow_forward</span>
             </button>
@@ -262,7 +262,7 @@
           <div class="overflow-x-auto">
             <table class="w-full text-left">
               <thead>
-                <tr class="border-b border-slate-800 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                   <th class="py-2.5 px-4">Judul Masalah</th>
                   <th class="py-2.5 px-4">Kategori</th>
                   <th class="py-2.5 px-4">Langkah</th>
@@ -272,7 +272,7 @@
               </thead>
               <tbody id="overview-recent-guides">
                 <tr>
-                  <td colspan="5" class="py-8 text-center text-slate-500 text-xs">Memuat data terbaru...</td>
+                  <td colspan="5" class="py-8 text-center text-slate-400 text-xs">Memuat data terbaru...</td>
                 </tr>
               </tbody>
             </table>
@@ -281,47 +281,47 @@
 
         <!-- Right 1 col: Quick Guide Actions -->
         <div class="space-y-4">
-          <div class="p-6 rounded-2xl bg-gradient-to-br from-[#002541]/80 to-slate-900/90 border border-slate-800 shadow-xl space-y-4">
-            <h3 class="text-sm font-bold text-white flex items-center gap-2">
-              <span class="material-symbols-outlined text-[#0097A7] text-lg">bolt</span>
+          <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-4">
+            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#03B1C0] text-lg">bolt</span>
               <span>Aksi Cepat Staf IT</span>
             </h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
+            <p class="text-xs text-slate-500 leading-relaxed">
               Tambahkan panduan masalah hardware baru langsung ke sistem atau kelola klasifikasi kategori hardware.
             </p>
             <div class="space-y-2 pt-2">
               <button
                 onclick="openCreateGuideModal()"
-                class="rbac-mutation w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-cyan-500/50 text-white text-xs font-semibold flex items-center justify-between transition-all"
+                class="rbac-mutation w-full py-2.5 px-4 rounded-xl bg-slate-50/70 hover:bg-slate-100 border border-slate-200 hover:border-[#03B1C0]/50 text-slate-800 text-xs font-semibold flex items-center justify-between transition-all cursor-pointer"
               >
                 <span class="flex items-center gap-2">
-                  <span class="material-symbols-outlined text-cyan-400 text-base">post_add</span>
+                  <span class="material-symbols-outlined text-[#03B1C0] text-base">post_add</span>
                   <span>Buat Panduan SOP Baru</span>
                 </span>
-                <span class="material-symbols-outlined text-slate-500 text-sm">chevron_right</span>
+                <span class="material-symbols-outlined text-slate-400 text-sm">chevron_right</span>
               </button>
 
               <button
                 onclick="openCreateCategoryModal()"
-                class="rbac-mutation w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-cyan-500/50 text-white text-xs font-semibold flex items-center justify-between transition-all"
+                class="rbac-mutation w-full py-2.5 px-4 rounded-xl bg-slate-50/70 hover:bg-slate-100 border border-slate-200 hover:border-[#03B1C0]/50 text-slate-800 text-xs font-semibold flex items-center justify-between transition-all cursor-pointer"
               >
                 <span class="flex items-center gap-2">
-                  <span class="material-symbols-outlined text-cyan-400 text-base">add_circle</span>
+                  <span class="material-symbols-outlined text-[#03B1C0] text-base">add_circle</span>
                   <span>Tambah Kategori Baru</span>
                 </span>
-                <span class="material-symbols-outlined text-slate-500 text-sm">chevron_right</span>
+                <span class="material-symbols-outlined text-slate-400 text-sm">chevron_right</span>
               </button>
 
               <a
                 href="/"
                 target="_blank"
-                class="w-full py-2.5 px-4 rounded-xl bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 text-slate-300 hover:text-white text-xs font-semibold flex items-center justify-between transition-all"
+                class="w-full py-2.5 px-4 rounded-xl bg-slate-50/40 hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-slate-900 text-xs font-semibold flex items-center justify-between transition-all"
               >
                 <span class="flex items-center gap-2">
-                  <span class="material-symbols-outlined text-slate-400 text-base">open_in_browser</span>
+                  <span class="material-symbols-outlined text-slate-500 text-base">open_in_browser</span>
                   <span>Pratinjau Portal Pengguna</span>
                 </span>
-                <span class="material-symbols-outlined text-slate-500 text-sm">north_east</span>
+                <span class="material-symbols-outlined text-slate-400 text-sm">north_east</span>
               </a>
             </div>
           </div>
@@ -339,14 +339,14 @@
       <!-- Section Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 class="text-xl sm:text-2xl font-bold font-brand text-white">Basis Pengetahuan SOP Troubleshooting</h2>
-          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+          <h2 class="text-xl sm:text-2xl font-bold font-brand text-slate-900">Basis Pengetahuan SOP Troubleshooting</h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
             Kelola panduan troubleshooting perangkat keras, langkah perbaikan mandiri, dan siklus hidup publikasi.
           </p>
         </div>
         <button
           onclick="openCreateGuideModal()"
-          class="rbac-mutation px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#0097A7] to-cyan-600 hover:from-cyan-600 hover:to-[#00828A] text-white text-xs font-bold shadow-lg shadow-cyan-900/30 transition-all flex items-center gap-1.5 self-start sm:self-auto"
+          class="rbac-mutation px-4 py-2.5 rounded-xl bg-[#03B1C0] hover:bg-[#0298a5] text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
         >
           <span class="material-symbols-outlined text-base">add</span>
           <span>Tambah Panduan Baru</span>
@@ -354,7 +354,7 @@
       </div>
 
       <!-- Filters & Search Toolbar -->
-      <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         
         <!-- Left: Search Box -->
         <div class="relative flex-1 max-w-md">
@@ -366,7 +366,7 @@
             type="text"
             oninput="handleGuideSearch(event)"
             placeholder="Cari judul panduan, key code, lokasi, atau kata kunci..."
-            class="w-full pl-10 pr-4 py-2 bg-slate-950/70 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7] transition-all"
+            class="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0] transition-all"
           />
         </div>
 
@@ -377,45 +377,45 @@
           <select
             id="guide-filter-category"
             onchange="handleGuideCategoryFilter(event)"
-            class="px-3 py-2 bg-slate-950/70 border border-slate-700/80 rounded-xl text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           >
             <option value="ALL">Semua Kategori</option>
           </select>
 
           <!-- Status Filter Buttons -->
-          <div class="inline-flex rounded-xl bg-slate-950 p-1 border border-slate-800 text-xs">
+          <div class="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200 text-xs">
             <button
               id="status-filter-all"
               onclick="filterGuidesByStatus('ALL')"
-              class="guide-status-filter-btn px-3 py-1 rounded-lg transition-colors bg-[#0097A7] text-white font-semibold"
+              class="guide-status-filter-btn px-3 py-1 rounded-lg transition-colors bg-[#03B1C0] text-white font-semibold cursor-pointer"
             >
               Semua
             </button>
             <button
               id="status-filter-published"
               onclick="filterGuidesByStatus('PUBLISHED')"
-              class="guide-status-filter-btn px-3 py-1 rounded-lg transition-colors text-slate-400 hover:text-white"
+              class="guide-status-filter-btn px-3 py-1 rounded-lg transition-colors text-slate-600 hover:text-slate-900 cursor-pointer"
             >
               Published
             </button>
             <button
               id="status-filter-draft"
               onclick="filterGuidesByStatus('DRAFT')"
-              class="guide-status-filter-btn px-3 py-1 rounded-lg transition-colors text-slate-400 hover:text-white"
+              class="guide-status-filter-btn px-3 py-1 rounded-lg transition-colors text-slate-600 hover:text-slate-900 cursor-pointer"
             >
               Draft
             </button>
             <button
               id="status-filter-archived"
               onclick="filterGuidesByStatus('ARCHIVED')"
-              class="guide-status-filter-btn px-3 py-1 rounded-lg transition-colors text-slate-400 hover:text-white"
+              class="guide-status-filter-btn px-3 py-1 rounded-lg transition-colors text-slate-600 hover:text-slate-900 cursor-pointer"
             >
               Archived
             </button>
           </div>
 
           <!-- Total Count Badge -->
-          <span id="guides-filtered-count" class="text-xs font-mono text-slate-400 px-2 py-1 bg-slate-800/80 rounded-lg border border-slate-700">
+          <span id="guides-filtered-count" class="text-xs font-mono text-slate-600 px-2.5 py-1 bg-slate-100 rounded-lg border border-slate-200">
             0 Panduan
           </span>
 
@@ -424,11 +424,11 @@
       </div>
 
       <!-- Guides Data Table -->
-      <div class="bg-slate-900/80 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
+      <div class="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full text-left">
             <thead>
-              <tr class="bg-slate-950/80 border-b border-slate-800 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                 <th class="py-3.5 px-4">Panduan & Kode SOP</th>
                 <th class="py-3.5 px-4">Kategori Hardware</th>
                 <th class="py-3.5 px-4">Status Siklus</th>
@@ -439,7 +439,7 @@
             </thead>
             <tbody id="guides-table-body">
               <tr>
-                <td colspan="6" class="py-12 text-center text-slate-500 text-xs">Memuat daftar panduan troubleshooting...</td>
+                <td colspan="6" class="py-12 text-center text-slate-400 text-xs">Memuat daftar panduan troubleshooting...</td>
               </tr>
             </tbody>
           </table>
@@ -456,14 +456,14 @@
       <!-- Section Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 class="text-xl sm:text-2xl font-bold font-brand text-white">Klasifikasi Kategori Hardware</h2>
-          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+          <h2 class="text-xl sm:text-2xl font-bold font-brand text-slate-900">Klasifikasi Kategori Hardware</h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
             Atur pengelompokan perangkat medis, komputer, jaringan, dan aksesoris RS Awal Bros.
           </p>
         </div>
         <button
           onclick="openCreateCategoryModal()"
-          class="rbac-mutation px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#0097A7] to-cyan-600 hover:from-cyan-600 hover:to-[#00828A] text-white text-xs font-bold shadow-lg shadow-cyan-900/30 transition-all flex items-center gap-1.5 self-start sm:self-auto"
+          class="rbac-mutation px-4 py-2.5 rounded-xl bg-[#03B1C0] hover:bg-[#0298a5] text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
         >
           <span class="material-symbols-outlined text-base">add</span>
           <span>Tambah Kategori Baru</span>
@@ -472,7 +472,7 @@
 
       <!-- Categories Grid List -->
       <div id="categories-list-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="col-span-full py-12 text-center text-slate-500 text-xs">
+        <div class="col-span-full py-12 text-center text-slate-400 text-xs">
           Memuat daftar kategori hardware...
         </div>
       </div>
@@ -486,15 +486,15 @@
       <!-- Section Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 class="text-xl sm:text-2xl font-bold font-brand text-white">Manajemen Pengguna & Staf IT</h2>
-          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+          <h2 class="text-xl sm:text-2xl font-bold font-brand text-slate-900">Manajemen Pengguna & Staf IT</h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
             Kelola akun operasional staf IT, penugasan hak akses/role, dan status aktivasi akun.
           </p>
         </div>
         <div class="flex items-center gap-2">
           <button
             onclick="openUserModal()"
-            class="rbac-mutation px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#0097A7] to-cyan-600 hover:from-cyan-600 hover:to-[#00828A] text-white text-xs font-bold shadow-lg shadow-cyan-900/30 transition-all flex items-center gap-1.5"
+            class="rbac-mutation px-4 py-2.5 rounded-xl bg-[#03B1C0] hover:bg-[#0298a5] text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <span class="material-symbols-outlined text-base">person_add</span>
             <span>+ Tambah Staf IT</span>
@@ -504,35 +504,35 @@
 
       <!-- User Stats Overview -->
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
-          <span class="text-xs font-medium text-slate-400 block mb-1">Total Staf IT</span>
-          <div id="user-stats-total" class="text-2xl font-bold font-mono text-white">0</div>
+        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs">
+          <span class="text-xs font-medium text-slate-500 block mb-1">Total Staf IT</span>
+          <div id="user-stats-total" class="text-2xl font-bold font-mono text-slate-900">0</div>
         </div>
-        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
-          <span class="text-xs font-medium text-emerald-400 block mb-1">Staf Aktif</span>
-          <div id="user-stats-active" class="text-2xl font-bold font-mono text-emerald-400">0</div>
+        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs">
+          <span class="text-xs font-medium text-[#03B1C0] block mb-1">Staf Aktif</span>
+          <div id="user-stats-active" class="text-2xl font-bold font-mono text-[#03B1C0]">0</div>
         </div>
-        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
-          <span class="text-xs font-medium text-red-400 block mb-1">Staf Nonaktif</span>
-          <div id="user-stats-inactive" class="text-2xl font-bold font-mono text-red-400">0</div>
+        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs">
+          <span class="text-xs font-medium text-slate-500 block mb-1">Staf Nonaktif</span>
+          <div id="user-stats-inactive" class="text-2xl font-bold font-mono text-slate-600">0</div>
         </div>
-        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
-          <span class="text-xs font-medium text-cyan-400 block mb-1">Administrator / Manager</span>
-          <div id="user-stats-admins" class="text-2xl font-bold font-mono text-cyan-400">0</div>
+        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs">
+          <span class="text-xs font-medium text-slate-600 block mb-1">Administrator / Manager</span>
+          <div id="user-stats-admins" class="text-2xl font-bold font-mono text-slate-900">0</div>
         </div>
       </div>
 
       <!-- Filters & Search Toolbar -->
-      <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 shadow-md">
+      <div class="p-4 rounded-2xl bg-white border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xs">
         <!-- Search -->
         <div class="relative w-full md:w-80">
-          <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-lg">search</span>
+          <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
           <input
             id="users-search-input"
             type="text"
             placeholder="Cari nama, username, atau email..."
             oninput="handleUserSearch(this.value)"
-            class="w-full pl-10 pr-4 py-2 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           />
         </div>
 
@@ -541,7 +541,7 @@
           <select
             id="users-filter-role"
             onchange="handleUserRoleFilter(this.value)"
-            class="px-3 py-2 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           >
             <option value="ALL">Semua Role</option>
             <option value="ADMIN">ADMIN</option>
@@ -552,7 +552,7 @@
           <select
             id="users-filter-status"
             onchange="handleUserStatusFilter(this.value)"
-            class="px-3 py-2 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           >
             <option value="ALL">Semua Status</option>
             <option value="active">Aktif</option>
@@ -562,11 +562,11 @@
       </div>
 
       <!-- Users Table -->
-      <div class="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
         <div class="overflow-x-auto">
           <table class="w-full text-left">
             <thead>
-              <tr class="border-b border-slate-800 bg-slate-950/40 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              <tr class="border-b border-slate-200 bg-slate-50/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                 <th class="py-3 px-5">Nama Lengkap & Username</th>
                 <th class="py-3 px-4">Email</th>
                 <th class="py-3 px-4">Role Akses</th>
@@ -575,9 +575,9 @@
                 <th class="py-3 px-5 text-right">Aksi</th>
               </tr>
             </thead>
-            <tbody id="users-table-body" class="divide-y divide-slate-800/60 text-xs">
+            <tbody id="users-table-body" class="divide-y divide-slate-100 text-xs">
               <tr>
-                <td colspan="6" class="py-12 text-center text-slate-500">Memuat data staf IT...</td>
+                <td colspan="6" class="py-12 text-center text-slate-400">Memuat data staf IT...</td>
               </tr>
             </tbody>
           </table>
@@ -592,8 +592,8 @@
       <!-- Section Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 class="text-xl sm:text-2xl font-bold font-brand text-white">Log Audit Aktivitas Sistem</h2>
-          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+          <h2 class="text-xl sm:text-2xl font-bold font-brand text-slate-900">Log Audit Aktivitas Sistem</h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
             Catatan kronologis immutable atas autentikasi, mutasi data SOP, dan manajemen akun staf IT.
           </p>
         </div>
@@ -601,7 +601,7 @@
           <button
             id="btn-export-audit-csv"
             onclick="handleExportAuditLogs('csv')"
-            class="rbac-mutation px-3.5 py-2 rounded-xl bg-emerald-700/80 hover:bg-emerald-600 text-white text-xs font-semibold border border-emerald-600/60 transition-colors flex items-center gap-1.5 shadow-sm"
+            class="rbac-mutation px-3.5 py-2 rounded-xl bg-[#03B1C0] hover:bg-[#0298a5] text-white text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
           >
             <span class="material-symbols-outlined text-base">download</span>
             <span>Ekspor CSV</span>
@@ -609,14 +609,14 @@
           <button
             id="btn-export-audit-json"
             onclick="handleExportAuditLogs('json')"
-            class="rbac-mutation px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors flex items-center gap-1.5 shadow-sm"
+            class="rbac-mutation px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-200 hover:border-[#03B1C0]/40 shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
           >
             <span class="material-symbols-outlined text-base">data_object</span>
             <span>Ekspor JSON</span>
           </button>
           <button
             onclick="loadAuditLogs()"
-            class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition-colors flex items-center gap-1.5"
+            class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-200 transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
           >
             <span class="material-symbols-outlined text-base">refresh</span>
             <span>Muat Ulang</span>
@@ -625,40 +625,40 @@
       </div>
 
       <!-- Audit Toolbar -->
-      <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 shadow-md">
+      <div class="p-4 rounded-2xl bg-white border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xs">
         <!-- Search -->
         <div class="relative w-full md:w-72">
-          <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-lg">search</span>
+          <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
           <input
             id="audit-search-input"
             type="text"
             placeholder="Cari pelaksana, aksi, atau entitas..."
             oninput="handleAuditSearch(this.value)"
-            class="w-full pl-10 pr-4 py-2 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           />
         </div>
 
         <!-- Date Range & Action Filters -->
         <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto justify-end">
           <!-- Date From -->
-          <div class="flex items-center gap-1.5 bg-slate-950 border border-slate-700/80 rounded-xl px-2.5 py-1.5">
-            <span class="text-[11px] text-slate-400 font-medium">Dari:</span>
+          <div class="flex items-center gap-1.5 bg-white border border-slate-200 rounded-xl px-2.5 py-1.5">
+            <span class="text-[11px] text-slate-500 font-medium">Dari:</span>
             <input
               id="audit-filter-from"
               type="date"
               onchange="handleAuditDateFilter()"
-              class="bg-transparent text-xs text-slate-200 focus:outline-none [color-scheme:dark]"
+              class="bg-transparent text-xs text-slate-800 focus:outline-none"
             />
           </div>
 
           <!-- Date To -->
-          <div class="flex items-center gap-1.5 bg-slate-950 border border-slate-700/80 rounded-xl px-2.5 py-1.5">
-            <span class="text-[11px] text-slate-400 font-medium">Sampai:</span>
+          <div class="flex items-center gap-1.5 bg-white border border-slate-200 rounded-xl px-2.5 py-1.5">
+            <span class="text-[11px] text-slate-500 font-medium">Sampai:</span>
             <input
               id="audit-filter-to"
               type="date"
               onchange="handleAuditDateFilter()"
-              class="bg-transparent text-xs text-slate-200 focus:outline-none [color-scheme:dark]"
+              class="bg-transparent text-xs text-slate-800 focus:outline-none"
             />
           </div>
 
@@ -667,16 +667,16 @@
             id="btn-audit-date-clear"
             onclick="clearAuditDateFilter()"
             title="Reset Filter Tanggal"
-            class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+            class="p-2 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-600 hover:text-slate-900 transition-colors cursor-pointer"
           >
             <span class="material-symbols-outlined text-sm">event_busy</span>
           </button>
 
-          <!-- Filter Action Category -->
+          <!-- Filter Action Category (Must contain all 17 supported audit action values) -->
           <select
             id="audit-filter-action"
             onchange="handleAuditActionFilter(this.value)"
-            class="px-3 py-2 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           >
             <option value="ALL">Semua Aksi</option>
             <option value="LOGIN_SUCCESS">Login Berhasil</option>
@@ -701,11 +701,11 @@
       </div>
 
       <!-- Audit Logs Table -->
-      <div class="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
         <div class="overflow-x-auto">
           <table class="w-full text-left">
             <thead>
-              <tr class="border-b border-slate-800 bg-slate-950/40 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              <tr class="border-b border-slate-200 bg-slate-50/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                 <th class="py-3 px-5">Waktu (WIB)</th>
                 <th class="py-3 px-4">Pelaksana (Actor)</th>
                 <th class="py-3 px-4">Tindakan / Aksi</th>
@@ -714,9 +714,9 @@
                 <th class="py-3 px-5 text-right">Detail</th>
               </tr>
             </thead>
-            <tbody id="audit-table-body" class="divide-y divide-slate-800/60 text-xs">
+            <tbody id="audit-table-body" class="divide-y divide-slate-100 text-xs">
               <tr>
-                <td colspan="6" class="py-12 text-center text-slate-500">Memuat data log audit...</td>
+                <td colspan="6" class="py-12 text-center text-slate-400">Memuat data log audit...</td>
               </tr>
             </tbody>
           </table>
@@ -727,18 +727,18 @@
   </main>
 
   <!-- Footer -->
-  <footer class="w-full py-4 text-center text-xs text-slate-500 border-t border-slate-800 bg-slate-900/50 mt-auto">
+  <footer class="w-full py-4 text-center text-xs text-slate-400 border-t border-slate-200 bg-white mt-auto">
     &copy; 2026 IT Division RS Awal Bros Botania. Seluruh hak cipta dilindungi.
   </footer>
 
   <!-- =========================================================================
        MODAL 1: PREVIEW DETAIL PANDUAN
        ========================================================================= -->
-  <div id="guide-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-    <div class="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 my-8 max-h-[90vh] overflow-y-auto relative">
+  <div id="guide-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30 backdrop-blur-xs overflow-y-auto">
+    <div class="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-xl p-6 sm:p-8 my-8 max-h-[90vh] overflow-y-auto relative">
       <button
         onclick="closeGuideDetailModal()"
-        class="absolute top-5 right-5 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+        class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
       >
         <span class="material-symbols-outlined text-xl">close</span>
       </button>
@@ -749,18 +749,23 @@
   </div>
 
   <!-- =========================================================================
-       MODAL 2: FORM TAMBAH / EDIT PANDUAN (WITH STEP BUILDER)
+       MODAL 2: FORM TAMBAH / EDIT PANDUAN (STRUCTURED 6-SECTION STEP BUILDER)
        ========================================================================= -->
-  <div id="guide-form-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-    <div class="w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 my-8 max-h-[90vh] overflow-y-auto relative">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
-        <h3 id="guide-form-modal-title" class="text-lg sm:text-xl font-bold font-brand text-white">
-          Tambah Panduan Troubleshooting Baru
-        </h3>
+  <div id="guide-form-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30 backdrop-blur-xs overflow-y-auto">
+    <div class="w-full max-w-3xl bg-white border border-slate-200 rounded-2xl shadow-xl p-6 sm:p-8 my-8 max-h-[90vh] overflow-y-auto relative text-slate-800">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-4 border-b border-slate-200 mb-6">
+        <div>
+          <h3 id="guide-form-modal-title" class="text-lg sm:text-xl font-bold font-brand text-slate-900">
+            Tambah Panduan Troubleshooting Baru
+          </h3>
+          <p class="text-xs text-slate-500 mt-0.5">Lengkapi formulir terstruktur untuk mempublikasikan SOP perbaikan hardware rumah sakit.</p>
+        </div>
         <button
           type="button"
           onclick="closeGuideFormModal()"
-          class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+          class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
         >
           <span class="material-symbols-outlined text-xl">close</span>
         </button>
@@ -768,191 +773,239 @@
 
       <form id="guide-form" onsubmit="handleGuideFormSubmit(event)" class="space-y-6">
         
-        <!-- Row 1: Title & Category -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- SECTION 1: BASIC INFORMATION -->
+        <div class="space-y-4">
+          <div class="pb-2 border-b border-slate-100">
+            <h4 class="text-xs font-bold text-[#03B1C0] uppercase tracking-wider flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base">info</span>
+              <span>1. Basic Information</span>
+            </h4>
+            <p class="text-[11px] text-slate-500 mt-0.5">Judul permasalahan dan pengelompokan kategori perangkat hardware.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+                Judul Masalah / SOP <span class="text-red-500">*</span>
+              </label>
+              <input
+                id="guide-form-title"
+                type="text"
+                required
+                placeholder="Contoh: Printer Resep Macet / Offline"
+                class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+                Kategori Hardware <span class="text-red-500">*</span>
+              </label>
+              <select
+                id="guide-form-category"
+                required
+                class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
+              >
+                <option value="" disabled selected>Pilih Kategori Hardware</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2: HARDWARE & LOCATION -->
+        <div class="space-y-4 pt-2">
+          <div class="pb-2 border-b border-slate-100">
+            <h4 class="text-xs font-bold text-[#03B1C0] uppercase tracking-wider flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base">devices</span>
+              <span>2. Hardware & Location</span>
+            </h4>
+            <p class="text-[11px] text-slate-500 mt-0.5">Identitas perangkat, lingkup ruangan, dokumentasi fisik, dan estimasi waktu penanganan.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+                Key Code (Opsional)
+              </label>
+              <input
+                id="guide-form-keycode"
+                type="text"
+                placeholder="Dibuat otomatis dari judul jika kosong"
+                class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 font-mono placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
+              />
+              <span class="text-[10px] text-slate-400 block mt-1">Hanya huruf kecil, angka, strip (-). Contoh: printer_thermal</span>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+                Lokasi / Lingkup Ruangan <span class="text-red-500">*</span>
+              </label>
+              <input
+                id="guide-form-location"
+                type="text"
+                required
+                placeholder="Contoh: Farmasi, Kasir & Screening"
+                class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+                URL Foto Perangkat <span class="text-red-500">*</span>
+              </label>
+              <input
+                id="guide-form-image"
+                type="url"
+                required
+                placeholder="https://..."
+                class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+                Estimasi Waktu Penanganan
+              </label>
+              <input
+                id="guide-form-time"
+                type="text"
+                placeholder="Contoh: 2 - 4 Menit"
+                value="2 - 4 Menit"
+                class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: TROUBLESHOOTING INFORMATION -->
+        <div class="space-y-4 pt-2">
+          <div class="pb-2 border-b border-slate-100">
+            <h4 class="text-xs font-bold text-[#03B1C0] uppercase tracking-wider flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base">medical_services</span>
+              <span>3. Troubleshooting Information</span>
+            </h4>
+            <p class="text-[11px] text-slate-500 mt-0.5">Catatan kepatuhan keselamatan pasien, indikasi gejala masalah, dan kemungkinan penyebab.</p>
+          </div>
+
+          <!-- Hospital Safety Note -->
           <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-              Judul Masalah / SOP <span class="text-red-400">*</span>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+              Catatan Keselamatan & Kepatuhan Pasien <span class="text-red-500">*</span>
             </label>
-            <input
-              id="guide-form-title"
-              type="text"
+            <textarea
+              id="guide-form-security"
+              rows="2"
               required
-              placeholder="Contoh: Printer Resep Macet / Offline"
-              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
-            />
+              placeholder="Peringatan keselamatan bagi staf di ruangan (misal: JANGAN mencabut kabel ventilator medis...)"
+              class="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
+            ></textarea>
+          </div>
+
+          <!-- Symptoms & Causes -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+                Gejala / Indikasi Masalah (1 per baris)
+              </label>
+              <textarea
+                id="guide-form-symptoms"
+                rows="3"
+                placeholder="Lampu status merah berkedip&#10;Kertas resep tidak keluar&#10;Antrian cetak macet"
+                class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+                Kemungkinan Penyebab
+              </label>
+              <textarea
+                id="guide-form-causes"
+                rows="3"
+                placeholder="Paper jam pada roll thermal, sensor optik kotor, atau kabel USB kendor."
+                class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 4: SEARCH & AI ASSISTANCE -->
+        <div class="space-y-4 pt-2">
+          <div class="pb-2 border-b border-slate-100">
+            <h4 class="text-xs font-bold text-[#03B1C0] uppercase tracking-wider flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base">smart_toy</span>
+              <span>4. Search & AI Assistance</span>
+            </h4>
+            <p class="text-[11px] text-slate-500 mt-0.5">Optimasi pencarian cerdas dan pertanyaan otomatis untuk asisten AI Gemini.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+                Shortcut Prompt AI Gemini
+              </label>
+              <input
+                id="guide-form-prompt"
+                type="text"
+                placeholder="Contoh: Bagaimana cara mengatasi printer resep farmasi macet?"
+                class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+                Kata Kunci Pencarian (Keywords)
+              </label>
+              <input
+                id="guide-form-keywords"
+                type="text"
+                placeholder="printer resep macet thermal etiket kasir"
+                class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 5: PUBLICATION STATUS -->
+        <div class="space-y-4 pt-2">
+          <div class="pb-2 border-b border-slate-100">
+            <h4 class="text-xs font-bold text-[#03B1C0] uppercase tracking-wider flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base">visibility</span>
+              <span>5. Publication Status</span>
+            </h4>
+            <p class="text-[11px] text-slate-500 mt-0.5">Tentukan visibilitas panduan pada Portal Pengguna publik.</p>
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-              Kategori Hardware <span class="text-red-400">*</span>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+              Status Publikasi
             </label>
             <select
-              id="guide-form-category"
-              required
-              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+              id="guide-form-status"
+              class="w-full sm:w-72 px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
             >
-              <option value="" disabled selected>Pilih Kategori Hardware</option>
+              <option value="DRAFT">DRAFT (Disimpan internal tim IT)</option>
+              <option value="PUBLISHED">PUBLISHED (Langsung tampil di Portal Publik)</option>
             </select>
           </div>
         </div>
 
-        <!-- Row 2: Key Code & Location Scope -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-              Key Code (Opsional)
-            </label>
-            <input
-              id="guide-form-keycode"
-              type="text"
-              placeholder="Dibuat otomatis dari judul jika kosong"
-              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white font-mono placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
-            />
-            <span class="text-[10px] text-slate-500 block mt-1">Hanya huruf kecil, angka, strip (-). Contoh: printer_thermal</span>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-              Lokasi / Lingkup Ruangan <span class="text-red-400">*</span>
-            </label>
-            <input
-              id="guide-form-location"
-              type="text"
-              required
-              placeholder="Contoh: Farmasi, Kasir & Screening"
-              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
-            />
-          </div>
-        </div>
-
-        <!-- Row 3: Image URL & Estimated Time -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-              URL Foto Perangkat <span class="text-red-400">*</span>
-            </label>
-            <input
-              id="guide-form-image"
-              type="url"
-              required
-              placeholder="https://..."
-              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-              Estimasi Waktu Penanganan
-            </label>
-            <input
-              id="guide-form-time"
-              type="text"
-              placeholder="Contoh: 2 - 4 Menit"
-              value="2 - 4 Menit"
-              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
-            />
-          </div>
-        </div>
-
-        <!-- Row 4: Security Note (Hospital Safety Note) -->
-        <div>
-          <label class="block text-xs font-semibold text-red-300 uppercase tracking-wider mb-1.5">
-            Catatan Keselamatan & Kepatuhan Pasien <span class="text-red-400">*</span>
-          </label>
-          <textarea
-            id="guide-form-security"
-            rows="2"
-            required
-            placeholder="Peringatan keselamatan bagi staf di ruangan (misal: JANGAN mencabut kabel ventilator medis...)"
-            class="w-full px-3.5 py-2 bg-red-950/20 border border-red-900/60 rounded-xl text-xs text-red-200 placeholder-red-400/50 focus:outline-none focus:ring-1 focus:ring-red-500"
-          ></textarea>
-        </div>
-
-        <!-- Row 5: Symptoms & Causes -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-              Gejala / Indikasi Masalah (1 per baris)
-            </label>
-            <textarea
-              id="guide-form-symptoms"
-              rows="3"
-              placeholder="Lampu status merah berkedip&#10;Kertas resep tidak keluar&#10;Antrian cetak macet"
-              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
-            ></textarea>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-              Kemungkinan Penyebab
-            </label>
-            <textarea
-              id="guide-form-causes"
-              rows="3"
-              placeholder="Paper jam pada roll thermal, sensor optik kotor, atau kabel USB kendor."
-              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
-            ></textarea>
-          </div>
-        </div>
-
-        <!-- Row 6: Prompt Shortcut & Keywords -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-              Shortcut Prompt AI Gemini
-            </label>
-            <input
-              id="guide-form-prompt"
-              type="text"
-              placeholder="Contoh: Bagaimana cara mengatasi printer resep farmasi macet?"
-              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-              Kata Kunci Pencarian (Keywords)
-            </label>
-            <input
-              id="guide-form-keywords"
-              type="text"
-              placeholder="printer resep macet thermal etiket kasir"
-              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
-            />
-          </div>
-        </div>
-
-        <!-- Row 7: Initial Status -->
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-            Status Publikasi
-          </label>
-          <select
-            id="guide-form-status"
-            class="w-full sm:w-60 px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
-          >
-            <option value="DRAFT">DRAFT (Disimpan internal)</option>
-            <option value="PUBLISHED">PUBLISHED (Langsung tampil di Portal)</option>
-          </select>
-        </div>
-
-        <!-- DYNAMIC STEPS BUILDER SECTION -->
-        <div class="pt-4 border-t border-slate-800">
-          <div class="flex items-center justify-between mb-3">
+        <!-- SECTION 6: DYNAMIC STEPS BUILDER -->
+        <div class="space-y-4 pt-2">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
             <div>
-              <h4 class="text-sm font-bold text-white flex items-center gap-1.5">
-                <span class="material-symbols-outlined text-[#0097A7] text-base">format_list_numbered</span>
-                <span>Langkah-Langkah Troubleshooting (SOP Steps)</span>
+              <h4 class="text-xs font-bold text-[#03B1C0] uppercase tracking-wider flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-base">format_list_numbered</span>
+                <span>6. Troubleshooting Steps</span>
               </h4>
-              <p class="text-[11px] text-slate-400 mt-0.5">
-                Susun langkah terurut yang jelas dan mudah dipraktikkan staf ruangan.
+              <p class="text-[11px] text-slate-500 mt-0.5">
+                Susun langkah-langkah terurut yang jelas dan mudah dipraktikkan staf ruangan.
               </p>
             </div>
             <button
               type="button"
               onclick="addStepToBuilder()"
-              class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-400 hover:text-cyan-300 text-xs font-semibold inline-flex items-center gap-1 transition-colors"
+              class="px-3.5 py-1.5 rounded-xl bg-[#03B1C0] hover:bg-[#0298a5] text-white text-xs font-semibold inline-flex items-center gap-1 transition-colors shadow-xs cursor-pointer"
             >
               <span class="material-symbols-outlined text-sm">add</span>
               <span>Tambah Langkah</span>
@@ -966,18 +1019,18 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+        <div class="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
           <button
             type="button"
             onclick="closeGuideFormModal()"
-            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+            class="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
           >
             Batal
           </button>
           <button
             id="guide-form-submit-btn"
             type="submit"
-            class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#0097A7] to-cyan-600 hover:from-cyan-600 hover:to-[#00828A] shadow-lg shadow-cyan-900/30 transition-all flex items-center gap-1.5"
+            class="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#03B1C0] hover:bg-[#0298a5] shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <span class="material-symbols-outlined text-base">save</span>
             <span>Simpan Panduan</span>
@@ -991,16 +1044,16 @@
   <!-- =========================================================================
        MODAL 3: FORM TAMBAH / EDIT KATEGORI
        ========================================================================= -->
-  <div id="category-form-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 my-8 relative">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
-        <h3 id="category-form-modal-title" class="text-lg font-bold font-brand text-white">
+  <div id="category-form-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30 backdrop-blur-xs overflow-y-auto">
+    <div class="w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-xl p-6 sm:p-8 my-8 relative text-slate-800">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-200 mb-6">
+        <h3 id="category-form-modal-title" class="text-lg font-bold font-brand text-slate-900">
           Tambah Kategori Hardware Baru
         </h3>
         <button
           type="button"
           onclick="closeCategoryFormModal()"
-          class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+          class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
         >
           <span class="material-symbols-outlined text-xl">close</span>
         </button>
@@ -1008,33 +1061,33 @@
 
       <form id="category-form" onsubmit="handleCategoryFormSubmit(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-            Nama Kategori <span class="text-red-400">*</span>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            Nama Kategori <span class="text-red-500">*</span>
           </label>
           <input
             id="cat-form-name"
             type="text"
             required
             placeholder="Contoh: Server & Jaringan ICU"
-            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
             Slug URL (Opsional)
           </label>
           <input
             id="cat-form-slug"
             type="text"
             placeholder="Otomatis dari nama (contoh: server-jaringan-icu)"
-            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white font-mono placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 font-mono placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           />
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
               Nama Icon Material
             </label>
             <input
@@ -1042,32 +1095,32 @@
               type="text"
               value="devices"
               placeholder="devices / print / lan"
-              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white font-mono placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+              class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 font-mono placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
             />
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
               Urutan Tampilan
             </label>
             <input
               id="cat-form-order"
               type="number"
               value="0"
-              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+              class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
             />
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
             Deskripsi Kategori
           </label>
           <textarea
             id="cat-form-desc"
             rows="3"
             placeholder="Deskripsi perangkat dan modul yang tercakup dalam kategori ini..."
-            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           ></textarea>
         </div>
 
@@ -1076,25 +1129,25 @@
             id="cat-form-active"
             type="checkbox"
             checked
-            class="w-4 h-4 rounded text-[#0097A7] focus:ring-[#0097A7] bg-slate-950 border-slate-700"
+            class="w-4 h-4 rounded text-[#03B1C0] focus:ring-[#03B1C0] border-slate-300"
           />
-          <label for="cat-form-active" class="text-xs font-semibold text-slate-300">
+          <label for="cat-form-active" class="text-xs font-semibold text-slate-700">
             Aktifkan Kategori (Dapat dipilih untuk panduan baru)
           </label>
         </div>
 
-        <div class="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+        <div class="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
           <button
             type="button"
             onclick="closeCategoryFormModal()"
-            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+            class="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
           >
             Batal
           </button>
           <button
             id="category-form-submit-btn"
             type="submit"
-            class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#0097A7] to-cyan-600 hover:from-cyan-600 hover:to-[#00828A] shadow-lg shadow-cyan-900/30 transition-all flex items-center gap-1.5"
+            class="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#03B1C0] hover:bg-[#0298a5] shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <span class="material-symbols-outlined text-base">save</span>
             <span>Simpan Kategori</span>
@@ -1107,26 +1160,26 @@
   <!-- =========================================================================
        MODAL 4: KONFIRMASI AKSI (CONFIRMATION DIALOG)
        ========================================================================= -->
-  <div id="admin-confirm-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 relative text-center">
-      <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/30 flex items-center justify-center mx-auto mb-4">
+  <div id="admin-confirm-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30 backdrop-blur-xs">
+    <div class="w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-xl p-6 relative text-center text-slate-800">
+      <div class="w-12 h-12 rounded-2xl bg-slate-100 text-[#03B1C0] border border-slate-200 flex items-center justify-center mx-auto mb-4">
         <span class="material-symbols-outlined text-2xl">help_outline</span>
       </div>
-      <h3 id="confirm-modal-title" class="text-base font-bold text-white mb-2">Konfirmasi Tindakan</h3>
-      <p id="confirm-modal-message" class="text-xs text-slate-400 leading-relaxed mb-6">
+      <h3 id="confirm-modal-title" class="text-base font-bold text-slate-900 mb-2">Konfirmasi Tindakan</h3>
+      <p id="confirm-modal-message" class="text-xs text-slate-500 leading-relaxed mb-6">
         Apakah Anda yakin ingin melanjutkan tindakan ini?
       </p>
       <div class="flex items-center justify-center gap-3">
         <button
           onclick="closeConfirmModal()"
-          class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+          class="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
         >
           Batalkan
         </button>
         <button
           id="confirm-modal-action-btn"
           onclick="executeConfirmAction()"
-          class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-cyan-600 hover:bg-cyan-500 shadow-md transition-all"
+          class="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-[#03B1C0] hover:bg-[#0298a5] shadow-xs transition-all cursor-pointer"
         >
           Konfirmasi
         </button>
@@ -1137,17 +1190,17 @@
   <!-- =========================================================================
        MODAL 5: TAMBAH STAF IT (USER PROVISIONING)
        ========================================================================= -->
-  <div id="user-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-    <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 my-8 relative">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
-        <h3 class="text-lg font-bold font-brand text-white flex items-center gap-2">
-          <span class="material-symbols-outlined text-[#0097A7]">person_add</span>
+  <div id="user-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30 backdrop-blur-xs overflow-y-auto">
+    <div class="w-full max-w-lg bg-white border border-slate-200 rounded-2xl shadow-xl p-6 sm:p-8 my-8 relative text-slate-800">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-200 mb-6">
+        <h3 class="text-lg font-bold font-brand text-slate-900 flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#03B1C0]">person_add</span>
           <span>Tambah Akun Staf IT Baru</span>
         </h3>
         <button
           type="button"
           onclick="closeUserModal()"
-          class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+          class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
         >
           <span class="material-symbols-outlined text-xl">close</span>
         </button>
@@ -1155,66 +1208,66 @@
 
       <form id="user-form" onsubmit="handleUserFormSubmit(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-            Nama Lengkap <span class="text-red-400">*</span>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            Nama Lengkap <span class="text-red-500">*</span>
           </label>
           <input
             id="user-form-name"
             type="text"
             required
             placeholder="Contoh: Budi Santoso"
-            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           />
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-              Username <span class="text-red-400">*</span>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              Username <span class="text-red-500">*</span>
             </label>
             <input
               id="user-form-username"
               type="text"
               required
               placeholder="budi.santoso"
-              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white font-mono placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+              class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 font-mono placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
             />
-            <span class="text-[10px] text-slate-500 block mt-1">3-50 karakter (huruf, angka, titik, underscore)</span>
+            <span class="text-[10px] text-slate-400 block mt-1">3-50 karakter (huruf, angka, titik, underscore)</span>
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-              Alamat Email <span class="text-red-400">*</span>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              Alamat Email <span class="text-red-500">*</span>
             </label>
             <input
               id="user-form-email"
               type="email"
               required
               placeholder="budi@rsawalbros.com"
-              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+              class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
             />
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-            Hak Akses / Role Akun <span class="text-red-400">*</span>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            Hak Akses / Role Akun <span class="text-red-500">*</span>
           </label>
           <select
             id="user-form-role"
             required
-            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           >
             <!-- Injected by applyRBAC / openUserModal based on hierarchy -->
           </select>
-          <span id="user-form-role-hint" class="text-[10px] text-slate-500 block mt-1">
+          <span id="user-form-role-hint" class="text-[10px] text-slate-400 block mt-1">
             Role menentukan batas otorisasi dan fungsi di portal.
           </span>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-            Kata Sandi Awal <span class="text-red-400">*</span>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            Kata Sandi Awal <span class="text-red-500">*</span>
           </label>
           <input
             id="user-form-password"
@@ -1222,22 +1275,22 @@
             required
             minlength="8"
             placeholder="Minimal 8 karakter"
-            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           />
         </div>
 
-        <div class="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+        <div class="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
           <button
             type="button"
             onclick="closeUserModal()"
-            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+            class="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
           >
             Batal
           </button>
           <button
             id="user-form-submit-btn"
             type="submit"
-            class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#0097A7] to-cyan-600 hover:from-cyan-600 hover:to-[#00828A] shadow-lg shadow-cyan-900/30 transition-all flex items-center gap-1.5"
+            class="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#03B1C0] hover:bg-[#0298a5] shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <span class="material-symbols-outlined text-base">person_add</span>
             <span>Simpan Akun Staf</span>
@@ -1250,17 +1303,17 @@
   <!-- =========================================================================
        MODAL 6: DETAIL LOG AUDIT (INSPECTION MODAL)
        ========================================================================= -->
-  <div id="audit-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-    <div class="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 my-8 relative">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
-        <h3 class="text-lg font-bold font-brand text-white flex items-center gap-2">
-          <span class="material-symbols-outlined text-cyan-400">policy</span>
+  <div id="audit-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30 backdrop-blur-xs overflow-y-auto">
+    <div class="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-xl p-6 sm:p-8 my-8 relative text-slate-800">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-200 mb-6">
+        <h3 class="text-lg font-bold font-brand text-slate-900 flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#03B1C0]">policy</span>
           <span>Detail Log Audit Aktivitas</span>
         </h3>
         <button
           type="button"
           onclick="closeAuditDetailModal()"
-          class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+          class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
         >
           <span class="material-symbols-outlined text-xl">close</span>
         </button>
@@ -1270,10 +1323,10 @@
         <!-- Injected via JavaScript -->
       </div>
 
-      <div class="pt-4 border-t border-slate-800 flex justify-end">
+      <div class="pt-4 border-t border-slate-200 flex justify-end">
         <button
           onclick="closeAuditDetailModal()"
-          class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+          class="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
         >
           Tutup
         </button>
@@ -1284,17 +1337,17 @@
   <!-- =========================================================================
        MODAL 7: GANTI KATA SANDI SENDIRI (SELF-SERVICE PASSWORD CHANGE)
        ========================================================================= -->
-  <div id="change-password-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 my-8 relative">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
-        <h3 class="text-lg font-bold font-brand text-white flex items-center gap-2">
-          <span class="material-symbols-outlined text-cyan-400">key</span>
+  <div id="change-password-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30 backdrop-blur-xs overflow-y-auto">
+    <div class="w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-xl p-6 sm:p-8 my-8 relative text-slate-800">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-200 mb-6">
+        <h3 class="text-lg font-bold font-brand text-slate-900 flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#03B1C0]">key</span>
           <span>Ganti Kata Sandi Akun Anda</span>
         </h3>
         <button
           type="button"
           onclick="closeChangePasswordModal()"
-          class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+          class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
         >
           <span class="material-symbols-outlined text-xl">close</span>
         </button>
@@ -1302,21 +1355,21 @@
 
       <form id="change-password-form" onsubmit="handleChangePasswordSubmit(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-            Kata Sandi Saat Ini <span class="text-red-400">*</span>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            Kata Sandi Saat Ini <span class="text-red-500">*</span>
           </label>
           <input
             id="change-pw-current"
             type="password"
             required
             placeholder="Masukkan kata sandi lama Anda"
-            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-            Kata Sandi Baru <span class="text-red-400">*</span>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            Kata Sandi Baru <span class="text-red-500">*</span>
           </label>
           <input
             id="change-pw-new"
@@ -1324,13 +1377,13 @@
             required
             minlength="8"
             placeholder="Minimal 8 karakter"
-            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-            Konfirmasi Kata Sandi Baru <span class="text-red-400">*</span>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            Konfirmasi Kata Sandi Baru <span class="text-red-500">*</span>
           </label>
           <input
             id="change-pw-confirm"
@@ -1338,22 +1391,22 @@
             required
             minlength="8"
             placeholder="Ulangi kata sandi baru"
-            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           />
         </div>
 
-        <div class="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+        <div class="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
           <button
             type="button"
             onclick="closeChangePasswordModal()"
-            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+            class="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
           >
             Batal
           </button>
           <button
             id="change-password-submit-btn"
             type="submit"
-            class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#0097A7] to-cyan-600 hover:from-cyan-600 hover:to-[#00828A] shadow-lg shadow-cyan-900/30 transition-all flex items-center gap-1.5"
+            class="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#03B1C0] hover:bg-[#0298a5] shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <span class="material-symbols-outlined text-base">save</span>
             <span>Perbarui Sandi</span>
@@ -1366,34 +1419,34 @@
   <!-- =========================================================================
        MODAL 8: RESET KATA SANDI STAF (ADMIN RESET)
        ========================================================================= -->
-  <div id="reset-password-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 my-8 relative">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
-        <h3 class="text-lg font-bold font-brand text-white flex items-center gap-2">
-          <span class="material-symbols-outlined text-amber-400">lock_reset</span>
+  <div id="reset-password-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30 backdrop-blur-xs overflow-y-auto">
+    <div class="w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-xl p-6 sm:p-8 my-8 relative text-slate-800">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-200 mb-4">
+        <h3 class="text-lg font-bold font-brand text-slate-900 flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#03B1C0]">lock_reset</span>
           <span>Reset Kata Sandi Staf</span>
         </h3>
         <button
           type="button"
           onclick="closeResetPasswordModal()"
-          class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+          class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
         >
           <span class="material-symbols-outlined text-xl">close</span>
         </button>
       </div>
 
-      <div class="mb-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200">
+      <div class="mb-4 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700">
         <p>Anda akan mereset kata sandi akun untuk:</p>
-        <div class="font-bold text-white mt-1" id="reset-pw-target-name">Memuat...</div>
-        <div class="text-[11px] font-mono text-amber-300 mt-0.5" id="reset-pw-target-user">@username</div>
+        <div class="font-bold text-slate-900 mt-1" id="reset-pw-target-name">Memuat...</div>
+        <div class="text-[11px] font-mono text-slate-500 mt-0.5" id="reset-pw-target-user">@username</div>
       </div>
 
       <form id="reset-password-form" onsubmit="handleResetPasswordSubmit(event)" class="space-y-4">
         <input type="hidden" id="reset-pw-target-id" value="" />
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-            Kata Sandi Baru <span class="text-red-400">*</span>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            Kata Sandi Baru <span class="text-red-500">*</span>
           </label>
           <input
             id="reset-pw-new"
@@ -1401,13 +1454,13 @@
             required
             minlength="8"
             placeholder="Minimal 8 karakter"
-            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-            Konfirmasi Kata Sandi Baru <span class="text-red-400">*</span>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            Konfirmasi Kata Sandi Baru <span class="text-red-500">*</span>
           </label>
           <input
             id="reset-pw-confirm"
@@ -1415,22 +1468,22 @@
             required
             minlength="8"
             placeholder="Ulangi kata sandi baru"
-            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           />
         </div>
 
-        <div class="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+        <div class="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
           <button
             type="button"
             onclick="closeResetPasswordModal()"
-            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+            class="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
           >
             Batal
           </button>
           <button
             id="reset-password-submit-btn"
             type="submit"
-            class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 shadow-lg shadow-amber-900/30 transition-all flex items-center gap-1.5"
+            class="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#03B1C0] hover:bg-[#0298a5] shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <span class="material-symbols-outlined text-base">lock_reset</span>
             <span>Reset Kata Sandi</span>
@@ -1443,17 +1496,17 @@
   <!-- =========================================================================
        MODAL 9: EDIT PROFIL STAF IT (ADMIN USER PROFILE UPDATE)
        ========================================================================= -->
-  <div id="edit-user-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-    <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 my-8 relative">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
-        <h3 class="text-lg font-bold font-brand text-white flex items-center gap-2">
-          <span class="material-symbols-outlined text-[#0097A7]">manage_accounts</span>
+  <div id="edit-user-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30 backdrop-blur-xs overflow-y-auto">
+    <div class="w-full max-w-lg bg-white border border-slate-200 rounded-2xl shadow-xl p-6 sm:p-8 my-8 relative text-slate-800">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-200 mb-6">
+        <h3 class="text-lg font-bold font-brand text-slate-900 flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#03B1C0]">manage_accounts</span>
           <span>Edit Profil Staf IT</span>
         </h3>
         <button
           type="button"
           onclick="closeEditUserModal()"
-          class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+          class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
         >
           <span class="material-symbols-outlined text-xl">close</span>
         </button>
@@ -1463,73 +1516,73 @@
         <input type="hidden" id="edit-user-target-id" value="" />
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-            Nama Lengkap <span class="text-red-400">*</span>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            Nama Lengkap <span class="text-red-500">*</span>
           </label>
           <input
             id="edit-user-name"
             type="text"
             required
             placeholder="Contoh: Budi Santoso"
-            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           />
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
               Username (Tetap)
             </label>
             <input
               id="edit-user-username"
               type="text"
               disabled
-              class="w-full px-3.5 py-2 bg-slate-950/50 border border-slate-800 rounded-xl text-xs text-slate-500 font-mono cursor-not-allowed"
+              class="w-full px-3.5 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-xs text-slate-500 font-mono cursor-not-allowed"
             />
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-              Alamat Email <span class="text-red-400">*</span>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              Alamat Email <span class="text-red-500">*</span>
             </label>
             <input
               id="edit-user-email"
               type="email"
               required
               placeholder="budi@rsawalbros.com"
-              class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+              class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
             />
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-            Hak Akses / Role Akun <span class="text-red-400">*</span>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            Hak Akses / Role Akun <span class="text-red-500">*</span>
           </label>
           <select
             id="edit-user-role"
             required
-            class="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
           >
             <!-- Injected by openEditUserModal based on hierarchy -->
           </select>
-          <span id="edit-user-role-hint" class="text-[10px] text-slate-500 block mt-1">
+          <span id="edit-user-role-hint" class="text-[10px] text-slate-400 block mt-1">
             Role menentukan batas otorisasi di portal.
           </span>
         </div>
 
-        <div class="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+        <div class="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
           <button
             type="button"
             onclick="closeEditUserModal()"
-            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+            class="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
           >
             Batal
           </button>
           <button
             id="edit-user-submit-btn"
             type="submit"
-            class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#0097A7] to-cyan-600 hover:from-cyan-600 hover:to-[#00828A] shadow-lg shadow-cyan-900/30 transition-all flex items-center gap-1.5"
+            class="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#03B1C0] hover:bg-[#0298a5] shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <span class="material-symbols-outlined text-base">save</span>
             <span>Simpan Perubahan</span>

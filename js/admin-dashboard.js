@@ -104,17 +104,17 @@
     if (avatarEl) avatarEl.textContent = user.full_name ? user.full_name.charAt(0).toUpperCase() : 'U';
 
     if (roleBadgeEl) {
-      let roleClass = 'bg-slate-700 text-slate-200 border-slate-600';
+      let roleClass = 'bg-slate-100 text-slate-700 border-slate-200';
       let roleLabel = user.role;
 
       if (user.role === 'ADMIN') {
-        roleClass = 'bg-red-500/10 text-red-400 border-red-500/30';
+        roleClass = 'bg-red-50 text-red-700 border-red-200';
         roleLabel = 'ADMINISTRATOR';
       } else if (user.role === 'IT_MANAGER') {
-        roleClass = 'bg-[#0097A7]/10 text-cyan-400 border-[#0097A7]/30';
+        roleClass = 'bg-[#03B1C0]/10 text-[#03B1C0] border-[#03B1C0]/30';
         roleLabel = 'IT MANAGER';
       } else if (user.role === 'IT_SUPPORT') {
-        roleClass = 'bg-blue-500/10 text-blue-400 border-blue-500/30';
+        roleClass = 'bg-slate-100 text-slate-700 border-slate-200';
         roleLabel = 'IT SUPPORT (READ-ONLY)';
       }
 
@@ -155,14 +155,14 @@
 
     // Update Tab Buttons UI
     document.querySelectorAll('.admin-nav-btn').forEach((btn) => {
-      btn.classList.remove('border-[#0097A7]', 'text-[#0097A7]', 'bg-slate-800');
-      btn.classList.add('border-transparent', 'text-slate-400');
+      btn.classList.remove('border-[#03B1C0]', 'text-[#03B1C0]', 'bg-slate-50', 'font-bold');
+      btn.classList.add('border-transparent', 'text-slate-600', 'font-medium');
     });
 
     const activeBtn = document.getElementById(`tab-btn-${tabName}`);
     if (activeBtn) {
-      activeBtn.classList.remove('border-transparent', 'text-slate-400');
-      activeBtn.classList.add('border-[#0097A7]', 'text-[#0097A7]', 'bg-slate-800');
+      activeBtn.classList.remove('border-transparent', 'text-slate-600', 'font-medium');
+      activeBtn.classList.add('border-[#03B1C0]', 'text-[#03B1C0]', 'bg-slate-50', 'font-bold');
       if (typeof activeBtn.scrollIntoView === 'function') {
         activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       }
@@ -350,24 +350,26 @@
 
     const recent = [...state.guides].slice(0, 5);
     recentContainer.innerHTML = recent.map((guide) => `
-      <tr class="hover:bg-slate-800/40 transition-colors border-b border-slate-800/60 text-xs">
-        <td class="py-3 px-4 font-semibold text-slate-200">
+      <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 text-xs">
+        <td class="py-3 px-4 font-semibold text-slate-800">
           <div class="flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full ${getStatusDotClass(guide.status)}"></span>
-            <span>${escapeHTML(guide.title)}</span>
+            <span class="w-2 h-2 rounded-full ${getStatusDotClass(guide.status)}"></span>
+            <span class="font-bold hover:text-[#03B1C0] cursor-pointer" onclick="viewGuideDetail('${guide.id}')">${escapeHTML(guide.title)}</span>
           </div>
           <span class="text-[10px] text-slate-500 font-mono font-normal block mt-0.5">key: ${escapeHTML(guide.key_code)}</span>
         </td>
-        <td class="py-3 px-4 text-slate-400">
-          <span class="inline-flex items-center gap-1">
-            <span class="material-symbols-outlined text-sm text-cyan-400">${escapeHTML(guide.category ? guide.category.icon : 'folder')}</span>
+        <td class="py-3 px-4 text-slate-600">
+          <span class="inline-flex items-center gap-1.5">
+            <div class="icon-box icon-box-sm text-[#03B1C0] shrink-0">
+              <span class="material-symbols-outlined text-sm">${escapeHTML(guide.category ? guide.category.icon : 'folder')}</span>
+            </div>
             <span>${escapeHTML(guide.category ? guide.category.name : '-')}</span>
           </span>
         </td>
-        <td class="py-3 px-4 text-slate-400 font-mono">${guide.step_count || 0} Langkah</td>
+        <td class="py-3 px-4 text-slate-600 font-mono">${guide.step_count || 0} Langkah</td>
         <td class="py-3 px-4">${renderStatusBadge(guide.status)}</td>
         <td class="py-3 px-4 text-right">
-          <button onclick="viewGuideDetail('${guide.id}')" class="text-cyan-400 hover:text-cyan-300 font-medium px-2 py-1 rounded hover:bg-cyan-500/10 transition-colors">
+          <button onclick="viewGuideDetail('${guide.id}')" class="text-[#03B1C0] hover:text-[#028e9b] font-medium px-2.5 py-1 rounded-lg hover:bg-[#03B1C0]/10 transition-colors">
             Lihat Detail
           </button>
         </td>
@@ -389,14 +391,14 @@
 
     // Update filter buttons
     document.querySelectorAll('.guide-status-filter-btn').forEach((btn) => {
-      btn.classList.remove('bg-[#0097A7]', 'text-white', 'font-semibold');
-      btn.classList.add('bg-slate-800', 'text-slate-400');
+      btn.classList.remove('bg-[#03B1C0]', 'text-white', 'font-semibold');
+      btn.classList.add('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
     });
 
     const activeBtn = document.getElementById(`status-filter-${status.toLowerCase()}`);
     if (activeBtn) {
-      activeBtn.classList.remove('bg-slate-800', 'text-slate-400');
-      activeBtn.classList.add('bg-[#0097A7]', 'text-white', 'font-semibold');
+      activeBtn.classList.remove('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
+      activeBtn.classList.add('bg-[#03B1C0]', 'text-white', 'font-semibold');
     }
 
     loadGuides();
@@ -452,31 +454,31 @@
     const isReadOnly = state.currentUser?.role === 'IT_SUPPORT';
 
     tbody.innerHTML = state.filteredGuides.map((guide) => `
-      <tr class="hover:bg-slate-800/50 transition-colors border-b border-slate-800/60 text-xs">
+      <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 text-xs">
         <!-- Title & Key -->
-        <td class="py-3.5 px-4 font-semibold text-slate-200">
+        <td class="py-3.5 px-4 font-semibold text-slate-800">
           <div class="flex items-start gap-2.5">
-            <div class="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0 text-cyan-400 mt-0.5">
+            <div class="icon-box icon-box-sm text-[#03B1C0] shrink-0 mt-0.5">
               <span class="material-symbols-outlined text-base">${escapeHTML(guide.category ? guide.category.icon : 'devices')}</span>
             </div>
             <div>
-              <span class="font-bold text-slate-100 text-[13px] block hover:text-cyan-400 cursor-pointer" onclick="viewGuideDetail('${guide.id}')">
+              <span class="font-bold text-slate-900 text-[13px] block hover:text-[#03B1C0] cursor-pointer" onclick="viewGuideDetail('${guide.id}')">
                 ${escapeHTML(guide.title)}
               </span>
-              <div class="flex items-center gap-2 mt-1 text-[11px] text-slate-400 font-normal">
-                <span class="font-mono bg-slate-800/80 px-1.5 py-0.5 rounded border border-slate-700/60 text-slate-400">
+              <div class="flex items-center gap-2 mt-1 text-[11px] text-slate-500 font-normal">
+                <span class="font-mono bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 text-slate-600">
                   ${escapeHTML(guide.key_code)}
                 </span>
                 <span>&bull;</span>
-                <span class="text-slate-400">${escapeHTML(guide.location_scope || '-')}</span>
+                <span class="text-slate-500">${escapeHTML(guide.location_scope || '-')}</span>
               </div>
             </div>
           </div>
         </td>
 
         <!-- Category -->
-        <td class="py-3.5 px-4 text-slate-300">
-          <span class="font-medium text-slate-300">${escapeHTML(guide.category ? guide.category.name : '-')}</span>
+        <td class="py-3.5 px-4 text-slate-700">
+          <span class="font-medium text-slate-700">${escapeHTML(guide.category ? guide.category.name : '-')}</span>
         </td>
 
         <!-- Status -->
@@ -486,16 +488,16 @@
 
         <!-- Steps -->
         <td class="py-3.5 px-4">
-          <span class="inline-flex items-center gap-1.5 font-mono text-slate-300 font-medium">
-            <span class="material-symbols-outlined text-xs text-slate-500">format_list_numbered</span>
+          <span class="inline-flex items-center gap-1.5 font-mono text-slate-700 font-medium">
+            <span class="material-symbols-outlined text-xs text-slate-400">format_list_numbered</span>
             <span>${guide.step_count || 0} Langkah</span>
           </span>
         </td>
 
         <!-- Author & Time -->
-        <td class="py-3.5 px-4 text-slate-400 text-[11px]">
-          <div>${escapeHTML(guide.author ? guide.author.full_name : 'Sistem')}</div>
-          <div class="text-slate-500 text-[10px] mt-0.5">${formatDate(guide.updated_at || guide.created_at)}</div>
+        <td class="py-3.5 px-4 text-slate-500 text-[11px]">
+          <div class="font-medium text-slate-700">${escapeHTML(guide.author ? guide.author.full_name : 'Sistem')}</div>
+          <div class="text-slate-400 text-[10px] mt-0.5">${formatDate(guide.updated_at || guide.created_at)}</div>
         </td>
 
         <!-- Actions -->
@@ -504,7 +506,7 @@
             <!-- View Detail (All Roles) -->
             <button
               onclick="viewGuideDetail('${guide.id}')"
-              class="p-1.5 text-slate-400 hover:text-cyan-400 hover:bg-slate-800 rounded-lg transition-colors"
+              class="p-1.5 text-slate-500 hover:text-[#03B1C0] hover:bg-slate-100 rounded-lg transition-colors"
               title="Lihat Detail Lengkap"
             >
               <span class="material-symbols-outlined text-lg">visibility</span>
@@ -514,7 +516,7 @@
               <!-- Edit Guide (ADMIN & IT_MANAGER) -->
               <button
                 onclick="openEditGuideModal('${guide.id}')"
-                class="p-1.5 text-slate-400 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition-colors"
+                class="p-1.5 text-slate-500 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
                 title="Edit Panduan & Langkah"
               >
                 <span class="material-symbols-outlined text-lg">edit</span>
@@ -524,14 +526,14 @@
               ${guide.status === 'DRAFT' ? `
                 <button
                   onclick="confirmStatusChange('${guide.id}', 'PUBLISHED', '${escapeHTML(guide.title)}')"
-                  class="p-1.5 text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 rounded-lg transition-colors"
+                  class="p-1.5 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors"
                   title="Publikasikan ke Portal Pengguna"
                 >
                   <span class="material-symbols-outlined text-lg">publish</span>
                 </button>
                 <button
                   onclick="confirmStatusChange('${guide.id}', 'ARCHIVED', '${escapeHTML(guide.title)}')"
-                  class="p-1.5 text-slate-400 hover:text-slate-300 hover:bg-slate-800 rounded-lg transition-colors"
+                  class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
                   title="Arsipkan Panduan"
                 >
                   <span class="material-symbols-outlined text-lg">archive</span>
@@ -541,7 +543,7 @@
               ${guide.status === 'PUBLISHED' ? `
                 <button
                   onclick="confirmStatusChange('${guide.id}', 'ARCHIVED', '${escapeHTML(guide.title)}')"
-                  class="p-1.5 text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 rounded-lg transition-colors"
+                  class="p-1.5 text-amber-600 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors"
                   title="Arsipkan (Tarik dari Portal Publik)"
                 >
                   <span class="material-symbols-outlined text-lg">archive</span>
@@ -549,13 +551,13 @@
               ` : ''}
 
               ${guide.status === 'ARCHIVED' ? `
-                <span class="px-2 py-0.5 text-[10px] text-slate-500 italic">Arsip</span>
+                <span class="px-2 py-0.5 text-[10px] text-slate-400 italic">Arsip</span>
               ` : ''}
 
               <!-- Delete Guide (ADMIN & IT_MANAGER) -->
               <button
                 onclick="confirmDeleteGuide('${guide.id}', '${escapeHTML(guide.title)}')"
-                class="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                 title="Hapus Panduan Permanen"
               >
                 <span class="material-symbols-outlined text-lg">delete</span>
@@ -588,18 +590,18 @@
       const guide = await window.AdminAPI.guides.getById(guideId);
 
       const symptomsList = Array.isArray(guide.symptoms) && guide.symptoms.length > 0
-        ? guide.symptoms.map((s) => `<li class="flex items-start gap-2"><span class="text-cyan-400 mt-0.5">•</span><span>${escapeHTML(s)}</span></li>`).join('')
+        ? guide.symptoms.map((s) => `<li class="flex items-start gap-2"><span class="text-[#03B1C0] mt-0.5">•</span><span>${escapeHTML(s)}</span></li>`).join('')
         : '<li class="text-slate-500 italic">Tidak ada rincian gejala khusus.</li>';
 
       const stepsList = Array.isArray(guide.steps) && guide.steps.length > 0
         ? guide.steps.map((step) => `
-          <div class="flex items-start gap-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#002541] to-[#0097A7] text-white flex items-center justify-center font-bold text-sm shrink-0 shadow">
+          <div class="flex items-start gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="w-8 h-8 rounded-lg bg-[#03B1C0] text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
               ${step.step_number}
             </div>
             <div class="flex-1">
-              <h5 class="text-sm font-bold text-slate-200">${escapeHTML(step.title)}</h5>
-              <p class="text-xs text-slate-400 mt-1 leading-relaxed">${escapeHTML(step.instruction)}</p>
+              <h5 class="text-sm font-bold text-slate-900">${escapeHTML(step.title)}</h5>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">${escapeHTML(step.instruction)}</p>
             </div>
           </div>
         `).join('')
@@ -608,24 +610,24 @@
       content.innerHTML = `
         <div class="space-y-6">
           <!-- Header info banner -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
             <div>
               <div class="flex items-center gap-2 mb-1.5">
                 ${renderStatusBadge(guide.status)}
-                <span class="text-xs font-mono bg-slate-800 px-2 py-0.5 rounded text-slate-400 border border-slate-700">
+                <span class="text-xs font-mono bg-slate-100 px-2 py-0.5 rounded text-slate-600 border border-slate-200">
                   key: ${escapeHTML(guide.key_code)}
                 </span>
               </div>
-              <h3 class="text-lg sm:text-xl font-bold font-brand text-white">${escapeHTML(guide.title)}</h3>
-              <p class="text-xs text-slate-400 mt-1">
-                Kategori: <strong class="text-slate-300">${escapeHTML(guide.category ? guide.category.name : '-')}</strong> &bull;
-                Lokasi: <strong class="text-slate-300">${escapeHTML(guide.location_scope || '-')}</strong> &bull;
-                Estimasi: <strong class="text-slate-300">${escapeHTML(guide.estimated_time || '2 - 4 Menit')}</strong>
+              <h3 class="text-lg sm:text-xl font-bold font-brand text-slate-900">${escapeHTML(guide.title)}</h3>
+              <p class="text-xs text-slate-500 mt-1">
+                Kategori: <strong class="text-slate-700">${escapeHTML(guide.category ? guide.category.name : '-')}</strong> &bull;
+                Lokasi: <strong class="text-slate-700">${escapeHTML(guide.location_scope || '-')}</strong> &bull;
+                Estimasi: <strong class="text-slate-700">${escapeHTML(guide.estimated_time || '2 - 4 Menit')}</strong>
               </p>
             </div>
 
             ${guide.image_url ? `
-              <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden border border-slate-700 shrink-0 bg-slate-900">
+              <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden border border-slate-200 shrink-0 bg-slate-100">
                 <img src="${escapeHTML(guide.image_url)}" alt="${escapeHTML(guide.title)}" class="w-full h-full object-cover"/>
               </div>
             ` : ''}
@@ -633,40 +635,40 @@
 
           <!-- Security Note (Hospital Standard) -->
           ${guide.security_note ? `
-            <div class="p-4 rounded-xl bg-red-950/40 border border-red-800/60 text-xs text-red-200 flex items-start gap-3">
-              <span class="material-symbols-outlined text-red-400 text-lg shrink-0 mt-0.5">verified_user</span>
+            <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-xs text-red-900 flex items-start gap-3">
+              <span class="material-symbols-outlined text-red-600 text-lg shrink-0 mt-0.5">verified_user</span>
               <div>
-                <strong class="font-bold text-red-300 block mb-0.5">Catatan Keselamatan & Kepatuhan Pasien:</strong>
-                <p class="leading-relaxed">${escapeHTML(guide.security_note)}</p>
+                <strong class="font-bold text-red-900 block mb-0.5">Catatan Keselamatan & Kepatuhan Pasien:</strong>
+                <p class="leading-relaxed text-red-800">${escapeHTML(guide.security_note)}</p>
               </div>
             </div>
           ` : ''}
 
           <!-- Symptoms & Causes Grid -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-            <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800">
-              <h4 class="font-bold text-slate-300 mb-2 flex items-center gap-1.5">
-                <span class="material-symbols-outlined text-sm text-cyan-400">troubleshoot</span>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <h4 class="font-bold text-slate-900 mb-2 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm text-[#03B1C0]">troubleshoot</span>
                 <span>Gejala Masalah Terdeteksi</span>
               </h4>
-              <ul class="space-y-1.5 text-slate-400">
+              <ul class="space-y-1.5 text-slate-600">
                 ${symptomsList}
               </ul>
             </div>
 
-            <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800">
-              <h4 class="font-bold text-slate-300 mb-2 flex items-center gap-1.5">
-                <span class="material-symbols-outlined text-sm text-amber-400">help_outline</span>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <h4 class="font-bold text-slate-900 mb-2 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm text-amber-600">help_outline</span>
                 <span>Kemungkinan Penyebab</span>
               </h4>
-              <p class="text-slate-400 leading-relaxed">${escapeHTML(guide.possible_causes || 'Belum diisi.')}</p>
+              <p class="text-slate-600 leading-relaxed">${escapeHTML(guide.possible_causes || 'Belum diisi.')}</p>
             </div>
           </div>
 
           <!-- Step by step troubleshooting -->
           <div>
-            <h4 class="font-bold text-sm text-slate-200 mb-3 flex items-center gap-2">
-              <span class="material-symbols-outlined text-base text-[#0097A7]">format_list_numbered</span>
+            <h4 class="font-bold text-sm text-slate-900 mb-3 flex items-center gap-2">
+              <span class="material-symbols-outlined text-base text-[#03B1C0]">format_list_numbered</span>
               <span>Prosedur Langkah Penanganan (SOP Standar)</span>
             </h4>
             <div class="space-y-2.5">
@@ -675,17 +677,17 @@
           </div>
 
           <!-- Metadata info -->
-          <div class="pt-4 border-t border-slate-800 text-[11px] text-slate-500 flex flex-wrap items-center justify-between gap-2">
-            <span>Dibuat oleh: <strong class="text-slate-400">${escapeHTML(guide.author ? guide.author.full_name : 'Sistem')}</strong></span>
-            <span>Terakhir diperbarui: <strong class="text-slate-400">${formatDate(guide.updated_at || guide.created_at)}</strong></span>
+          <div class="pt-4 border-t border-slate-200 text-[11px] text-slate-500 flex flex-wrap items-center justify-between gap-2">
+            <span>Dibuat oleh: <strong class="text-slate-700">${escapeHTML(guide.author ? guide.author.full_name : 'Sistem')}</strong></span>
+            <span>Terakhir diperbarui: <strong class="text-slate-700">${formatDate(guide.updated_at || guide.created_at)}</strong></span>
           </div>
         </div>
       `;
     } catch (err) {
       content.innerHTML = `
-        <div class="p-6 text-center text-red-400 text-xs">
+        <div class="p-6 text-center text-red-600 text-xs">
           <p class="font-bold">Gagal memuat detail panduan.</p>
-          <p class="mt-1 text-slate-400">${escapeHTML(err.message)}</p>
+          <p class="mt-1 text-slate-500">${escapeHTML(err.message)}</p>
         </div>
       `;
     }
@@ -778,10 +780,10 @@
     if (!container) return;
 
     container.innerHTML = steps.map((step, idx) => `
-      <div class="step-item p-4 rounded-xl bg-slate-900/80 border border-slate-800 relative group space-y-3" data-step-index="${idx}">
-        <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-          <span class="text-xs font-bold text-cyan-400 flex items-center gap-1.5">
-            <span class="w-5 h-5 rounded bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-[11px] font-mono">
+      <div class="step-item p-4 rounded-xl bg-slate-50 border border-slate-200 relative group space-y-3" data-step-index="${idx}">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+          <span class="text-xs font-bold text-[#03B1C0] flex items-center gap-1.5">
+            <span class="w-5 h-5 rounded bg-[#03B1C0]/10 text-[#03B1C0] flex items-center justify-center text-[11px] font-mono">
               ${idx + 1}
             </span>
             <span>Langkah ${idx + 1}</span>
@@ -790,7 +792,7 @@
             <button
               type="button"
               onclick="moveStep(${idx}, -1)"
-              class="p-1 text-slate-500 hover:text-slate-300 hover:bg-slate-800 rounded transition-colors ${idx === 0 ? 'opacity-30 pointer-events-none' : ''}"
+              class="p-1 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded transition-colors ${idx === 0 ? 'opacity-30 pointer-events-none' : ''}"
               title="Pindah ke Atas"
             >
               <span class="material-symbols-outlined text-sm">arrow_upward</span>
@@ -798,7 +800,7 @@
             <button
               type="button"
               onclick="moveStep(${idx}, 1)"
-              class="p-1 text-slate-500 hover:text-slate-300 hover:bg-slate-800 rounded transition-colors ${idx === steps.length - 1 ? 'opacity-30 pointer-events-none' : ''}"
+              class="p-1 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded transition-colors ${idx === steps.length - 1 ? 'opacity-30 pointer-events-none' : ''}"
               title="Pindah ke Bawah"
             >
               <span class="material-symbols-outlined text-sm">arrow_downward</span>
@@ -806,7 +808,7 @@
             <button
               type="button"
               onclick="removeStep(${idx})"
-              class="p-1 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors ${steps.length <= 1 ? 'opacity-30 pointer-events-none' : ''}"
+              class="p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors ${steps.length <= 1 ? 'opacity-30 pointer-events-none' : ''}"
               title="Hapus Langkah"
             >
               <span class="material-symbols-outlined text-sm">delete</span>
@@ -815,10 +817,10 @@
         </div>
 
         <div>
-          <label class="block text-[11px] font-semibold text-slate-400 mb-1">Judul Langkah</label>
+          <label class="block text-[11px] font-semibold text-slate-700 mb-1">Judul Langkah</label>
           <input
             type="text"
-            class="step-title-input w-full px-3 py-1.5 bg-slate-950/60 border border-slate-700/80 rounded-lg text-xs text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="step-title-input w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
             placeholder="Contoh: Periksa Lampu LED Indikator Daya"
             value="${escapeHTML(step.title || '')}"
             required
@@ -826,10 +828,10 @@
         </div>
 
         <div>
-          <label class="block text-[11px] font-semibold text-slate-400 mb-1">Instruksi Detail Langkah</label>
+          <label class="block text-[11px] font-semibold text-slate-700 mb-1">Instruksi Detail Langkah</label>
           <textarea
             rows="2"
-            class="step-instruction-input w-full px-3 py-1.5 bg-slate-950/60 border border-slate-700/80 rounded-lg text-xs text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-[#0097A7]"
+            class="step-instruction-input w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#03B1C0]"
             placeholder="Jelaskan tindakan spesifik yang harus dilakukan staf di ruangan..."
             required
           >${escapeHTML(step.instruction || '')}</textarea>
@@ -1035,32 +1037,32 @@
     const isReadOnly = state.currentUser?.role === 'IT_SUPPORT';
 
     container.innerHTML = state.categories.map((cat) => `
-      <div class="p-5 rounded-2xl bg-slate-900/80 border ${cat.is_active ? 'border-slate-800' : 'border-red-900/30 opacity-75'} flex flex-col justify-between transition-all hover:border-slate-700 shadow-lg">
+      <div class="p-5 rounded-2xl bg-white border ${cat.is_active ? 'border-slate-200 shadow-sm hover:border-slate-300' : 'border-red-200 opacity-75 bg-red-50/20'} flex flex-col justify-between transition-all">
         <div>
           <div class="flex items-start justify-between gap-3 mb-3">
-            <div class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-cyan-400 shrink-0">
+            <div class="icon-box icon-box-primary shrink-0">
               <span class="material-symbols-outlined text-xl">${escapeHTML(cat.icon || 'devices')}</span>
             </div>
             <div class="flex items-center gap-1.5">
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase border ${
-                cat.is_active ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-red-500/10 text-red-400 border-red-500/30'
+                cat.is_active ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-red-50 text-red-700 border-red-200'
               }">
                 ${cat.is_active ? 'Aktif' : 'Non-aktif'}
               </span>
-              <span class="text-[11px] font-mono text-slate-500 bg-slate-950 px-2 py-0.5 rounded border border-slate-800" title="Urutan Tampilan">
+              <span class="text-[11px] font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200" title="Urutan Tampilan">
                 #${cat.display_order || 0}
               </span>
             </div>
           </div>
 
-          <h4 class="text-sm font-bold text-white mb-1">${escapeHTML(cat.name)}</h4>
-          <p class="text-[11px] font-mono text-cyan-400/80 mb-2">slug: ${escapeHTML(cat.slug)}</p>
-          <p class="text-xs text-slate-400 leading-relaxed line-clamp-3 mb-4">${escapeHTML(cat.description || 'Tidak ada deskripsi.')}</p>
+          <h4 class="text-sm font-bold text-slate-900 mb-1">${escapeHTML(cat.name)}</h4>
+          <p class="text-[11px] font-mono text-[#03B1C0] font-medium mb-2">slug: ${escapeHTML(cat.slug)}</p>
+          <p class="text-xs text-slate-600 leading-relaxed line-clamp-3 mb-4">${escapeHTML(cat.description || 'Tidak ada deskripsi.')}</p>
         </div>
 
-        <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-          <span class="text-slate-400 inline-flex items-center gap-1 font-medium">
-            <span class="material-symbols-outlined text-sm text-slate-500">article</span>
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+          <span class="text-slate-600 inline-flex items-center gap-1 font-medium">
+            <span class="material-symbols-outlined text-sm text-slate-400">article</span>
             <span>${cat.guide_count || 0} Panduan</span>
           </span>
 
@@ -1068,14 +1070,14 @@
             <div class="inline-flex items-center gap-1">
               <button
                 onclick="openEditCategoryModal('${cat.id}')"
-                class="p-1 text-slate-400 hover:text-amber-400 hover:bg-slate-800 rounded transition-colors"
+                class="p-1.5 text-slate-500 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
                 title="Edit Kategori"
               >
                 <span class="material-symbols-outlined text-base">edit</span>
               </button>
               <button
                 onclick="confirmCategoryStatusToggle('${cat.id}', ${!cat.is_active}, '${escapeHTML(cat.name)}')"
-                class="p-1 ${cat.is_active ? 'text-red-400 hover:text-red-300' : 'text-emerald-400 hover:text-emerald-300'} hover:bg-slate-800 rounded transition-colors"
+                class="p-1.5 ${cat.is_active ? 'text-red-500 hover:text-red-600 hover:bg-red-50' : 'text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50'} rounded-lg transition-colors"
                 title="${cat.is_active ? 'Nonaktifkan Kategori' : 'Aktifkan Kategori'}"
               >
                 <span class="material-symbols-outlined text-base">${cat.is_active ? 'toggle_on' : 'toggle_off'}</span>
@@ -1301,18 +1303,18 @@
 
   function renderStatusBadge(status) {
     if (status === 'PUBLISHED') {
-      return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+      return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
         <span>PUBLISHED</span>
       </span>`;
     }
     if (status === 'DRAFT') {
-      return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/30">
-        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+      return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200">
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
         <span>DRAFT</span>
       </span>`;
     }
-    return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-700/40 text-slate-400 border border-slate-600/40">
+    return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
       <span>ARCHIVED</span>
     </span>`;
   }
@@ -1408,27 +1410,27 @@
       const isActorManager = currentActor && currentActor.role === 'IT_MANAGER';
       const isTargetHigherOrEqual = u.role === 'ADMIN' || u.role === 'IT_MANAGER';
 
-      let roleBadgeClass = 'bg-blue-500/10 text-blue-400 border-blue-500/30';
+      let roleBadgeClass = 'bg-slate-100 text-slate-700 border-slate-200';
       if (u.role === 'ADMIN') {
-        roleBadgeClass = 'bg-red-500/10 text-red-400 border-red-500/30';
+        roleBadgeClass = 'bg-red-50 text-red-700 border-red-200';
       } else if (u.role === 'IT_MANAGER') {
-        roleBadgeClass = 'bg-[#0097A7]/10 text-cyan-400 border-[#0097A7]/30';
+        roleBadgeClass = 'bg-[#03B1C0]/10 text-[#03B1C0] border-[#03B1C0]/30';
       }
 
       const statusBadge = u.is_active
-        ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
             <span>Aktif</span>
           </span>`
-        : `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-red-500/10 text-red-400 border border-red-500/30">
-            <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span>
+        : `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-red-50 text-red-700 border border-red-200">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
             <span>Nonaktif</span>
           </span>`;
 
       // Action Button
       let actionBtnHTML = '';
       if (isActorReadOnly) {
-        actionBtnHTML = `<span class="text-[11px] text-slate-500 italic">Read-Only</span>`;
+        actionBtnHTML = `<span class="text-[11px] text-slate-400 italic">Read-Only</span>`;
       } else {
         const canManageTarget = currentActor && (currentActor.role === 'ADMIN' || (currentActor.role === 'IT_MANAGER' && u.role === 'IT_SUPPORT'));
 
@@ -1439,7 +1441,7 @@
           editBtn = `
             <button
               onclick="openEditUserModal('${u.id}')"
-              class="rbac-mutation p-1.5 rounded-lg text-slate-400 hover:text-cyan-300 hover:bg-slate-800 border border-slate-700/60 hover:border-cyan-500/40 text-[11px] font-semibold transition-colors flex items-center"
+              class="rbac-mutation p-1.5 rounded-lg text-slate-600 hover:text-[#03B1C0] hover:bg-slate-100 border border-slate-200 text-[11px] font-semibold transition-colors flex items-center"
               title="Edit profil staf"
             >
               <span class="material-symbols-outlined text-sm">edit</span>
@@ -1449,7 +1451,7 @@
           resetBtn = `
             <button
               onclick="openResetPasswordModal('${u.id}', '${escapeHTML(u.username)}', '${escapeHTML(u.full_name || '')}')"
-              class="rbac-mutation p-1.5 rounded-lg text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 border border-amber-500/30 text-[11px] font-semibold transition-colors flex items-center"
+              class="rbac-mutation p-1.5 rounded-lg text-amber-600 hover:text-amber-700 hover:bg-amber-50 border border-amber-200 text-[11px] font-semibold transition-colors flex items-center"
               title="Reset kata sandi staf"
             >
               <span class="material-symbols-outlined text-sm">key</span>
@@ -1460,13 +1462,13 @@
         let statusBtn = '';
         if (isSelf) {
           statusBtn = `
-            <button disabled class="px-2.5 py-1 rounded-lg text-slate-500 bg-slate-800/40 border border-slate-700/40 text-[11px] font-semibold cursor-not-allowed" title="Anda tidak dapat menonaktifkan akun sendiri">
+            <button disabled class="px-2.5 py-1 rounded-lg text-slate-400 bg-slate-100 border border-slate-200 text-[11px] font-semibold cursor-not-allowed" title="Anda tidak dapat menonaktifkan akun sendiri">
               Akun Anda
             </button>
           `;
         } else if (isActorManager && isTargetHigherOrEqual) {
           statusBtn = `
-            <button disabled class="px-2.5 py-1 rounded-lg text-slate-500 bg-slate-800/40 border border-slate-700/40 text-[11px] font-semibold cursor-not-allowed" title="IT Manager hanya berwenang mengelola IT Support">
+            <button disabled class="px-2.5 py-1 rounded-lg text-slate-400 bg-slate-100 border border-slate-200 text-[11px] font-semibold cursor-not-allowed" title="IT Manager hanya berwenang mengelola IT Support">
               Dibatasi
             </button>
           `;
@@ -1474,7 +1476,7 @@
           statusBtn = `
             <button
               onclick="confirmToggleUserStatus('${u.id}', '${escapeHTML(u.username)}', true)"
-              class="rbac-mutation px-2.5 py-1 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/30 text-[11px] font-semibold transition-colors flex items-center gap-1"
+              class="rbac-mutation px-2.5 py-1 rounded-lg text-red-600 hover:text-red-700 hover:bg-red-50 border border-red-200 text-[11px] font-semibold transition-colors flex items-center gap-1"
               title="Nonaktifkan akun staf"
             >
               <span class="material-symbols-outlined text-sm">block</span>
@@ -1485,7 +1487,7 @@
           statusBtn = `
             <button
               onclick="confirmToggleUserStatus('${u.id}', '${escapeHTML(u.username)}', false)"
-              class="rbac-mutation px-2.5 py-1 rounded-lg text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-semibold transition-colors flex items-center gap-1"
+              class="rbac-mutation px-2.5 py-1 rounded-lg text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 border border-emerald-200 text-[11px] font-semibold transition-colors flex items-center gap-1"
               title="Aktifkan kembali akun staf"
             >
               <span class="material-symbols-outlined text-sm">check_circle</span>
@@ -1498,19 +1500,19 @@
       }
 
       return `
-        <tr class="hover:bg-slate-800/40 transition-colors">
+        <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100">
           <td class="py-3 px-5">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 font-bold flex items-center justify-center text-xs shrink-0">
+              <div class="w-8 h-8 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 font-bold font-brand flex items-center justify-center text-xs shrink-0">
                 ${escapeHTML(u.full_name ? u.full_name.charAt(0).toUpperCase() : 'U')}
               </div>
               <div class="min-w-0">
-                <span class="font-bold text-slate-200 block truncate leading-tight">${escapeHTML(u.full_name)}</span>
-                <span class="text-[11px] font-mono text-slate-400 block mt-0.5">@${escapeHTML(u.username)}</span>
+                <span class="font-bold text-slate-900 block truncate leading-tight">${escapeHTML(u.full_name)}</span>
+                <span class="text-[11px] font-mono text-slate-500 block mt-0.5">@${escapeHTML(u.username)}</span>
               </div>
             </div>
           </td>
-          <td class="py-3 px-4 text-slate-300 font-mono text-[11px] truncate max-w-[200px]">
+          <td class="py-3 px-4 text-slate-700 font-mono text-[11px] truncate max-w-[200px]">
             ${escapeHTML(u.email)}
           </td>
           <td class="py-3 px-4">
@@ -1521,7 +1523,7 @@
           <td class="py-3 px-4">
             ${statusBadge}
           </td>
-          <td class="py-3 px-4 text-slate-400 text-[11px]">
+          <td class="py-3 px-4 text-slate-500 text-[11px]">
             ${formatDate(u.created_at)}
           </td>
           <td class="py-3 px-5 text-right">
@@ -2020,15 +2022,15 @@
 
     tbody.innerHTML = logs.map((log) => {
       // Action Badge
-      let actionBadgeClass = 'bg-slate-700/30 text-slate-300 border-slate-600';
+      let actionBadgeClass = 'bg-slate-100 text-slate-700 border-slate-200';
       if (log.action.includes('CREATED') || log.action === 'LOGIN_SUCCESS' || log.action === 'ACCOUNT_ACTIVATED') {
-        actionBadgeClass = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+        actionBadgeClass = 'bg-emerald-50 text-emerald-700 border-emerald-200';
       } else if (log.action.includes('UPDATED') || log.action.includes('CHANGED') || log.action.includes('PASSWORD')) {
-        actionBadgeClass = 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+        actionBadgeClass = 'bg-amber-50 text-amber-700 border-amber-200';
       } else if (log.action.includes('DISABLED') || log.action === 'LOGIN_FAILED' || log.action.includes('ARCHIVED') || log.action.includes('DELETED')) {
-        actionBadgeClass = 'bg-red-500/10 text-red-400 border-red-500/30';
+        actionBadgeClass = 'bg-red-50 text-red-700 border-red-200';
       } else if (log.action === 'LOGOUT') {
-        actionBadgeClass = 'bg-blue-500/10 text-blue-400 border-blue-500/30';
+        actionBadgeClass = 'bg-sky-50 text-sky-700 border-sky-200';
       }
 
       // Actor info
@@ -2036,14 +2038,14 @@
       const actorRole = log.actor ? log.actor.role : 'GUEST';
 
       return `
-        <tr class="hover:bg-slate-800/40 transition-colors">
-          <td class="py-3 px-5 text-slate-400 font-mono text-[11px] whitespace-nowrap">
+        <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100">
+          <td class="py-3 px-5 text-slate-500 font-mono text-[11px] whitespace-nowrap">
             ${formatDateTime(log.created_at)}
           </td>
           <td class="py-3 px-4">
             <div class="flex items-center gap-2">
-              <span class="font-bold text-slate-200">@${escapeHTML(actorUsername)}</span>
-              <span class="text-[9px] px-1.5 py-0.2 rounded border border-slate-700 text-slate-400">${escapeHTML(actorRole)}</span>
+              <span class="font-bold text-slate-900">@${escapeHTML(actorUsername)}</span>
+              <span class="text-[9px] px-1.5 py-0.2 rounded border border-slate-200 text-slate-500 bg-slate-100">${escapeHTML(actorRole)}</span>
             </div>
           </td>
           <td class="py-3 px-4">
@@ -2051,17 +2053,17 @@
               ${escapeHTML(log.action)}
             </span>
           </td>
-          <td class="py-3 px-4 text-slate-300 font-mono text-[11px]">
-            <span class="uppercase font-bold text-slate-400">${escapeHTML(log.entity_name)}</span>
-            <span class="text-[10px] text-slate-500 block truncate max-w-[140px]" title="${escapeHTML(log.entity_id)}">${escapeHTML(log.entity_id)}</span>
+          <td class="py-3 px-4 text-slate-700 font-mono text-[11px]">
+            <span class="uppercase font-bold text-slate-700">${escapeHTML(log.entity_name)}</span>
+            <span class="text-[10px] text-slate-400 block truncate max-w-[140px]" title="${escapeHTML(log.entity_id)}">${escapeHTML(log.entity_id)}</span>
           </td>
-          <td class="py-3 px-4 text-slate-400 font-mono text-[11px]">
+          <td class="py-3 px-4 text-slate-500 font-mono text-[11px]">
             ${escapeHTML(log.ip_address || '-')}
           </td>
           <td class="py-3 px-5 text-right">
             <button
               onclick="openAuditDetailModal('${log.id}')"
-              class="px-2.5 py-1 rounded-lg text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 border border-cyan-500/30 text-[11px] font-semibold transition-colors inline-flex items-center gap-1"
+              class="px-2.5 py-1 rounded-lg text-[#03B1C0] hover:text-[#028e9b] hover:bg-[#03B1C0]/10 border border-[#03B1C0]/30 text-[11px] font-semibold transition-colors inline-flex items-center gap-1"
             >
               <span class="material-symbols-outlined text-sm">visibility</span>
               <span>Detail</span>

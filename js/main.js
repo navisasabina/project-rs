@@ -69,22 +69,22 @@ function renderHomepageCards(sopData) {
     const imgSrc = guide.image ? escapeHTML(guide.image) : defaultImg;
 
     return `
-      <div class="guide-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:border-[#0097A7] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="${escapeHTML(keywords)}" onclick="openDedicatedSOP('${key}')">
+      <div class="guide-card bg-white rounded-2xl overflow-hidden shadow-xs border border-slate-200 hover:border-[#03B1C0] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="${escapeHTML(keywords)}" onclick="openDedicatedSOP('${key}')">
         <div>
           <div class="relative h-48 bg-slate-100 overflow-hidden">
             <img alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" src="${imgSrc}" onerror="this.onerror=null; this.src='${defaultImg}';"/>
-            <span class="absolute top-3 left-3 bg-[#002541] text-white text-xs font-semibold px-2.5 py-1 rounded-md">${category}</span>
+            <span class="absolute top-3 left-3 bg-[#03B1C0] text-white text-xs font-semibold px-2.5 py-1 rounded-md shadow-xs">${category}</span>
           </div>
           <div class="p-4">
-            <h3 class="font-bold text-sm sm:text-base text-slate-800 group-hover:text-[#0097A7] transition-colors leading-snug">${title}</h3>
+            <h3 class="font-bold text-sm sm:text-base text-slate-900 group-hover:text-[#03B1C0] transition-colors leading-snug">${title}</h3>
             <p class="text-xs text-slate-500 mt-1">${location}</p>
           </div>
         </div>
         <div class="px-4 pb-4 pt-1 border-t border-slate-100 flex items-center justify-between">
-          <span class="text-xs font-bold text-[#0097A7] group-hover:text-[#00828A] flex items-center gap-1">
+          <span class="text-xs font-bold text-[#03B1C0] group-hover:text-[#0298a5] flex items-center gap-1">
             Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
           </span>
-          <span class="material-symbols-outlined text-[#0097A7] text-xl">chevron_right</span>
+          <span class="material-symbols-outlined text-[#03B1C0] text-xl transition-transform group-hover:translate-x-0.5">chevron_right</span>
         </div>
       </div>
     `.trim();

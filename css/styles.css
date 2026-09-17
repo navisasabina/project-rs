@@ -1,19 +1,95 @@
+/* ==========================================================================
+   RS AWAL BROS KNOWLEDGE BASE — UNIFIED DESIGN & ICON SYSTEM
+   Palette: White (#FFFFFF) + Brand Accent (#03B1C0) + Dark Text (#0F172A)
+   ========================================================================== */
+
+:root {
+  --brand-primary: #03B1C0;
+  --brand-hover: #0298A5;
+  --brand-light: #F0FBFC;
+  --brand-border: rgba(3, 177, 192, 0.2);
+  --bg-page: #F8FAFC;
+  --bg-surface: #FFFFFF;
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+  --border-light: #E2E8F0;
+  --border-subtle: #F1F5F9;
+}
+
 html {
   scroll-behavior: smooth;
 }
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--text-main);
+  background-color: var(--bg-page);
+  letter-spacing: -0.01em;
+}
+
+/* ==========================================================================
+   1. UNIFIED ICON CONTAINER SYSTEM (.icon-box)
+   ========================================================================== */
+
+.icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem; /* 40px */
+  height: 2.5rem;
+  border-radius: 0.75rem; /* rounded-xl */
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  color: #1E293B;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.icon-box-primary {
+  background-color: rgba(3, 177, 192, 0.08);
+  border-color: rgba(3, 177, 192, 0.2);
+  color: #03B1C0;
+}
+
+.icon-box-sm {
+  width: 2rem; /* 32px */
+  height: 2rem;
+  border-radius: 0.625rem;
+}
+
+.icon-box-lg {
+  width: 3rem; /* 48px */
+  height: 3rem;
+  border-radius: 1rem;
+}
+
+/* Material Symbols Standard Reset & Consistency */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* ==========================================================================
+   2. VIEW TOGGLES & ANIMATIONS
+   ========================================================================== */
+
 .view-content {
   display: none;
 }
 .view-content.active {
   display: block;
 }
+
 .status-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 @keyframes pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: .4; }
+  50% { opacity: 0.4; }
 }
+
 .typing-dot {
   animation: typingBounce 1.4s infinite ease-in-out both;
 }
@@ -54,7 +130,7 @@ html {
   position: relative;
   width: 100%;
   height: 2.5px;
-  background-color: rgba(51, 65, 85, 0.75);
+  background-color: rgba(226, 232, 240, 0.9);
   border-radius: 9999px;
   overflow: hidden;
 }
@@ -65,7 +141,7 @@ html {
   bottom: 0;
   left: 0;
   height: 100%;
-  background-color: #0097A7;
+  background-color: #03B1C0;
   border-radius: 9999px;
   will-change: transform;
 }

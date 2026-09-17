@@ -337,10 +337,19 @@ async function runM9Tests() {
     // -------------------------------------------------------------------------
     console.log('6. Testing Docker Compose Configuration (docker compose config)...');
     try {
-      const composeOutput = execSync('docker compose config', {
-        cwd: path.resolve(__dirname, '..'),
-        encoding: 'utf8',
-      });
+      let composeOutput;
+      try {
+        composeOutput = execSync('docker compose config', {
+          cwd: path.resolve(__dirname, '..'),
+          encoding: 'utf8',
+        });
+      } catch (e) {
+        // Fallback to docker-compose (standalone binary) if docker compose plugin unavailable
+        composeOutput = execSync('docker-compose config', {
+          cwd: path.resolve(__dirname, '..'),
+          encoding: 'utf8',
+        });
+      }
       if (!composeOutput.includes('rs_awal_bros_postgres') || !composeOutput.includes('rs_awal_bros_app')) {
         throw new Error('docker-compose config missing required service definitions');
       }

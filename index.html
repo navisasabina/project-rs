@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
 <meta charset="utf-8"/>
@@ -18,9 +17,9 @@
 <!-- Custom Styles -->
 <link href="css/styles.css" rel="stylesheet"/>
 </head>
-<body class="bg-hospital-surface text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-slate-50/60 text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-[#03B1C0] selection:text-white">
 <!-- BEGIN: MainHeader -->
-<header class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm" data-purpose="primary-navigation">
+<header class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-xs" data-purpose="primary-navigation">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 <div class="flex items-center justify-between h-20">
 <div class="flex items-center gap-3">
@@ -28,31 +27,31 @@
 <img alt="RS Awal Bros" class="h-8 md:h-9 w-auto object-contain" src="logo.png"/>
 </a>
 <div class="hidden sm:block pl-3 border-l border-slate-200">
-<span class="text-[12px] font-bold uppercase tracking-wider text-[#0097A7] block leading-none">RS Awal Bros Botania</span>
+<span class="text-[12px] font-extrabold uppercase tracking-wider text-[#03B1C0] block leading-none">RS Awal Bros Botania</span>
 <span class="text-xs text-slate-500 font-medium">Divisi Teknologi Informasi</span>
 </div>
 </div>
 <nav class="hidden md:flex items-center gap-2 font-semibold text-sm">
-<button class="nav-tab-btn px-4 py-2 rounded-lg transition-colors border-b-2 border-[#0097A7] text-[#0097A7]" id="tab-btn-home" onclick="switchTab('home')" type="button">Beranda</button>
-<button class="nav-tab-btn px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors border-b-2 border-transparent" id="tab-btn-categories" onclick="switchTab('categories')" type="button">Kategori Hardware</button>
-<button class="nav-tab-btn px-4 py-2 rounded-lg text-slate-700 hover:text-[#0097A7] hover:bg-slate-50 transition-colors border-b-2 border-transparent inline-flex items-center gap-1.5 font-semibold" id="tab-btn-contact" onclick="openContactModal()" type="button">
+<button class="nav-tab-btn px-4 py-2 rounded-xl transition-colors border-b-2 border-[#03B1C0] text-[#03B1C0]" id="tab-btn-home" onclick="switchTab('home')" type="button">Beranda</button>
+<button class="nav-tab-btn px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors border-b-2 border-transparent" id="tab-btn-categories" onclick="switchTab('categories')" type="button">Kategori Hardware</button>
+<button class="nav-tab-btn px-4 py-2 rounded-xl text-slate-700 hover:text-[#03B1C0] hover:bg-slate-50 transition-colors border-b-2 border-transparent inline-flex items-center gap-1.5 font-semibold" id="tab-btn-contact" onclick="openContactModal()" type="button">
 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
 <span>Kontak IT Siaga</span>
 </button>
-<a class="nav-tab-btn px-3 py-2 rounded-lg text-slate-500 hover:text-[#0097A7] hover:bg-slate-50 transition-colors text-xs font-semibold inline-flex items-center gap-1 border border-slate-200" href="/admin/login" title="Masuk Portal Manajemen Staf IT">
+<a class="nav-tab-btn px-3.5 py-2 rounded-xl text-slate-600 hover:text-[#03B1C0] hover:bg-slate-50 transition-colors text-xs font-semibold inline-flex items-center gap-1.5 border border-slate-200 hover:border-[#03B1C0]/40 shadow-xs" href="/admin/login" title="Masuk Portal Manajemen Staf IT">
 <span class="material-symbols-outlined text-sm">lock</span>
 <span>Portal Staf IT</span>
 </a>
 </nav>
 <div class="flex items-center gap-3">
-<a class="inline-flex items-center gap-2 bg-[#0097A7] hover:bg-[#00A3A6] active:bg-[#00828A] text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition-all active:scale-95" href="https://wa.me/6281234567890?text=Halo%20IT%20Support%20RS%20Awal%20Bros%20Botania,%20saya%20memerlukan%20bantuan%20teknis" rel="noopener noreferrer" target="_blank">
-<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"></path></svg>
+<a class="inline-flex items-center gap-2 bg-[#03B1C0] hover:bg-[#0298a5] text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold shadow-xs transition-all active:scale-95 cursor-pointer" href="https://wa.me/6281234567890?text=Halo%20IT%20Support%20RS%20Awal%20Bros%20Botania,%20saya%20memerlukan%20bantuan%20teknis" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-base">chat</span>
 <span>Chat IT Support</span>
 </a>
 </div>
 </div>
 <div class="flex md:hidden overflow-x-auto py-2 gap-2 border-t border-slate-100 text-xs font-semibold">
-<button class="mobile-nav-btn px-3 py-1.5 rounded-full bg-[#0097A7] text-white whitespace-nowrap" onclick="switchTab('home')" type="button">Beranda</button>
+<button class="mobile-nav-btn px-3 py-1.5 rounded-full bg-[#03B1C0] text-white whitespace-nowrap" onclick="switchTab('home')" type="button">Beranda</button>
 <button class="mobile-nav-btn px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 whitespace-nowrap" onclick="switchTab('categories')" type="button">Kategori</button>
 <button class="mobile-nav-btn px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 whitespace-nowrap" onclick="openContactModal()" type="button">Kontak IT</button>
 <a class="mobile-nav-btn px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 whitespace-nowrap inline-flex items-center gap-1" href="/admin/login">
@@ -68,22 +67,22 @@
 <!-- BEGIN: ViewHome -->
 <section class="view-content active" data-purpose="home-troubleshooting-view" id="view-home">
 <!-- Hero Banner & Interactive Search -->
-<div class="bg-gradient-to-b from-[#002541] to-[#003859] text-white py-12 lg:py-14 relative overflow-hidden">
+<div class="bg-white border-b border-slate-200 text-slate-900 py-12 lg:py-14 relative overflow-hidden">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
 <div class="max-w-3xl mx-auto">
-<span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-[#00A3A6] text-xs font-semibold uppercase tracking-wider mb-4 border border-white/15">
-<span class="w-2 h-2 rounded-full bg-[#0097A7]"></span>Portal Bantuan Mandiri
-        </span>
-<h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight mb-3">Bantuan &amp; Panduan IT RS Awal Bros Botania</h1>
-<p class="text-slate-200 text-sm sm:text-base mb-8 leading-relaxed max-w-2xl mx-auto">Cari solusi cepat kendala perangkat dan jaringan rumah sakit sebelum menghubungi teknisi.</p>
-<div class="bg-white p-2 rounded-2xl shadow-lg max-w-2xl mx-auto flex flex-col sm:flex-row gap-2 border border-slate-100">
+<span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#03B1C0]/10 text-[#03B1C0] text-xs font-semibold uppercase tracking-wider mb-4 border border-[#03B1C0]/20">
+<span class="w-2 h-2 rounded-full bg-[#03B1C0]"></span>Portal Bantuan Mandiri
+</span>
+<h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">Bantuan &amp; Panduan IT RS Awal Bros Botania</h1>
+<p class="text-slate-600 text-sm sm:text-base mb-8 leading-relaxed max-w-2xl mx-auto">Cari solusi cepat kendala perangkat dan jaringan rumah sakit sebelum menghubungi teknisi.</p>
+<div class="bg-white p-2 rounded-2xl shadow-xs max-w-2xl mx-auto flex flex-col sm:flex-row gap-2 border border-slate-200">
 <div class="relative flex-grow">
 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="material-symbols-outlined text-lg">search</span>
 </div>
-<input class="w-full pl-10 pr-4 py-3 rounded-xl text-slate-800 placeholder-slate-400 border-none focus:ring-2 focus:ring-[#0097A7] text-sm font-medium" id="main-search-input" placeholder="Ketik kata kunci (misal: printer, cache, monitor, internet)..." type="text"/>
+<input class="w-full pl-10 pr-4 py-3 rounded-xl text-slate-900 placeholder-slate-400 border-none focus:ring-1 focus:ring-[#03B1C0] text-sm font-medium" id="main-search-input" placeholder="Ketik kata kunci (misal: printer, cache, monitor, internet)..." type="text"/>
 </div>
-<button class="bg-[#0097A7] hover:bg-[#00A3A6] active:bg-[#00828A] text-white font-semibold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm text-sm" id="btn-search-trigger" onclick="executeSearch()" type="button">
+<button class="bg-[#03B1C0] hover:bg-[#0298a5] active:bg-[#028b97] text-white font-semibold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2 active:scale-95 shadow-xs text-sm cursor-pointer" id="btn-search-trigger" onclick="executeSearch()" type="button">
 <span>Cari</span>
 </button>
 </div>
@@ -92,17 +91,17 @@
 </div>
 <!-- Section Tentang RS Awal Bros -->
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20 space-y-4">
-<div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
 <div class="flex items-start gap-4">
-<div class="w-12 h-12 rounded-xl bg-teal-50 border border-teal-100 text-[#0097A7] flex items-center justify-center flex-shrink-0">
-<span class="material-symbols-outlined text-2xl">apartment</span>
+<div class="icon-box icon-box-primary shrink-0">
+<span class="material-symbols-outlined text-xl">apartment</span>
 </div>
 <div class="space-y-1">
-<h3 class="font-bold text-base text-hospital-navy">Tentang RS Awal Bros Botania</h3>
+<h3 class="font-bold text-base text-slate-900">Tentang RS Awal Bros Botania</h3>
 <p class="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-3xl">RS Awal Bros Botania berlokasi strategis di kawasan Botania Garden, Batam Center, hadir memberikan pelayanan kesehatan modern dan prima untuk seluruh masyarakat Kota Batam dengan didukung infrastruktur teknologi terintegrasi.</p>
 </div>
 </div>
-<a class="inline-flex items-center gap-2 px-4 py-2 bg-[#0097A7] hover:bg-[#00A3A6] active:bg-[#00828A] text-white text-xs sm:text-sm font-semibold rounded-lg shadow-sm whitespace-nowrap transition-colors flex-shrink-0 active:scale-95" href="https://awalbros.com" rel="noopener noreferrer" target="_blank">
+<a class="inline-flex items-center gap-2 px-4 py-2 bg-[#03B1C0] hover:bg-[#0298a5] text-white text-xs sm:text-sm font-semibold rounded-xl shadow-xs whitespace-nowrap transition-colors shrink-0 active:scale-95" href="https://awalbros.com" rel="noopener noreferrer" target="_blank">
 <span>awalbros.com</span>
 <span class="material-symbols-outlined text-base leading-none">open_in_new</span>
 </a>
@@ -112,182 +111,180 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10" id="modules-section">
 <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-200">
 <div>
-<h2 class="text-xl sm:text-2xl font-bold text-hospital-navy">Modul Penanganan Perangkat</h2>
+<h2 class="text-xl sm:text-2xl font-bold text-slate-900">Modul Penanganan Perangkat</h2>
 <p class="text-xs sm:text-sm text-slate-500">Pilih kartu perangkat di bawah ini untuk melihat panduan langkah demi langkah</p>
 </div>
-<div class="px-3 py-1 bg-teal-50 text-[#0097A7] text-xs font-bold rounded-full border border-teal-100" id="results-count-badge">Menampilkan 8 Panduan</div>
+<div class="px-3 py-1 bg-[#03B1C0]/10 text-[#03B1C0] text-xs font-bold rounded-full border border-[#03B1C0]/20" id="results-count-badge">Menampilkan 8 Panduan</div>
 </div>
 <!-- Grid 8 Cards with Explicit 'Lihat Detail SOP →' button -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="cards-grid">
 <!-- Card 1: Cache -->
-<div class="guide-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:border-[#0097A7] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="komputer lambat cache menumpuk browser aplikasi relog chrome lemot hang poliklinik farmasi administrasi" onclick="openDedicatedSOP('cache')">
+<div class="guide-card bg-white rounded-2xl overflow-hidden shadow-xs border border-slate-200 hover:border-[#03B1C0] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="komputer lambat cache menumpuk browser aplikasi relog chrome lemot hang poliklinik farmasi administrasi" onclick="openDedicatedSOP('cache')">
 <div>
 <div class="relative h-48 bg-slate-100 overflow-hidden">
 <img alt="Komputer Lambat &amp; Cache Menumpuk" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida/AEtjO1WxAVvsJjJsR2NV0jbAUXR_15wLdHrqbupyJcHJy2ilJo1AU2ptAajEgSd8Ay3d1QeOdg_jZ2-zqKMUehPu-FVLVLqs4nP7QGSyNcAfsLoMtxew4NTCQLimfIXKuYyJrRf-vVwAMK6mLt6umn9iSn7J9GWf0A9M65ZIiN1rv51fgI66Bh0KR2G6MB37pHhilCclhOxHdJTGnA1DTXyIBNoyJNAwHKvxjur7W6qvq23XHqyk2rwMFknUSiU"/>
-<span class="absolute top-3 left-3 bg-[#002541] text-white text-xs font-semibold px-2.5 py-1 rounded-md">Aplikasi &amp; Browser</span>
+<span class="absolute top-3 left-3 bg-[#03B1C0] text-white text-xs font-semibold px-2.5 py-1 rounded-md shadow-xs">Aplikasi &amp; Browser</span>
 </div>
 <div class="p-4">
-<h3 class="font-bold text-sm sm:text-base text-slate-800 group-hover:text-[#0097A7] transition-colors leading-snug">Komputer Lambat / Cache Menumpuk</h3>
+<h3 class="font-bold text-sm sm:text-base text-slate-900 group-hover:text-[#03B1C0] transition-colors leading-snug">Komputer Lambat / Cache Menumpuk</h3>
 <p class="text-xs text-slate-500 mt-1">Poliklinik, Farmasi &amp; Administrasi</p>
 </div>
 </div>
 <div class="px-4 pb-4 pt-1 border-t border-slate-100 flex items-center justify-between">
-<span class="text-xs font-bold text-[#0097A7] group-hover:text-[#00828A] flex items-center gap-1">
-            Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
+<span class="text-xs font-bold text-[#03B1C0] group-hover:text-[#0298a5] flex items-center gap-1">
+Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
 </span>
-<span class="material-symbols-outlined text-[#0097A7] text-xl">chevron_right</span>
+<span class="material-symbols-outlined text-[#03B1C0] text-xl transition-transform group-hover:translate-x-0.5">chevron_right</span>
 </div>
 </div>
 <!-- Card 2: LAN -->
-<div class="guide-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:border-[#0097A7] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="internet tidak terhubung lan terlepas kabel rj45 offline bola dunia silang merah disconnect nurse station dialisis kantor" onclick="openDedicatedSOP('lan')">
+<div class="guide-card bg-white rounded-2xl overflow-hidden shadow-xs border border-slate-200 hover:border-[#03B1C0] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="internet tidak terhubung lan terlepas kabel rj45 offline bola dunia silang merah disconnect nurse station dialisis kantor" onclick="openDedicatedSOP('lan')">
 <div>
 <div class="relative h-48 bg-slate-100 overflow-hidden">
 <img alt="Internet Tidak Terhubung" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida/AEtjO1Ub-AGGvJtLQwy4LLjKItC41otPDWt-eYdpSiuQM3teR1Fn1L7NtgG89AvR84D2G56R1o_jyLjUDPK80li5lhUQHXi2haD-xAZ3rf252bvngEXD1W6rALSft-rEPwd2iuEOcIP6EVC2lmnTAnnuhW57gJpdmpxzCMtxRF5xFzXtWhLbm-ZeREm1yvhsz-VINyOYRwfeEKPUl5khfc9sEt7Ia_XfZESSXfCs35GES9Bb1AhyciS5jypbqYU"/>
-<span class="absolute top-3 left-3 bg-[#002541] text-white text-xs font-semibold px-2.5 py-1 rounded-md">Jaringan &amp; Port</span>
+<span class="absolute top-3 left-3 bg-[#03B1C0] text-white text-xs font-semibold px-2.5 py-1 rounded-md shadow-xs">Jaringan &amp; Port</span>
 </div>
 <div class="p-4">
-<h3 class="font-bold text-sm sm:text-base text-slate-800 group-hover:text-[#0097A7] transition-colors leading-snug">Internet Tidak Terhubung</h3>
+<h3 class="font-bold text-sm sm:text-base text-slate-900 group-hover:text-[#03B1C0] transition-colors leading-snug">Internet Tidak Terhubung</h3>
 <p class="text-xs text-slate-500 mt-1">Nurse Station, Ruang Dialisis &amp; Kantor</p>
 </div>
 </div>
 <div class="px-4 pb-4 pt-1 border-t border-slate-100 flex items-center justify-between">
-<span class="text-xs font-bold text-[#0097A7] group-hover:text-[#00828A] flex items-center gap-1">
-            Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
+<span class="text-xs font-bold text-[#03B1C0] group-hover:text-[#0298a5] flex items-center gap-1">
+Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
 </span>
-<span class="material-symbols-outlined text-[#0097A7] text-xl">chevron_right</span>
+<span class="material-symbols-outlined text-[#03B1C0] text-xl transition-transform group-hover:translate-x-0.5">chevron_right</span>
 </div>
 </div>
 <!-- Card 3: Printer -->
-<div class="guide-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:border-[#0097A7] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="printer tidak berfungsi resep macet thermal stiker etiket blink merah kertas habis kasir screening farmasi" onclick="openDedicatedSOP('printer')">
+<div class="guide-card bg-white rounded-2xl overflow-hidden shadow-xs border border-slate-200 hover:border-[#03B1C0] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="printer tidak berfungsi resep macet thermal stiker etiket blink merah kertas habis kasir screening farmasi" onclick="openDedicatedSOP('printer')">
 <div>
 <div class="relative h-48 bg-slate-100 overflow-hidden">
 <img alt="Printer Tidak Berfungsi / Resep Macet" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida/AEtjO1VCLKt6zfl2VoA9GNVKkbY_jGAZK0_BijnrEhBhzfMrNbkZToVP0Ztqg23PSYmNxYhSRuNvfjNessWpVwX7bFUaFWuYBnRJwHpF5FY76Z4VWl0jvs9BJDctu7w7ncZFQyQTl9BNYewO5y7WFZRIa39dxmb5YORN-_Wlr7eTHcWgIcA_beZot5qELlXIQL7aFhQeuFSWWh1Xah9fTFKbdi0IlWC_fYbGqxJX5qpSx5ert1ER0He6TrGJ050"/>
-<span class="absolute top-3 left-3 bg-[#002541] text-white text-xs font-semibold px-2.5 py-1 rounded-md">Farmasi &amp; Kasir</span>
+<span class="absolute top-3 left-3 bg-[#03B1C0] text-white text-xs font-semibold px-2.5 py-1 rounded-md shadow-xs">Farmasi &amp; Kasir</span>
 </div>
 <div class="p-4">
-<h3 class="font-bold text-sm sm:text-base text-slate-800 group-hover:text-[#0097A7] transition-colors leading-snug">Printer Tidak Berfungsi / Resep Macet</h3>
+<h3 class="font-bold text-sm sm:text-base text-slate-900 group-hover:text-[#03B1C0] transition-colors leading-snug">Printer Tidak Berfungsi / Resep Macet</h3>
 <p class="text-xs text-slate-500 mt-1">Kasir, Screening &amp; Farmasi</p>
 </div>
 </div>
 <div class="px-4 pb-4 pt-1 border-t border-slate-100 flex items-center justify-between">
-<span class="text-xs font-bold text-[#0097A7] group-hover:text-[#00828A] flex items-center gap-1">
-            Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
+<span class="text-xs font-bold text-[#03B1C0] group-hover:text-[#0298a5] flex items-center gap-1">
+Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
 </span>
-<span class="material-symbols-outlined text-[#0097A7] text-xl">chevron_right</span>
+<span class="material-symbols-outlined text-[#03B1C0] text-xl transition-transform group-hover:translate-x-0.5">chevron_right</span>
 </div>
 </div>
 <!-- Card 4: Power PC -->
-<div class="guide-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:border-[#0097A7] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="pc komputer tidak menyala mati total cpu desktop saklar stopkontak power customer care nicu meja perawat" onclick="openDedicatedSOP('power')">
+<div class="guide-card bg-white rounded-2xl overflow-hidden shadow-xs border border-slate-200 hover:border-[#03B1C0] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="pc komputer tidak menyala mati total cpu desktop saklar stopkontak power customer care nicu meja perawat" onclick="openDedicatedSOP('power')">
 <div>
 <div class="relative h-48 bg-slate-100 overflow-hidden">
 <img alt="PC / Komputer Tidak Menyala" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida/AEtjO1VW7tPkFD4mOCtpaskCNDCRNLCwk1RuyOvqydy5wmI3Hh4O63NHsZ8eLs0K-NPd2qFex-lOZhtTSStIIvlIzlemamEK4G-xtHQYbGkQR7kLpBR4zmNNnreWiYcmllUAWKrPUMLSmtuNvi9motgM3KZGi3sA7zgzn6SqVxZNM2cUXPzpJLqZoPckHXn8rY9XvaHgMZM7gCLjVtKSTkKl-2UfKKRtOOwrlXCGw2V-TSZG9e3B059U6d0kbKQ"/>
-<span class="absolute top-3 left-3 bg-[#002541] text-white text-xs font-semibold px-2.5 py-1 rounded-md">Hardware PC</span>
+<span class="absolute top-3 left-3 bg-[#03B1C0] text-white text-xs font-semibold px-2.5 py-1 rounded-md shadow-xs">Hardware PC</span>
 </div>
 <div class="p-4">
-<h3 class="font-bold text-sm sm:text-base text-slate-800 group-hover:text-[#0097A7] transition-colors leading-snug">PC / Komputer Tidak Menyala</h3>
+<h3 class="font-bold text-sm sm:text-base text-slate-900 group-hover:text-[#03B1C0] transition-colors leading-snug">PC / Komputer Tidak Menyala</h3>
 <p class="text-xs text-slate-500 mt-1">Customer Care, NICU &amp; Meja Perawat</p>
 </div>
 </div>
 <div class="px-4 pb-4 pt-1 border-t border-slate-100 flex items-center justify-between">
-<span class="text-xs font-bold text-[#0097A7] group-hover:text-[#00828A] flex items-center gap-1">
-            Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
+<span class="text-xs font-bold text-[#03B1C0] group-hover:text-[#0298a5] flex items-center gap-1">
+Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
 </span>
-<span class="material-symbols-outlined text-[#0097A7] text-xl">chevron_right</span>
+<span class="material-symbols-outlined text-[#03B1C0] text-xl transition-transform group-hover:translate-x-0.5">chevron_right</span>
 </div>
 </div>
 <!-- Card 5: Monitor -->
-<div class="guide-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:border-[#0097A7] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="monitor tidak ada sinyal no signal blank layar hitam kabel hdmi vga kendor pendaftaran kasir ruang operasi ok" onclick="openDedicatedSOP('monitor')">
+<div class="guide-card bg-white rounded-2xl overflow-hidden shadow-xs border border-slate-200 hover:border-[#03B1C0] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="monitor tidak ada sinyal no signal blank layar hitam kabel hdmi vga kendor pendaftaran kasir ruang operasi ok" onclick="openDedicatedSOP('monitor')">
 <div>
 <div class="relative h-48 bg-slate-100 overflow-hidden">
 <img alt="Monitor Tidak Ada Sinyal" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida/AEtjO1Vg5mpgGfdX0Gs5aZCkm7lPCUk_JlhKqP-URFq_RSoy2IkkW3W8aeoXYN2X0sYnZUxuViH77SLJtEUng4tQOrjvRSa2i6k3auCDQSHlT3J53eVdqG-0yBgoWSFbIyRFyaVPhKdp-LYJAvkweWOstyyj0Tx8it5Eo8SNpj5utfAsLHcetgaOgVVqaeJgzvHMnBDyYbgFhmJw_4YCMwekl6BjcLjsvmMeFSBd-4fc4LtD5IJtXQyONFRTyg"/>
-<span class="absolute top-3 left-3 bg-[#002541] text-white text-xs font-semibold px-2.5 py-1 rounded-md">Layar Display</span>
+<span class="absolute top-3 left-3 bg-[#03B1C0] text-white text-xs font-semibold px-2.5 py-1 rounded-md shadow-xs">Layar Display</span>
 </div>
 <div class="p-4">
-<h3 class="font-bold text-sm sm:text-base text-slate-800 group-hover:text-[#0097A7] transition-colors leading-snug">Monitor Tidak Ada Sinyal</h3>
+<h3 class="font-bold text-sm sm:text-base text-slate-900 group-hover:text-[#03B1C0] transition-colors leading-snug">Monitor Tidak Ada Sinyal</h3>
 <p class="text-xs text-slate-500 mt-1">Pendaftaran, Kasir &amp; Ruang Operasi OK</p>
 </div>
 </div>
 <div class="px-4 pb-4 pt-1 border-t border-slate-100 flex items-center justify-between">
-<span class="text-xs font-bold text-[#0097A7] group-hover:text-[#00828A] flex items-center gap-1">
-            Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
+<span class="text-xs font-bold text-[#03B1C0] group-hover:text-[#0298a5] flex items-center gap-1">
+Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
 </span>
-<span class="material-symbols-outlined text-[#0097A7] text-xl">chevron_right</span>
+<span class="material-symbols-outlined text-[#03B1C0] text-xl transition-transform group-hover:translate-x-0.5">chevron_right</span>
 </div>
 </div>
 <!-- Card 6: Mouse / Keyboard -->
-<div class="guide-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:border-[#0097A7] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="keyboard mouse bermasalah macet kursor hilang usb port screening e nurse station" onclick="openDedicatedSOP('mouse')">
+<div class="guide-card bg-white rounded-2xl overflow-hidden shadow-xs border border-slate-200 hover:border-[#03B1C0] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="keyboard mouse bermasalah macet kursor hilang usb port screening e nurse station" onclick="openDedicatedSOP('mouse')">
 <div>
 <div class="relative h-48 bg-slate-100 overflow-hidden">
 <img alt="Keyboard / Mouse Bermasalah" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida/AEtjO1WQSZVeJrS2KZNnsz7qW5sU5-_Bi2dJsDdVdlR8ZuE23TbrGWqMQweJFYw3MfvEmiLYDW7s6aQsFSri-yetD1Zhzuko-9sJ2sNuzalWZbT7SICGC2YaJttp2vnaWKx8lg_NMU78vp6HUNb-2UKJBQoZQ2C7vZBLafOIl94n3Wb-Unogu1_4wc03VZkAjxqCWLYT_iQog6I_DyBzmqX1VIWuqzJ3EiIzr6TtDZsG-L431hSbJgiVkYlNJ_I"/>
-<span class="absolute top-3 left-3 bg-[#002541] text-white text-xs font-semibold px-2.5 py-1 rounded-md">Aksesoris USB</span>
+<span class="absolute top-3 left-3 bg-[#03B1C0] text-white text-xs font-semibold px-2.5 py-1 rounded-md shadow-xs">Aksesoris USB</span>
 </div>
 <div class="p-4">
-<h3 class="font-bold text-sm sm:text-base text-slate-800 group-hover:text-[#0097A7] transition-colors leading-snug">Keyboard / Mouse Bermasalah</h3>
+<h3 class="font-bold text-sm sm:text-base text-slate-900 group-hover:text-[#03B1C0] transition-colors leading-snug">Keyboard / Mouse Bermasalah</h3>
 <p class="text-xs text-slate-500 mt-1">Screening E &amp; Nurse Station</p>
 </div>
 </div>
 <div class="px-4 pb-4 pt-1 border-t border-slate-100 flex items-center justify-between">
-<span class="text-xs font-bold text-[#0097A7] group-hover:text-[#00828A] flex items-center gap-1">
-            Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
+<span class="text-xs font-bold text-[#03B1C0] group-hover:text-[#0298a5] flex items-center gap-1">
+Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
 </span>
-<span class="material-symbols-outlined text-[#0097A7] text-xl">chevron_right</span>
+<span class="material-symbols-outlined text-[#03B1C0] text-xl transition-transform group-hover:translate-x-0.5">chevron_right</span>
 </div>
 </div>
 <!-- Card 7: Mini PC -->
-<div class="guide-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:border-[#0097A7] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="mini pc ruang periksa meja dokter bracket onlogic adaptor kendor klinik spesialis poli kecantikan periksa" onclick="openDedicatedSOP('minipc')">
+<div class="guide-card bg-white rounded-2xl overflow-hidden shadow-xs border border-slate-200 hover:border-[#03B1C0] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="mini pc ruang periksa meja dokter bracket onlogic adaptor kendor klinik spesialis poli kecantikan periksa" onclick="openDedicatedSOP('minipc')">
 <div>
 <div class="relative h-48 bg-slate-100 overflow-hidden">
 <img alt="Mini PC Ruang Periksa" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida/AEtjO1WAHW5N946kPEoKQ5mfz8K5JRqFTtfl0_ciB1-BDEPy3XF0M5XBlZ0EJ6G67-zd6E9NZRsVPv1BWsUxg7g5x8Rw2p4utHYqOpodM2_IPVfdY7AXLzQ5XaFrQt-NuJzh3VT32t8IirJOa7OD-kg2oH03a7cJ9OLx34i4peycOSFRHhrczIoCkrcevr6XeJBwUNoxGCEgyvQVBBs_lHOeiGlcffWoDsVeS65LXwGMLTf359m92D3f1N_LYD8"/>
-<span class="absolute top-3 left-3 bg-[#002541] text-white text-xs font-semibold px-2.5 py-1 rounded-md">Meja Dokter</span>
+<span class="absolute top-3 left-3 bg-[#03B1C0] text-white text-xs font-semibold px-2.5 py-1 rounded-md shadow-xs">Meja Dokter</span>
 </div>
 <div class="p-4">
-<h3 class="font-bold text-sm sm:text-base text-slate-800 group-hover:text-[#0097A7] transition-colors leading-snug">Mini PC Ruang Periksa</h3>
+<h3 class="font-bold text-sm sm:text-base text-slate-900 group-hover:text-[#03B1C0] transition-colors leading-snug">Mini PC Ruang Periksa</h3>
 <p class="text-xs text-slate-500 mt-1">Klinik Spesialis, Poli Kecantikan &amp; Periksa</p>
 </div>
 </div>
 <div class="px-4 pb-4 pt-1 border-t border-slate-100 flex items-center justify-between">
-<span class="text-xs font-bold text-[#0097A7] group-hover:text-[#00828A] flex items-center gap-1">
-            Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
+<span class="text-xs font-bold text-[#03B1C0] group-hover:text-[#0298a5] flex items-center gap-1">
+Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
 </span>
-<span class="material-symbols-outlined text-[#0097A7] text-xl">chevron_right</span>
+<span class="material-symbols-outlined text-[#03B1C0] text-xl transition-transform group-hover:translate-x-0.5">chevron_right</span>
 </div>
 </div>
 <!-- Card 8: CCTV -->
-<div class="guide-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:border-[#0097A7] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="kamera cctv tidak terdeteksi offline koridor plafon poe ip camera koridor ruang rawat vip area parkir" onclick="openDedicatedSOP('cctv')">
+<div class="guide-card bg-white rounded-2xl overflow-hidden shadow-xs border border-slate-200 hover:border-[#03B1C0] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between" data-keywords="kamera cctv tidak terdeteksi offline koridor plafon poe ip camera koridor ruang rawat vip area parkir" onclick="openDedicatedSOP('cctv')">
 <div>
 <div class="relative h-48 bg-slate-100 overflow-hidden">
 <img alt="Kamera CCTV Tidak Terdeteksi" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida/AEtjO1UNqFYrVuoaqqlJOV0wxYjiZAitPhLBLPJMYN2kP93jZzDKVaWvpDMbQbNnOJKzgBB9ShYGjsaP-kdnaWgS79i-El3dHnJhKvLSbdjBXN4A7WmRqm7Z5Sdp8IBkkNa4ViZm-Xey4ucuHrl-O-_X3jt9mQsh3IWoKU3qpnAHJL3Np2d2hqOKK5_EsQCDFADhEaIms8zmFepAFL6L_yI_6MmlzRh4q3-znWiIsdpcI6KHki5YbH6olmOFA9M"/>
-<span class="absolute top-3 left-3 bg-[#002541] text-white text-xs font-semibold px-2.5 py-1 rounded-md">Keamanan Fisik</span>
+<span class="absolute top-3 left-3 bg-[#03B1C0] text-white text-xs font-semibold px-2.5 py-1 rounded-md shadow-xs">Keamanan Fisik</span>
 </div>
 <div class="p-4">
-<h3 class="font-bold text-sm sm:text-base text-slate-800 group-hover:text-[#0097A7] transition-colors leading-snug">Kamera CCTV Tidak Terdeteksi</h3>
+<h3 class="font-bold text-sm sm:text-base text-slate-900 group-hover:text-[#03B1C0] transition-colors leading-snug">Kamera CCTV Tidak Terdeteksi</h3>
 <p class="text-xs text-slate-500 mt-1">Koridor Ruang Rawat, VIP &amp; Area Parkir</p>
 </div>
 </div>
 <div class="px-4 pb-4 pt-1 border-t border-slate-100 flex items-center justify-between">
-<span class="text-xs font-bold text-[#0097A7] group-hover:text-[#00828A] flex items-center gap-1">
-            Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
+<span class="text-xs font-bold text-[#03B1C0] group-hover:text-[#0298a5] flex items-center gap-1">
+Lihat Detail SOP <span class="transition-transform group-hover:translate-x-1">→</span>
 </span>
-<span class="material-symbols-outlined text-[#0097A7] text-xl">chevron_right</span>
+<span class="material-symbols-outlined text-[#03B1C0] text-xl transition-transform group-hover:translate-x-0.5">chevron_right</span>
 </div>
 </div>
 </div>
 <!-- No Results Fallback State -->
-<div class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300 mt-6" id="no-results-state">
-<div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-400 mb-4">
-<svg class="w-8 h-8" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
+<div class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-slate-200 mt-6" id="no-results-state">
+<div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto text-slate-400 mb-4 border border-slate-200">
+<span class="material-symbols-outlined text-3xl text-slate-400">search_off</span>
 </div>
-<h3 class="text-lg font-bold text-slate-800 mb-1">Panduan Tidak Ditemukan</h3>
+<h3 class="text-lg font-bold text-slate-900 mb-1">Panduan Tidak Ditemukan</h3>
 <p class="text-sm text-slate-500 max-w-md mx-auto mb-6">Kata kunci yang Anda cari tidak cocok dengan modul yang ada. Coba gunakan kata kunci umum atau tanyakan langsung ke Gemini AI Siaga.</p>
 <div class="flex items-center justify-center gap-3">
-<button class="px-4 py-2 bg-hospital-navy text-white text-xs font-semibold rounded-lg hover:bg-hospital-teal transition" onclick="resetSearch()" type="button">
-          Tampilkan Semua Modul
-        </button>
-<button class="px-4 py-2 bg-hospital-teal text-white text-xs font-semibold rounded-lg hover:bg-hospital-teal-dark transition flex items-center gap-1.5" onclick="openGeminiChatWithFocus()" type="button">
+<button class="px-4 py-2 bg-slate-100 text-slate-700 text-xs font-semibold rounded-xl hover:bg-slate-200 border border-slate-200 transition cursor-pointer" onclick="resetSearch()" type="button">
+Tampilkan Semua Modul
+</button>
+<button class="px-4 py-2 bg-[#03B1C0] text-white text-xs font-semibold rounded-xl hover:bg-[#0298a5] transition flex items-center gap-1.5 cursor-pointer shadow-xs" onclick="openGeminiChatWithFocus()" type="button">
 <span class="material-symbols-outlined text-sm">auto_awesome</span> Tanya Gemini AI
-        </button>
+</button>
 </div>
 </div>
 </div>
@@ -297,36 +294,36 @@
 <section class="view-content" data-purpose="dedicated-sop-detail-view" id="view-sop">
 <div class="bg-white border-b border-slate-200 py-4 shadow-xs">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-<button class="inline-flex items-center gap-2 text-sm font-bold text-[#0097A7] hover:text-[#00828A] bg-teal-50 hover:bg-teal-100/70 px-4 py-2 rounded-xl transition" onclick="backToHomeView()" type="button">
+<button class="inline-flex items-center gap-2 text-sm font-bold text-[#03B1C0] hover:text-[#0298a5] bg-[#03B1C0]/10 border border-[#03B1C0]/20 px-4 py-2 rounded-xl transition cursor-pointer" onclick="backToHomeView()" type="button">
 <span class="material-symbols-outlined text-lg">arrow_back</span>
 <span>Kembali ke Beranda</span>
 </button>
 <div class="flex items-center gap-2">
-<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          SOP Terverifikasi
-        </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#03B1C0]/10 text-[#03B1C0] border border-[#03B1C0]/20">
+<span class="w-2 h-2 rounded-full bg-[#03B1C0]"></span>
+SOP Terverifikasi
+</span>
 <span class="hidden sm:inline-block text-xs font-semibold text-slate-400">RS Awal Bros Botania</span>
 </div>
 </div>
 </div>
 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
 <!-- Header SOP Card -->
-<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm mb-8">
+<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs mb-8">
 <div class="flex flex-wrap items-center gap-2 mb-3">
-<span class="px-3 py-1 bg-[#002541] text-white text-xs font-bold rounded-lg uppercase tracking-wider" id="sop-category-badge">Aplikasi &amp; Browser</span>
-<span class="px-3 py-1 bg-teal-50 text-[#0097A7] text-xs font-bold rounded-lg border border-teal-100 flex items-center gap-1">
+<span class="px-3 py-1 bg-[#03B1C0] text-white text-xs font-bold rounded-lg uppercase tracking-wider shadow-xs" id="sop-category-badge">Aplikasi &amp; Browser</span>
+<span class="px-3 py-1 bg-[#03B1C0]/10 text-[#03B1C0] text-xs font-bold rounded-lg border border-[#03B1C0]/20 flex items-center gap-1">
 <span class="material-symbols-outlined text-sm">verified_user</span> Protokol Resmi IT
-        </span>
+</span>
 </div>
-<h1 class="text-2xl sm:text-3xl font-extrabold text-[#002541] tracking-tight mb-3" id="sop-title">Panduan: Komputer Lambat / Cache Menumpuk</h1>
+<h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-3" id="sop-title">Panduan: Komputer Lambat / Cache Menumpuk</h1>
 <div class="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-600 pt-3 border-t border-slate-100">
 <div class="flex items-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
-<span class="material-symbols-outlined text-base text-[#0097A7]">location_on</span>
+<span class="material-symbols-outlined text-base text-[#03B1C0]">location_on</span>
 <span class="font-semibold text-slate-800" id="sop-location">Poliklinik, Farmasi &amp; Administrasi</span>
 </div>
 <div class="flex items-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
-<span class="material-symbols-outlined text-base text-slate-500">schedule</span>
+<span class="material-symbols-outlined text-base text-slate-400">schedule</span>
 <span>Estimasi Waktu Mandiri: <strong class="text-slate-800">2 - 4 Menit</strong></span>
 </div>
 </div>
@@ -336,11 +333,11 @@
 <!-- Left Column: Visual Photo & Gejala Awal -->
 <div class="lg:col-span-5 space-y-6">
 <!-- Real Device Image Frame -->
-<div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm">
+<div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs">
 <div class="relative h-64 bg-slate-100">
 <img alt="Hardware Device" class="w-full h-full object-cover" id="sop-image" src="https://lh3.googleusercontent.com/aida/AEtjO1WxAVvsJjJsR2NV0jbAUXR_15wLdHrqbupyJcHJy2ilJo1AU2ptAajEgSd8Ay3d1QeOdg_jZ2-zqKMUehPu-FVLVLqs4nP7QGSyNcAfsLoMtxew4NTCQLimfIXKuYyJrRf-vVwAMK6mLt6umn9iSn7J9GWf0A9M65ZIiN1rv51fgI66Bh0KR2G6MB37pHhilCclhOxHdJTGnA1DTXyIBNoyJNAwHKvxjur7W6qvq23XHqyk2rwMFknUSiU"/>
 <div class="absolute bottom-3 left-3 bg-black/70 backdrop-blur-xs text-white text-[11px] font-medium px-2.5 py-1 rounded-md flex items-center gap-1.5">
-<span class="material-symbols-outlined text-xs text-[#00A3A6]">photo_camera</span>
+<span class="material-symbols-outlined text-xs text-[#03B1C0]">photo_camera</span>
 <span>Dokumentasi On-Site RS Botania</span>
 </div>
 </div>
@@ -349,86 +346,86 @@
 </div>
 </div>
 <!-- Quick Diagnosis / Gejala Awal -->
-<div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-5 shadow-xs">
-<div class="flex items-center gap-2 text-amber-900 font-bold text-sm mb-3">
-<span class="material-symbols-outlined text-xl text-amber-600">report_problem</span>
+<div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 shadow-xs">
+<div class="flex items-center gap-2 text-slate-900 font-bold text-sm mb-3">
+<span class="material-symbols-outlined text-xl text-slate-700">report_problem</span>
 <span>Gejala Awal / Indikasi Masalah</span>
 </div>
-<ul class="space-y-2 text-xs text-amber-950/90 leading-relaxed list-disc list-inside" id="sop-symptoms-list">
+<ul class="space-y-2 text-xs text-slate-700 leading-relaxed list-disc list-inside" id="sop-symptoms-list">
 <li>Aplikasi rekam medis atau SIMRS berputar lama saat klik simpan/resep.</li>
 <li>Browser Google Chrome sering muncul peringatan "Page Unresponsive".</li>
 <li>Memori RAM penuh akibat tab browser tidak pernah ditutup selama berminggu-minggu.</li>
 </ul>
 </div>
 <!-- Emergency IT Callout -->
-<div class="bg-[#002541] text-white rounded-2xl p-5 shadow-sm space-y-3">
+<div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs space-y-3">
 <div class="flex items-center gap-2">
-<span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-<span class="text-xs font-bold uppercase tracking-wider text-[#00A3A6]">Layanan IT Siaga 24 Jam</span>
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="text-xs font-bold uppercase tracking-wider text-[#03B1C0]">Layanan IT Siaga 24 Jam</span>
 </div>
-<p class="text-xs text-slate-300 leading-relaxed">Jika langkah mandiri di samping belum menyelesaikan kendala dalam 3 menit, langsung hubungi tim teknisi on-site.</p>
-<div class="pt-2 border-t border-white/10 flex items-center justify-between text-xs">
-<span class="text-slate-300">PABX Sentral:</span>
-<span class="font-mono font-bold text-white bg-white/15 px-2 py-0.5 rounded">Ext. 104 (OK/ICU)</span>
+<p class="text-xs text-slate-600 leading-relaxed">Jika langkah mandiri di samping belum menyelesaikan kendala dalam 3 menit, langsung hubungi tim teknisi on-site.</p>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+<span class="text-slate-500">PABX Sentral:</span>
+<span class="font-mono font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">Ext. 104 (OK/ICU)</span>
 </div>
 </div>
 </div>
 <!-- Right Column: Step-by-Step SOP -->
 <div class="lg:col-span-7 space-y-6">
-<div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-6">
+<div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-xs space-y-6">
 <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
-<h3 class="font-bold text-lg text-[#002541] flex items-center gap-2">
-<span class="material-symbols-outlined text-[#0097A7]">task_alt</span>
-              Langkah Penanganan SOP Mandiri
-            </h3>
+<h3 class="font-bold text-lg text-slate-900 flex items-center gap-2">
+<span class="material-symbols-outlined text-[#03B1C0]">task_alt</span>
+Langkah Penanganan SOP Mandiri
+</h3>
 <span class="text-xs font-semibold text-slate-400">Ikuti urutan 1 - 3</span>
 </div>
 <!-- Step 1 -->
-<div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-teal-200 transition">
-<div class="w-9 h-9 rounded-xl bg-[#002541] text-white flex-shrink-0 flex items-center justify-center font-bold text-sm shadow-xs">
-              1
-            </div>
+<div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-slate-200 transition">
+<div class="w-8 h-8 rounded-lg bg-[#03B1C0] text-white flex-shrink-0 flex items-center justify-center font-bold text-sm shadow-xs">
+1
+</div>
 <div class="space-y-1">
-<h4 class="font-bold text-sm text-[#002541]" id="step-1-title">Langkah 1: Pengecekan Awal</h4>
-<p class="text-xs text-slate-600 leading-relaxed" id="step-1-desc">Tutup seluruh tab tab aplikasi rekam medis yang tidak digunakan. Pastikan tidak ada proses unduhan besar di latar belakang.</p>
+<h4 class="font-bold text-sm text-slate-900" id="step-1-title">Langkah 1: Pengecekan Awal</h4>
+<p class="text-xs text-slate-600 leading-relaxed" id="step-1-desc">Tutup seluruh tab aplikasi rekam medis yang tidak digunakan. Pastikan tidak ada proses unduhan besar di latar belakang.</p>
 </div>
 </div>
 <!-- Step 2 -->
-<div class="flex items-start gap-4 p-4 rounded-2xl bg-teal-50/50 border border-teal-100 hover:border-teal-300 transition">
-<div class="w-9 h-9 rounded-xl bg-[#0097A7] text-white flex-shrink-0 flex items-center justify-center font-bold text-sm shadow-xs">
-              2
-            </div>
+<div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-slate-200 transition">
+<div class="w-8 h-8 rounded-lg bg-[#03B1C0] text-white flex-shrink-0 flex items-center justify-center font-bold text-sm shadow-xs">
+2
+</div>
 <div class="space-y-1.5">
-<h4 class="font-bold text-sm text-[#002541]" id="step-2-title">Langkah 2: Tindakan Perbaikan Mandiri</h4>
-<p class="text-xs text-slate-700 leading-relaxed" id="step-2-desc">Buka Chrome/Edge, tekan shortcut <strong>Ctrl + Shift + Del</strong> secara bersamaan. Pada jendela baru, centang "Cached images and files" dan "Cookies", pilih rentang waktu "All time", lalu klik tombol <strong>Clear data</strong>.</p>
+<h4 class="font-bold text-sm text-slate-900" id="step-2-title">Langkah 2: Tindakan Perbaikan Mandiri</h4>
+<p class="text-xs text-slate-600 leading-relaxed" id="step-2-desc">Buka Chrome/Edge, tekan shortcut <strong>Ctrl + Shift + Del</strong> secara bersamaan. Pada jendela baru, centang "Cached images and files" dan "Cookies", pilih rentang waktu "All time", lalu klik tombol <strong>Clear data</strong>.</p>
 </div>
 </div>
 <!-- Step 3 -->
-<div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-teal-200 transition">
-<div class="w-9 h-9 rounded-xl bg-slate-700 text-white flex-shrink-0 flex items-center justify-center font-bold text-sm shadow-xs">
-              3
-            </div>
+<div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-slate-200 transition">
+<div class="w-8 h-8 rounded-lg bg-[#03B1C0] text-white flex-shrink-0 flex items-center justify-center font-bold text-sm shadow-xs">
+3
+</div>
 <div class="space-y-1">
-<h4 class="font-bold text-sm text-[#002541]" id="step-3-title">Langkah 3: Verifikasi Hasil &amp; Relog</h4>
+<h4 class="font-bold text-sm text-slate-900" id="step-3-title">Langkah 3: Verifikasi Hasil &amp; Relog</h4>
 <p class="text-xs text-slate-600 leading-relaxed" id="step-3-desc">Tutup seluruh jendela browser, tunggu 5 detik, kemudian buka kembali. Lakukan Login ulang ke sistem SIMRS dan uji buka antrean pasien.</p>
 </div>
 </div>
 <!-- Important Note -->
-<div class="p-4 rounded-2xl bg-blue-50 border border-blue-200 text-xs text-blue-900 space-y-1">
-<strong class="font-bold flex items-center gap-1 text-[#002541]">
-<span class="material-symbols-outlined text-sm text-[#0097A7]">info</span>
-              Protokol Keamanan Data Medis:
-            </strong>
+<div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-800 space-y-1">
+<strong class="font-bold flex items-center gap-1 text-slate-900">
+<span class="material-symbols-outlined text-sm text-[#03B1C0]">info</span>
+Protokol Keamanan Data Medis:
+</strong>
 <p class="leading-relaxed" id="sop-security-note">Jangan pernah membagikan kredensial login atau password akun medis rumah sakit kepada siapapun. Tim IT tidak pernah meminta kata sandi staf.</p>
 </div>
 <!-- Dual Action CTA Bottom Buttons -->
 <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center gap-3">
-<button class="w-full sm:flex-1 py-3 px-4 bg-[#0097A7] hover:bg-[#00A3A6] active:bg-[#00828A] text-white text-xs sm:text-sm font-bold rounded-xl shadow-sm transition flex items-center justify-center gap-2 active:scale-95" id="btn-sop-ask-gemini" onclick="askGeminiFromCurrentSOP()" type="button">
+<button class="w-full sm:flex-1 py-3 px-4 bg-[#03B1C0] hover:bg-[#0298a5] active:bg-[#028b97] text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition flex items-center justify-center gap-2 active:scale-95 cursor-pointer" id="btn-sop-ask-gemini" onclick="askGeminiFromCurrentSOP()" type="button">
 <span class="material-symbols-outlined text-lg">auto_awesome</span>
 <span>Tanyakan ke Gemini AI</span>
 </button>
-<a class="w-full sm:flex-1 py-3 px-4 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs sm:text-sm font-bold rounded-xl shadow-sm transition flex items-center justify-center gap-2 active:scale-95 text-center" href="#" id="btn-sop-wa" rel="noopener noreferrer" target="_blank">
-<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"></path></svg>
+<a class="w-full sm:flex-1 py-3 px-4 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition flex items-center justify-center gap-2 active:scale-95 text-center cursor-pointer" href="#" id="btn-sop-wa" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-lg">chat</span>
 <span>Hubungi IT Siaga (WhatsApp)</span>
 </a>
 </div>
@@ -441,50 +438,86 @@
 <!-- BEGIN: ViewCategories -->
 <section class="view-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10" data-purpose="categories-directory-view" id="view-categories">
 <div class="mb-8">
-<h2 class="text-3xl font-extrabold text-hospital-navy">Klasifikasi Perangkat Medis &amp; IT</h2>
+<h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Klasifikasi Perangkat Medis &amp; IT</h2>
 <p class="text-slate-500 text-sm mt-1">Pilih kategori untuk memfilter cepat modul pemeliharaan perangkat</p>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-[#0097A7] transition-all">
-<div class="w-12 h-12 rounded-xl bg-blue-50 text-hospital-navy flex items-center justify-center font-bold text-lg mb-4">
-<span class="material-symbols-outlined text-2xl text-hospital-navy">desktop_windows</span>
+
+<!-- Category Card 1 -->
+<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:border-[#03B1C0] transition-all flex flex-col justify-between group">
+<div>
+<div class="icon-box icon-box-primary mb-4">
+<span class="material-symbols-outlined text-2xl">desktop_windows</span>
 </div>
-<h3 class="font-bold text-lg text-hospital-navy mb-2">Workstation &amp; Mini PC</h3>
+<h3 class="font-bold text-lg text-slate-900 mb-2">Workstation &amp; Mini PC</h3>
 <p class="text-xs text-slate-600 mb-4 leading-relaxed">Komputer rawat inap, CPU nurse station, Mini PC dokter spesialis, monitor display EKG/radiologi.</p>
-<button class="text-xs font-bold text-[#0097A7] hover:text-[#00828A] flex items-center gap-1" onclick="filterByDirectCategory('pc')" type="button">Lihat Modul Terkait →</button>
 </div>
-<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-[#0097A7] transition-all">
-<div class="w-12 h-12 rounded-xl bg-teal-50 text-[#0097A7] flex items-center justify-center font-bold text-lg mb-4">
-<span class="material-symbols-outlined text-2xl text-[#0097A7]">print</span>
+<button class="text-xs font-bold text-[#03B1C0] hover:text-[#0298a5] inline-flex items-center gap-1 transition-transform cursor-pointer" onclick="filterByDirectCategory('pc')" type="button">
+<span>Lihat Modul Terkait</span>
+<span class="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
 </div>
-<h3 class="font-bold text-lg text-hospital-navy mb-2">Printer Resep &amp; Thermal</h3>
+
+<!-- Category Card 2 -->
+<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:border-[#03B1C0] transition-all flex flex-col justify-between group">
+<div>
+<div class="icon-box icon-box-primary mb-4">
+<span class="material-symbols-outlined text-2xl">print</span>
+</div>
+<h3 class="font-bold text-lg text-slate-900 mb-2">Printer Resep &amp; Thermal</h3>
 <p class="text-xs text-slate-600 mb-4 leading-relaxed">Printer stiker etiket farmasi, barcode wristband gelang pasien IGD, dan dokumen resep rangkap.</p>
-<button class="text-xs font-bold text-[#0097A7] hover:text-[#00828A] flex items-center gap-1" onclick="filterByDirectCategory('printer')" type="button">Lihat Modul Terkait →</button>
 </div>
-<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-[#0097A7] transition-all">
-<div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-lg mb-4">
-<span class="material-symbols-outlined text-2xl text-emerald-600">lan</span>
+<button class="text-xs font-bold text-[#03B1C0] hover:text-[#0298a5] inline-flex items-center gap-1 transition-transform cursor-pointer" onclick="filterByDirectCategory('printer')" type="button">
+<span>Lihat Modul Terkait</span>
+<span class="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
 </div>
-<h3 class="font-bold text-lg text-hospital-navy mb-2">Jaringan &amp; Wall Outlet LAN</h3>
+
+<!-- Category Card 3 -->
+<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:border-[#03B1C0] transition-all flex flex-col justify-between group">
+<div>
+<div class="icon-box icon-box-primary mb-4">
+<span class="material-symbols-outlined text-2xl">lan</span>
+</div>
+<h3 class="font-bold text-lg text-slate-900 mb-2">Jaringan &amp; Wall Outlet LAN</h3>
 <p class="text-xs text-slate-600 mb-4 leading-relaxed">Kabel patch cord RJ45 CAT6, pelat soket data dinding ICU/OK, switch hub ruangan, dan akses poin WiFi medis.</p>
-<button class="text-xs font-bold text-[#0097A7] hover:text-[#00828A] flex items-center gap-1" onclick="filterByDirectCategory('lan')" type="button">Lihat Modul Terkait →</button>
 </div>
-<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-[#0097A7] transition-all">
-<div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-lg mb-4">
-<span class="material-symbols-outlined text-2xl text-purple-600">sync</span>
+<button class="text-xs font-bold text-[#03B1C0] hover:text-[#0298a5] inline-flex items-center gap-1 transition-transform cursor-pointer" onclick="filterByDirectCategory('lan')" type="button">
+<span>Lihat Modul Terkait</span>
+<span class="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
 </div>
-<h3 class="font-bold text-lg text-hospital-navy mb-2">Browser, Cache &amp; Aplikasi</h3>
+
+<!-- Category Card 4 -->
+<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:border-[#03B1C0] transition-all flex flex-col justify-between group">
+<div>
+<div class="icon-box icon-box-primary mb-4">
+<span class="material-symbols-outlined text-2xl">sync</span>
+</div>
+<h3 class="font-bold text-lg text-slate-900 mb-2">Browser, Cache &amp; Aplikasi</h3>
 <p class="text-xs text-slate-600 mb-4 leading-relaxed">Pembersihan berkas cache, cookies riwayat sesi akun perawat/dokter, dan optimasi pemakaian memori RAM browser.</p>
-<button class="text-xs font-bold text-[#0097A7] hover:text-[#00828A] flex items-center gap-1" onclick="filterByDirectCategory('cache')" type="button">Lihat Modul Terkait →</button>
 </div>
-<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-[#0097A7] transition-all">
-<div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-lg mb-4">
-<span class="material-symbols-outlined text-2xl text-amber-600">videocam</span>
+<button class="text-xs font-bold text-[#03B1C0] hover:text-[#0298a5] inline-flex items-center gap-1 transition-transform cursor-pointer" onclick="filterByDirectCategory('cache')" type="button">
+<span>Lihat Modul Terkait</span>
+<span class="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
 </div>
-<h3 class="font-bold text-lg text-hospital-navy mb-2">Keamanan &amp; Periferal</h3>
+
+<!-- Category Card 5 -->
+<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:border-[#03B1C0] transition-all flex flex-col justify-between group">
+<div>
+<div class="icon-box icon-box-primary mb-4">
+<span class="material-symbols-outlined text-2xl">videocam</span>
+</div>
+<h3 class="font-bold text-lg text-slate-900 mb-2">Keamanan &amp; Periferal</h3>
 <p class="text-xs text-slate-600 mb-4 leading-relaxed">Kamera CCTV dome koridor pasien, scanner barcode obat genggam USB, dan barcode reader gelang.</p>
-<button class="text-xs font-bold text-[#0097A7] hover:text-[#00828A] flex items-center gap-1" onclick="filterByDirectCategory('cctv')" type="button">Lihat Modul Terkait →</button>
 </div>
+<button class="text-xs font-bold text-[#03B1C0] hover:text-[#0298a5] inline-flex items-center gap-1 transition-transform cursor-pointer" onclick="filterByDirectCategory('cctv')" type="button">
+<span>Lihat Modul Terkait</span>
+<span class="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+
 </div>
 </section>
 <!-- END: ViewCategories -->
@@ -492,44 +525,65 @@
 <section class="view-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10" data-purpose="it-contact-emergency-view" id="view-contact">
 <div class="max-w-3xl mx-auto">
 <div class="text-center mb-8">
-<h2 class="text-3xl font-extrabold text-hospital-navy">Kontak IT Support RS Awal Bros</h2>
+<h2 class="text-3xl font-extrabold text-slate-900">Kontak IT Support RS Awal Bros</h2>
 <p class="text-slate-500 text-sm mt-2">Bantuan teknis langsung 24/7 untuk seluruh staf pelayanan medis &amp; manajemen</p>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-<div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 text-center shadow-sm flex flex-col justify-between">
+<div class="bg-white border border-slate-200 rounded-2xl p-6 text-center shadow-xs flex flex-col justify-between">
 <div>
-<div class="w-12 h-12 bg-emerald-600 text-white rounded-full flex items-center justify-center mx-auto mb-3">
-<svg class="w-6 h-6 fill-current" viewbox="0 0 24 24">
-<path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"></path>
-</svg>
+<div class="icon-box icon-box-primary icon-box-lg mx-auto mb-3">
+<span class="material-symbols-outlined text-2xl text-[#03B1C0]">chat</span>
 </div>
-<h3 class="font-bold text-slate-800 text-base">WhatsApp Helpdesk IT</h3>
+<h3 class="font-bold text-slate-900 text-base">WhatsApp Helpdesk IT</h3>
 <p class="text-xs text-slate-600 mt-1 mb-4">Kirim foto masalah hardware langsung ke teknisi jaga tanpa buat tiket berbelit.</p>
 </div>
-<a class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition" href="https://wa.me/6281234567890?text=Halo%20IT%20Support%20RS%20Awal%20Bros%20Botania,%20saya%20memerlukan%20bantuan%20teknis" rel="noopener noreferrer" target="_blank">
-          Kirim Pesan WhatsApp Langsung
-        </a>
+<a class="w-full py-2.5 bg-[#03B1C0] hover:bg-[#0298a5] text-white font-bold text-xs rounded-xl shadow-xs transition" href="https://wa.me/6281234567890?text=Halo%20IT%20Support%20RS%20Awal%20Bros%20Botania,%20saya%20memerlukan%20bantuan%20teknis" rel="noopener noreferrer" target="_blank">
+Kirim Pesan WhatsApp Langsung
+</a>
 </div>
-<div class="bg-blue-50 border border-blue-200 rounded-2xl p-6 text-center shadow-sm flex flex-col justify-between">
+<div class="bg-white border border-slate-200 rounded-2xl p-6 text-center shadow-xs flex flex-col justify-between">
 <div>
-<div class="w-12 h-12 bg-hospital-navy text-white rounded-full flex items-center justify-center mx-auto mb-3">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
+<div class="icon-box icon-box-primary icon-box-lg mx-auto mb-3">
+<span class="material-symbols-outlined text-2xl text-[#03B1C0]">call</span>
 </div>
-<h3 class="font-bold text-slate-800 text-base">Telepon Ekstensi Internal (PABX)</h3>
+<h3 class="font-bold text-slate-900 text-base">Telepon Ekstensi Internal (PABX)</h3>
 <p class="text-xs text-slate-600 mt-1 mb-4">Gunakan pesawat telepon di setiap Nurse Station atau ruang dokter.</p>
 </div>
-<div class="bg-white py-2 rounded-xl border border-blue-200 text-hospital-navy font-extrabold text-sm">
-          Ext. 104 (Emergency OK/ICU) • Ext. 105 (Reguler)
-        </div>
+<div class="bg-slate-50 py-2 rounded-xl border border-slate-200 text-slate-900 font-extrabold text-sm">
+Ext. 104 (Emergency OK/ICU) • Ext. 105 (Reguler)
 </div>
 </div>
-<div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-<h4 class="font-bold text-hospital-navy text-sm uppercase tracking-wide mb-3">Lokasi Fisik Workshop IT</h4>
-<div class="space-y-2 text-xs text-slate-600">
-<p><strong>Ruang Server &amp; Workshop IT:</strong> Gedung Utama Lantai 2, Sebelah Koridor Farmasi Sentral RS Awal Bros.</p>
-<p><strong>Jam Operasional Tim Lapangan:</strong> Standby On-Site 24 Jam bergantian 3 Shift (Pagi, Sore, Malam).</p>
+</div>
+<div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
+<h4 class="font-bold text-slate-900 text-sm uppercase tracking-wide">Lokasi Fisik Workshop IT</h4>
+<div class="space-y-3 text-xs text-slate-600">
+<div class="flex items-start gap-2.5">
+<div class="icon-box icon-box-sm icon-box-primary mt-0.5">
+<span class="material-symbols-outlined text-base">location_on</span>
+</div>
+<div>
+<strong class="text-slate-900 block">Ruang Server &amp; Workshop IT:</strong>
+<span>Gedung Utama Lantai 2, Sebelah Koridor Farmasi Sentral RS Awal Bros.</span>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<div class="icon-box icon-box-sm icon-box-primary mt-0.5">
+<span class="material-symbols-outlined text-base">schedule</span>
+</div>
+<div>
+<strong class="text-slate-900 block">Jam Operasional Tim Lapangan:</strong>
+<span>Standby On-Site 24 Jam bergantian 3 Shift (Pagi, Sore, Malam).</span>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<div class="icon-box icon-box-sm icon-box-primary mt-0.5">
+<span class="material-symbols-outlined text-base">verified_user</span>
+</div>
+<div>
+<strong class="text-slate-900 block">Cakupan Pelayanan:</strong>
+<span>Rawat Inap, Poliklinik, IGD, Farmasi, Radiologi, Laboratorium, dan Kasir.</span>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -538,25 +592,25 @@
 </main>
 <!-- END: MainContent -->
 <!-- BEGIN: MainFooter -->
-<footer class="bg-hospital-navy text-slate-400 text-xs py-10 border-t border-slate-800" data-purpose="hospital-footer">
+<footer class="bg-white text-slate-500 text-xs py-10 border-t border-slate-200" data-purpose="hospital-footer">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-white/10">
+<div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-200">
 <div class="flex items-center gap-3">
-<img alt="RS Awal Bros" class="h-8 w-auto object-contain bg-white rounded px-2 py-0.5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_KqT_pC27tuR64rPE46UEhDSUUUQqHlh1gDSmU42NoMhFGAgqhtpVRAxy2gw5wu_j2gTwPdzCGNIhYlj_L8yrOifjidv9P2nHYtyOX7NSF7OTE0EtmdiQYMqO5A9DtrBZqM84Um3AdAK486MGV89t0qjs7Pb83ddX6N_2-KKRFQeLVhpDbZRXp84wsTf7IyuSoPU4AzgQH07jPRd-tYFurlou5sB5qYdmIk-zoxD6p9xVD4kNf4GqNWPAouOZfhsXaA"/>
+<img alt="RS Awal Bros" class="h-8 w-auto object-contain rounded" src="logo.png"/>
 <div>
-<p class="font-semibold text-white">RS Awal Bros Botania</p>
-<p class="text-slate-400 text-[11px]">Divisi Teknologi Informasi &amp; Jaringan Rumah Sakit</p>
+<p class="font-bold text-slate-900">RS Awal Bros Botania</p>
+<p class="text-slate-500 text-[11px]">Divisi Teknologi Informasi &amp; Jaringan Rumah Sakit</p>
 </div>
 </div>
-<div class="flex flex-wrap items-center gap-5 text-slate-300 text-xs">
-<a class="hover:text-[#00A3A6] transition" href="https://awalbros.com" rel="noopener noreferrer" target="_blank">awalbros.com</a>
-<button class="hover:text-[#00A3A6] transition cursor-pointer" onclick="switchTab('home')" type="button">Beranda</button>
-<button class="hover:text-[#00A3A6] transition cursor-pointer" onclick="switchTab('categories')" type="button">Kategori Hardware</button>
-<button class="hover:text-[#00A3A6] transition cursor-pointer text-slate-300 text-xs" onclick="openContactModal()" type="button">Kontak IT Siaga</button>
+<div class="flex flex-wrap items-center gap-5 text-slate-600 text-xs font-medium">
+<a class="hover:text-[#03B1C0] transition" href="https://awalbros.com" rel="noopener noreferrer" target="_blank">awalbros.com</a>
+<button class="hover:text-[#03B1C0] transition cursor-pointer" onclick="switchTab('home')" type="button">Beranda</button>
+<button class="hover:text-[#03B1C0] transition cursor-pointer" onclick="switchTab('categories')" type="button">Kategori Hardware</button>
+<button class="hover:text-[#03B1C0] transition cursor-pointer" onclick="openContactModal()" type="button">Kontak IT Siaga</button>
 </div>
 </div>
 <div class="pt-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 gap-2">
-<p>© 2025 RS Awal Bros Botania. Hak Cipta Dilindungi.</p>
+<p>© 2026 RS Awal Bros Botania. Hak Cipta Dilindungi.</p>
 <p>Jl. Botania Garden, Batam Center, Batam</p>
 </div>
 </div>
@@ -564,7 +618,7 @@
 <!-- END: MainFooter -->
 <!-- BEGIN: Floating Gemini AI Trigger Button (FAB) -->
 <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2" id="gemini-floating-container">
-<button class="group relative flex items-center gap-2.5 bg-[#0097A7] hover:bg-[#00A3A6] active:bg-[#00828A] text-white px-4 py-3 rounded-full shadow-lg transition-all duration-200 active:scale-95 cursor-pointer" id="btn-gemini-chat-toggle" onclick="toggleGeminiChat()" title="Tanya Asisten IT Gemini">
+<button class="group relative flex items-center gap-2.5 bg-[#03B1C0] hover:bg-[#0298a5] active:bg-[#028b97] text-white px-4 py-3 rounded-full shadow-lg transition-all duration-200 active:scale-95 cursor-pointer" id="btn-gemini-chat-toggle" onclick="toggleGeminiChat()" title="Tanya Asisten IT Gemini">
 <span class="material-symbols-outlined text-white text-xl leading-none">smart_toy</span>
 <span class="font-semibold text-xs tracking-wide hidden sm:inline">Asisten IT</span>
 </button>
@@ -573,15 +627,15 @@
 <!-- BEGIN: Gemini AI Chat Modal Window -->
 <div class="fixed bottom-5 right-4 sm:right-6 z-50 w-[95vw] sm:w-[440px] max-h-[660px] h-[590px] bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden hidden transition-all duration-200 animate-in fade-in zoom-in" id="gemini-chat-modal">
 <!-- Chat Header -->
-<div class="bg-[#0097A7] text-white p-4 flex items-center justify-between">
+<div class="bg-[#03B1C0] text-white p-4 flex items-center justify-between">
 <div class="flex items-center gap-3">
 <div class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-white">
 <span class="material-symbols-outlined text-xl">smart_toy</span>
 </div>
 <div>
 <h3 class="font-bold text-sm tracking-tight text-white">Asisten IT RS Awal Bros</h3>
-<div class="flex items-center gap-1.5 text-[11px] text-white/80">
-<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<div class="flex items-center gap-1.5 text-[11px] text-white/90">
+<span class="w-2 h-2 rounded-full bg-emerald-300"></span>
 <span>Online • Botania IT Support</span>
 </div>
 </div>
@@ -596,25 +650,25 @@
 </div>
 </div>
 <!-- Quick Prompt Chips -->
-<div class="bg-hospital-surface px-3 py-2 border-b border-slate-200 overflow-x-auto flex gap-1.5 text-[11px] no-scrollbar">
+<div class="bg-slate-50 px-3 py-2 border-b border-slate-200 overflow-x-auto flex gap-1.5 text-[11px] no-scrollbar">
 <span class="text-slate-500 self-center font-bold whitespace-nowrap text-[10px] uppercase tracking-wider pl-1">Cepat:</span>
-<button class="px-2.5 py-1 bg-white hover:bg-teal-50 hover:border-teal-300 border border-slate-200 rounded-full text-slate-700 font-semibold whitespace-nowrap transition shadow-2xs cursor-pointer" onclick="openGeminiWithPrompt('Printer Resep Blink Merah')" type="button">Printer Resep Blink Merah</button>
-<button class="px-2.5 py-1 bg-white hover:bg-teal-50 hover:border-teal-300 border border-slate-200 rounded-full text-slate-700 font-semibold whitespace-nowrap transition shadow-2xs cursor-pointer" onclick="openGeminiWithPrompt('LAN Disconnected')" type="button">LAN Disconnected</button>
-<button class="px-2.5 py-1 bg-white hover:bg-teal-50 hover:border-teal-300 border border-slate-200 rounded-full text-slate-700 font-semibold whitespace-nowrap transition shadow-2xs cursor-pointer" onclick="openGeminiWithPrompt('PC Poli Mati Total')" type="button">PC Poli Mati Total</button>
-<button class="px-2.5 py-1 bg-white hover:bg-teal-50 hover:border-teal-300 border border-slate-200 rounded-full text-slate-700 font-semibold whitespace-nowrap transition shadow-2xs cursor-pointer" onclick="openGeminiWithPrompt('Cache &amp; Aplikasi Lemot')" type="button">Cache &amp; Aplikasi Lemot</button>
+<button class="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-full text-slate-700 font-semibold whitespace-nowrap transition shadow-2xs cursor-pointer" onclick="openGeminiWithPrompt('Printer Resep Blink Merah')" type="button">Printer Resep Blink Merah</button>
+<button class="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-full text-slate-700 font-semibold whitespace-nowrap transition shadow-2xs cursor-pointer" onclick="openGeminiWithPrompt('LAN Disconnected')" type="button">LAN Disconnected</button>
+<button class="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-full text-slate-700 font-semibold whitespace-nowrap transition shadow-2xs cursor-pointer" onclick="openGeminiWithPrompt('PC Poli Mati Total')" type="button">PC Poli Mati Total</button>
+<button class="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-full text-slate-700 font-semibold whitespace-nowrap transition shadow-2xs cursor-pointer" onclick="openGeminiWithPrompt('Cache &amp; Aplikasi Lemot')" type="button">Cache &amp; Aplikasi Lemot</button>
 </div>
 <!-- Messages Container -->
 <div class="flex-1 p-4 overflow-y-auto space-y-3.5 bg-slate-50 text-xs" id="gemini-messages-box">
 <!-- Welcome Message -->
 <div class="flex gap-2.5">
-<div class="w-8 h-8 rounded-xl bg-hospital-navy text-[#00A3A6] flex-shrink-0 flex items-center justify-center shadow">
+<div class="icon-box icon-box-primary icon-box-sm shrink-0">
 <span class="material-symbols-outlined text-base">auto_awesome</span>
 </div>
 <div class="bg-white border border-slate-200 p-3.5 rounded-2xl rounded-tl-sm shadow-xs max-w-[88%] text-slate-800 space-y-2">
-<p class="font-bold text-hospital-navy flex items-center gap-1.5">Halo! Saya Gemini AI IT Support RS Awal Bros</p>
+<p class="font-bold text-slate-900 flex items-center gap-1.5">Halo! Saya Gemini AI IT Support RS Awal Bros</p>
 <p class="leading-relaxed text-slate-600">
-          Sebutkan kendala hardware atau lokasi unit Anda (misal: <em>'Printer farmasi macet'</em>, <em>'Layar monitor di ICU blank'</em>, atau <em>'Komputer poli lemot'</em>), saya akan berikan panduan perbaikan langkah demi langkah sesuai SOP resmi RS Awal Bros.
-        </p>
+Sebutkan kendala hardware atau lokasi unit Anda (misal: <em>'Printer farmasi macet'</em>, <em>'Layar monitor di ICU blank'</em>, atau <em>'Komputer poli lemot'</em>), saya akan berikan panduan perbaikan langkah demi langkah sesuai SOP resmi RS Awal Bros.
+</p>
 <div class="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
 <span>Respons Otomatis AI • RS Awal Bros</span>
 <span class="text-emerald-600 font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Siap Membantu</span>
@@ -626,77 +680,75 @@
 <div class="p-3 bg-white border-t border-slate-200">
 <form class="flex items-center gap-2" id="gemini-chat-form" onsubmit="submitGeminiMessage(event)">
 <div class="relative flex-1">
-<input autocomplete="off" class="w-full pl-3 pr-8 py-2.5 rounded-xl border border-slate-200 focus:border-[#0097A7] focus:ring-1 focus:ring-[#0097A7] text-xs text-slate-800 placeholder-slate-400 bg-slate-50" id="gemini-user-input" placeholder="Tanyakan masalah hardware / aplikasi Anda..." type="text"/>
+<input autocomplete="off" class="w-full pl-3 pr-8 py-2.5 rounded-xl border border-slate-200 focus:border-[#03B1C0] focus:ring-1 focus:ring-[#03B1C0] text-xs text-slate-900 placeholder-slate-400 bg-white" id="gemini-user-input" placeholder="Tanyakan masalah hardware / aplikasi Anda..." type="text"/>
 <button class="absolute right-2 top-2.5 text-slate-400 hover:text-slate-600 cursor-pointer" onclick="clearGeminiInput()" type="button">
 <span class="material-symbols-outlined text-sm leading-none">backspace</span>
 </button>
 </div>
-<button class="bg-hospital-navy hover:bg-[#0097A7] text-white p-2.5 rounded-xl transition shadow flex items-center justify-center flex-shrink-0 active:scale-95 cursor-pointer" id="btn-gemini-send" type="submit">
+<button class="bg-[#03B1C0] hover:bg-[#0298a5] text-white p-2.5 rounded-xl transition shadow-xs flex items-center justify-center flex-shrink-0 active:scale-95 cursor-pointer" id="btn-gemini-send" type="submit">
 <span class="material-symbols-outlined text-lg leading-none">send</span>
 </button>
 </form>
 <div class="mt-2 px-1 flex items-center justify-between text-[10px] text-slate-400">
 <span>Tekan <kbd class="bg-slate-100 border border-slate-200 px-1 py-0.5 rounded font-mono">Enter</kbd> untuk kirim diagnosis</span>
 <a class="text-emerald-600 hover:underline font-bold flex items-center gap-0.5" href="https://wa.me/6281234567890?text=Halo%20IT%20RS%20Awal%20Bros,%20kendala%20darurat%20di%20ruangan:" rel="noopener noreferrer" target="_blank">
-<span class="material-symbols-outlined text-[11px]">phone_in_talk</span> Ext 104 / WhatsApp
-      </a>
+<span class="material-symbols-outlined text-[11px]">call</span> Ext 104 / WhatsApp
+</a>
 </div>
 </div>
 </div>
 <!-- END: Gemini AI Chat Modal Window -->
 <!-- BEGIN: ContactModal -->
-<div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4" id="contact-modal">
-<div class="bg-white w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-150">
-<div class="bg-[#002541] text-white px-6 py-4 flex items-center justify-between border-b border-white/10">
+<div class="fixed inset-0 z-50 bg-slate-900/30 backdrop-blur-xs hidden items-center justify-center p-4" id="contact-modal">
+<div class="bg-white w-full max-w-lg rounded-2xl overflow-hidden shadow-xl border border-slate-200 animate-in fade-in zoom-in duration-150 text-slate-800">
+<div class="bg-[#03B1C0] text-white px-6 py-4 flex items-center justify-between">
 <div class="flex items-center gap-2.5">
-<div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+<div class="w-8 h-8 rounded-lg bg-white/20 text-white flex items-center justify-center">
 <span class="material-symbols-outlined text-xl">support_agent</span>
 </div>
 <div>
 <h3 class="font-bold text-base text-white leading-tight">Kontak IT Siaga 24 Jam</h3>
-<p class="text-[11px] text-slate-300">Divisi IT RS Awal Bros Botania</p>
+<p class="text-[11px] text-white/90">Divisi IT RS Awal Bros Botania</p>
 </div>
 </div>
 <button class="text-white/80 hover:text-white text-2xl leading-none cursor-pointer" onclick="closeContactModal()" type="button">×</button>
 </div>
 <div class="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-<div class="p-4 rounded-xl bg-blue-50 border border-blue-200">
-<div class="flex items-center gap-2 text-hospital-navy font-bold text-sm mb-1">
-<span class="material-symbols-outlined text-lg text-[#0097A7]">phone_in_talk</span>
-<span>Hotline PABX</span>
+<div class="p-4 rounded-xl bg-white border border-slate-200 shadow-xs">
+<div class="flex items-center gap-2 text-slate-900 font-bold text-sm mb-1">
+<span class="material-symbols-outlined text-lg text-[#03B1C0]">chat</span>
+<span>WhatsApp Helpdesk</span>
 </div>
-<p class="text-2xl font-extrabold text-[#002541]">Ext. 104</p>
-<p class="text-[11px] text-slate-500 mt-1">Darurat Kamar Operasi / ICU / IGD (Reguler: Ext. 105)</p>
+<p class="text-lg font-bold text-slate-900">+62 812-3456-7890</p>
+<p class="text-[11px] text-slate-500 mt-1">Kirim foto masalah hardware langsung ke teknisi jaga.</p>
 </div>
-<div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200">
-<div class="flex items-center gap-2 text-emerald-800 font-bold text-sm mb-1">
-<span class="material-symbols-outlined text-lg text-emerald-600">chat</span>
-<span>WhatsApp Siaga</span>
+<div class="p-4 rounded-xl bg-white border border-slate-200 shadow-xs">
+<div class="flex items-center gap-2 text-slate-900 font-bold text-sm mb-1">
+<span class="material-symbols-outlined text-lg text-[#03B1C0]">call</span>
+<span>Telepon Ekstensi</span>
 </div>
-<p class="text-base font-bold text-emerald-700">+62 812-3456-7890</p>
-<a class="mt-2 inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 hover:text-emerald-800 underline" href="https://wa.me/6281234567890?text=Halo%20IT%20Support%20RS%20Awal%20Bros%20Botania,%20saya%20memerlukan%20bantuan%20teknis%20segera" rel="noopener noreferrer" target="_blank">
-            Kirim Pesan Langsung →
-          </a>
+<p class="text-lg font-bold text-slate-900">Ext. 104 / 105</p>
+<p class="text-[11px] text-slate-500 mt-1">Darurat OK/ICU (Ext. 104) / Reguler (Ext. 105)</p>
 </div>
 </div>
 <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2.5 text-xs text-slate-700">
 <div class="flex items-start gap-2">
-<span class="material-symbols-outlined text-base text-[#0097A7] mt-0.5">location_on</span>
+<span class="material-symbols-outlined text-base text-[#03B1C0] mt-0.5">location_on</span>
 <div>
 <span class="font-bold text-slate-900 block">Lokasi Divisi IT:</span>
 <span>Gedung Utama Lantai 2, Ruang Server &amp; Workshop IT (Dekat Koridor Farmasi Sentral).</span>
 </div>
 </div>
 <div class="flex items-start gap-2">
-<span class="material-symbols-outlined text-base text-[#0097A7] mt-0.5">schedule</span>
+<span class="material-symbols-outlined text-base text-[#03B1C0] mt-0.5">schedule</span>
 <div>
 <span class="font-bold text-slate-900 block">Jam Operasional:</span>
 <span>Siaga 24 Jam Non-Stop Setiap Hari (Shift Pagi, Sore, Malam).</span>
 </div>
 </div>
 <div class="flex items-start gap-2">
-<span class="material-symbols-outlined text-base text-[#0097A7] mt-0.5">domain_verification</span>
+<span class="material-symbols-outlined text-base text-[#03B1C0] mt-0.5">verified_user</span>
 <div>
 <span class="font-bold text-slate-900 block">Cakupan Pelayanan:</span>
 <span>Rawat Inap, Poliklinik, IGD, Farmasi, Radiologi, Laboratorium, dan Kasir.</span>
@@ -704,8 +756,8 @@
 </div>
 </div>
 <div class="flex items-center justify-between pt-2 border-t border-slate-100">
-<button class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-lg transition cursor-pointer" onclick="closeContactModal()" type="button">Tutup</button>
-<a class="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-lg shadow-sm transition" href="https://wa.me/6281234567890?text=Halo%20IT%20Support%20RS%20Awal%20Bros%20Botania,%20saya%20memerlukan%20bantuan%20teknis%20segera" rel="noopener noreferrer" target="_blank">
+<button class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition cursor-pointer" onclick="closeContactModal()" type="button">Tutup</button>
+<a class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#03B1C0] hover:bg-[#0298a5] text-white font-semibold text-xs rounded-xl shadow-xs transition cursor-pointer" href="https://wa.me/6281234567890?text=Halo%20IT%20Support%20RS%20Awal%20Bros%20Botania,%20saya%20memerlukan%20bantuan%20teknis%20segera" rel="noopener noreferrer" target="_blank">
 <span class="material-symbols-outlined text-sm">chat</span>
 <span>Chat WhatsApp 24 Jam</span>
 </a>

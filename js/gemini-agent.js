@@ -62,11 +62,11 @@ function resetGeminiConversation() {
   if (!container) return;
   container.innerHTML = `
     <div class="flex gap-2.5">
-      <div class="w-8 h-8 rounded-xl bg-hospital-navy text-[#00A3A6] flex-shrink-0 flex items-center justify-center shadow">
+      <div class="icon-box icon-box-primary icon-box-sm shrink-0">
         <span class="material-symbols-outlined text-base">auto_awesome</span>
       </div>
       <div class="bg-white border border-slate-200 p-3.5 rounded-2xl rounded-tl-sm shadow-xs max-w-[88%] text-slate-800 space-y-2">
-        <p class="font-bold text-hospital-navy flex items-center gap-1.5">
+        <p class="font-bold text-slate-900 flex items-center gap-1.5">
           Halo! Saya Gemini AI IT Support RS Awal Bros
         </p>
         <p class="leading-relaxed text-slate-600">
@@ -89,9 +89,9 @@ async function processUserMessage(message) {
   const userBubble = document.createElement('div');
   userBubble.className = 'flex justify-end';
   userBubble.innerHTML = `
-    <div class="bg-hospital-navy text-white p-3 rounded-2xl rounded-tr-sm shadow-sm max-w-[85%] text-xs leading-relaxed">
+    <div class="bg-[#03B1C0] text-white p-3 rounded-2xl rounded-tr-sm shadow-xs max-w-[85%] text-xs leading-relaxed">
       <p>${escapeHtml(message)}</p>
-      <span class="block text-[9px] text-teal-200 text-right mt-1">Staf Medis / Anda</span>
+      <span class="block text-[9px] text-white/80 text-right mt-1">Staf Medis / Anda</span>
     </div>
   `;
   container.appendChild(userBubble);
@@ -103,15 +103,15 @@ async function processUserMessage(message) {
   typingBubble.id = typingId;
   typingBubble.className = 'flex gap-2.5';
   typingBubble.innerHTML = `
-    <div class="w-8 h-8 rounded-xl bg-hospital-navy text-[#00A3A6] flex-shrink-0 flex items-center justify-center shadow">
+    <div class="icon-box icon-box-primary icon-box-sm shrink-0">
       <span class="material-symbols-outlined text-base animate-spin">sync</span>
     </div>
-    <div class="bg-white border border-slate-200 px-4 py-3 rounded-2xl rounded-tl-sm shadow-xs text-slate-500 flex items-center gap-2">
+    <div class="bg-white border border-slate-200 px-4 py-3 rounded-2xl rounded-tl-sm shadow-xs text-slate-600 flex items-center gap-2">
       <span class="font-medium text-xs">Gemini menganalisa SOP RS Awal Bros...</span>
       <div class="flex gap-1">
-        <span class="w-1.5 h-1.5 bg-[#0097A7] rounded-full typing-dot"></span>
-        <span class="w-1.5 h-1.5 bg-[#0097A7] rounded-full typing-dot"></span>
-        <span class="w-1.5 h-1.5 bg-[#0097A7] rounded-full typing-dot"></span>
+        <span class="w-1.5 h-1.5 bg-[#03B1C0] rounded-full typing-dot"></span>
+        <span class="w-1.5 h-1.5 bg-[#03B1C0] rounded-full typing-dot"></span>
+        <span class="w-1.5 h-1.5 bg-[#03B1C0] rounded-full typing-dot"></span>
       </div>
     </div>
   `;
@@ -167,31 +167,31 @@ async function processUserMessage(message) {
   const aiBubble = document.createElement('div');
   aiBubble.className = 'flex gap-2.5 animate-in fade-in duration-200';
   aiBubble.innerHTML = `
-    <div class="w-8 h-8 rounded-xl bg-hospital-navy text-[#00A3A6] flex-shrink-0 flex items-center justify-center shadow">
+    <div class="icon-box icon-box-primary icon-box-sm shrink-0">
       <span class="material-symbols-outlined text-base">auto_awesome</span>
     </div>
-    <div class="bg-white border border-slate-200 p-3.5 rounded-2xl rounded-tl-sm shadow-sm max-w-[88%] text-slate-800 space-y-2.5">
+    <div class="bg-white border border-slate-200 p-3.5 rounded-2xl rounded-tl-sm shadow-xs max-w-[88%] text-slate-800 space-y-2.5">
       <div class="flex items-center justify-between border-b border-slate-100 pb-1.5">
-        <span class="font-bold text-hospital-navy flex items-center gap-1">
-          <span class="material-symbols-outlined text-sm text-[#0097A7]">verified</span> ${escapeHtml(responseObj.title || 'Diagnosis SOP IT')}
+        <span class="font-bold text-slate-900 flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm text-[#03B1C0]">verified</span> ${escapeHtml(responseObj.title || 'Diagnosis SOP IT')}
         </span>
-        <span class="text-[9px] px-1.5 py-0.5 rounded bg-teal-50 text-[#0097A7] font-bold uppercase">${escapeHtml(responseObj.category || 'IT Support')}</span>
+        <span class="text-[9px] px-2 py-0.5 rounded bg-[#03B1C0]/10 text-[#03B1C0] border border-[#03B1C0]/20 font-bold uppercase">${escapeHtml(responseObj.category || 'IT Support')}</span>
       </div>
       <p class="text-slate-600 leading-relaxed">${escapeHtml(responseObj.intro || '')}</p>
-      <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-2.5 space-y-1.5">
+      <div class="bg-slate-50 border border-slate-200 rounded-xl p-2.5 space-y-1.5">
         <div class="font-bold text-[11px] text-slate-700">Langkah Mandiri Sesuai SOP:</div>
         <ol class="list-decimal list-inside space-y-1 text-slate-600 text-[11px] leading-relaxed">
           ${(responseObj.steps || []).map(s => `<li>${escapeHtml(s)}</li>`).join('')}
         </ol>
       </div>
       ${responseObj.note ? `
-        <div class="bg-amber-50 border border-amber-200 rounded-lg p-2 text-[10px] text-amber-900 leading-tight">
+        <div class="bg-slate-50 border border-slate-200 rounded-lg p-2 text-[10px] text-slate-700 leading-tight">
           <strong>Catatan Penting:</strong> ${escapeHtml(responseObj.note)}
         </div>
       ` : ''}
       <div class="pt-1.5 flex flex-wrap items-center gap-2">
-        <a href="https://wa.me/6281234567890?text=Halo%20IT%20RS%20Awal%20Bros,%20butuh%20bantuan%20teknisi%20untuk:%20${encodeURIComponent(message)}" target="_blank" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1.5 rounded-lg text-[10px] shadow transition">
-          <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+        <a href="https://wa.me/6281234567890?text=Halo%20IT%20RS%20Awal%20Bros,%20butuh%20bantuan%20teknisi%20untuk:%20${encodeURIComponent(message)}" target="_blank" class="inline-flex items-center gap-1 bg-[#03B1C0] hover:bg-[#0298a5] text-white font-bold px-2.5 py-1.5 rounded-lg text-[10px] shadow-xs transition">
+          <span class="material-symbols-outlined text-xs">chat</span>
           Panggil Teknisi via WA
         </a>
         <span class="text-[10px] text-slate-400">atau PABX <strong>Ext 104</strong> (Emergency)</span>
