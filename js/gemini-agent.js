@@ -190,7 +190,7 @@ async function processUserMessage(message) {
         </div>
       ` : ''}
       <div class="pt-1.5 flex flex-wrap items-center gap-2">
-        <a href="https://wa.me/6281234567890?text=Halo%20IT%20RS%20Awal%20Bros,%20butuh%20bantuan%20teknisi%20untuk:%20${encodeURIComponent(message)}" target="_blank" class="inline-flex items-center gap-1 bg-[#03B1C0] hover:bg-[#0298a5] text-white font-bold px-2.5 py-1.5 rounded-lg text-[10px] shadow-xs transition">
+        <a href="https://wa.me/6282217305162?text=Halo%20Pak%20Bayu%20Firman%20(IT%20Helpdesk),%20butuh%20bantuan%20teknisi%20untuk:%20${encodeURIComponent(message)}" target="_blank" class="inline-flex items-center gap-1 bg-[#03B1C0] hover:bg-[#0298a5] text-white font-bold px-2.5 py-1.5 rounded-lg text-[10px] shadow-xs transition">
           <span class="material-symbols-outlined text-xs">chat</span>
           Panggil Teknisi via WA
         </a>

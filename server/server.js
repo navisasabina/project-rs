@@ -19,6 +19,11 @@ const server = app.listen(PORT, () => {
   console.log(`[Readiness Endpoint] http://localhost:${PORT}/api/v1/health/ready`);
 });
 
+// Configure Keep-Alive and socket pool limits for high multi-user concurrency
+server.keepAliveTimeout = 65000;
+server.headersTimeout = 66000;
+server.maxConnections = 1000;
+
 // Graceful Shutdown Handler
 let isShuttingDown = false;
 

@@ -80,10 +80,10 @@ function openDedicatedSOP(sopKey) {
   if (noteEl) noteEl.innerText = data.securityNote || '';
 
   // Configure Direct WhatsApp Button
-  const waText = encodeURIComponent(`Halo IT Support RS Awal Bros Botania, saya memerlukan bantuan teknisi untuk kendala: ${data.title} di lokasi unit: ${data.location}. Sudah mencoba SOP mandiri.`);
+  const waText = encodeURIComponent(`Halo IT Helpdesk RS Awal Bros (Pak Bayu Firman), saya memerlukan bantuan teknisi untuk kendala: ${data.title} di lokasi unit: ${data.location}. Sudah mencoba SOP mandiri.`);
   const waLinkEl = document.getElementById('btn-sop-wa');
   if (waLinkEl) {
-    waLinkEl.href = `https://wa.me/6281234567890?text=${waText}`;
+    waLinkEl.href = `https://wa.me/6282217305162?text=${waText}`;
   }
 
   // Switch View Content

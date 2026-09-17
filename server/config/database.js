@@ -9,7 +9,7 @@ const connectionTimeout = parseInt(process.env.DB_POOL_CONNECTION_TIMEOUT_MS, 10
 const poolConfig = process.env.DATABASE_URL
   ? {
       connectionString: process.env.DATABASE_URL,
-      max: (!isNaN(maxPool) && maxPool > 0) ? maxPool : 15,
+      max: (!isNaN(maxPool) && maxPool > 0) ? maxPool : 30,
       idleTimeoutMillis: (!isNaN(idleTimeout) && idleTimeout >= 0) ? idleTimeout : 30000,
       connectionTimeoutMillis: (!isNaN(connectionTimeout) && connectionTimeout >= 0) ? connectionTimeout : 5000,
     }
@@ -19,7 +19,7 @@ const poolConfig = process.env.DATABASE_URL
       database: process.env.POSTGRES_DB || 'rs_awal_bros_kb',
       user: process.env.POSTGRES_USER || 'postgres',
       password: process.env.POSTGRES_PASSWORD || 'postgres',
-      max: (!isNaN(maxPool) && maxPool > 0) ? maxPool : 15,
+      max: (!isNaN(maxPool) && maxPool > 0) ? maxPool : 30,
       idleTimeoutMillis: (!isNaN(idleTimeout) && idleTimeout >= 0) ? idleTimeout : 30000,
       connectionTimeoutMillis: (!isNaN(connectionTimeout) && connectionTimeout >= 0) ? connectionTimeout : 5000,
     };
